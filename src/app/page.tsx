@@ -1,5 +1,5 @@
 // import SimpleCard from "@/components/common/cards/SimpleCard";
- 
+
 // import Image from "next/image";
 // import styles from "./page.module.css";
 
@@ -7,7 +7,7 @@
 //   return (
 //     <div className={styles.page}>
 //       <SimpleCard title="Home" content="Welcome to template" />
-       
+
 //     </div>
 //   );
 // }
@@ -20,6 +20,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import myAppWebService from '@/services/myAppWebService';
 import styles from '../styles/homePage.module.css';
+import HeroSection from '@/components/CIF/HeroSection';
+import FacilitiesSection from '@/components/CIF/FacilitiesSection';
 
 // Define an interface for better type safety (Requirement #9)
 interface Instrument {
@@ -73,7 +75,8 @@ export default function Home() {
 
   return (
     <>
-      <section className="section bgDarkYellow pb-0">
+      <HeroSection />
+      {/* <section className="section bgDarkYellow pb-0">
         <div className="container">
           <div className="headingWraper mb-4">
             <div className="mainHead">
@@ -118,9 +121,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className={styles.section}>
+      <FacilitiesSection instruments={instruments} />
+      {/* <section className={styles.section}>
         <div className="container">
           <div className={`${styles.headingWraper} mb-4`}>
             <div className={styles.mainHead}>
@@ -162,7 +166,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Collaboration Section */}
       <section className="section industry-partners-grid">
@@ -186,7 +190,7 @@ export default function Home() {
       </section>
 
       {/* Footer Contact Section with SVG Fixes */}
-      <section className="section section-gray">
+      <section className={`${styles.section} section-gray`}>
         <div className="container">
           <div className="row">
             <div className="col-md-5">
@@ -197,7 +201,7 @@ export default function Home() {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M18.9996 15.4817V17.5893C19.0004 17.7849..." // Truncated for brevity
-                    stroke="#EF7D00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" 
+                    stroke="#EF7D00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
                   />
                 </svg>
                 <a href="tel:+911824444021" className="text-decoration-none">+91 1824-444021</a>
@@ -206,7 +210,7 @@ export default function Home() {
             <div className="col-md-4">
               <div className="d-flex align-items-center gap-2">
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none">
-                   {/* Corrected SVG camelCase attributes */}
+                  {/* Corrected SVG camelCase attributes */}
                   <g clipPath="url(#clip0_4273_280)">
                     <path d="M16 0.523438L7.95831 6.52344L0 0.523438" stroke="#EF7D00" strokeWidth="1.5" />
                   </g>
