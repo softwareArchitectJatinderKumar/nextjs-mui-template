@@ -28,23 +28,45 @@ class MyAppWebService {
   getFolderUrl() {
     return this.folderUrl;
   }
-
-  async getAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
+async getAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
     try {
-      const response = await this.apiClient.get('api/LpuCIF/GetUserDataIdWise', {
-        params: {
-          Email: UserEmail,
-          PasswordText: secreatKeys,
-          UserRole: userRole,
+      // 1. Prepare the FormData internally to keep the component clean
+      const loginData = new FormData();
+      loginData.append('Email', UserEmail);
+      loginData.append('PasswordText', secreatKeys);
+      loginData.append('UserRole', userRole);
+
+      // 2. Perform the POST request
+      const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', loginData, {
+        headers: {
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+          'Content-Type': 'multipart/form-data',
         },
       });
-      return response.data; 
+
+      return response.data;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
-      throw error; 
+      throw error;
     }
   }
+  // async getAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
+  //   try {
+  //     const response = await this.apiClient.get('api/LpuCIF/GetUserDataIdWise', {
+  //       params: {
+  //         Email: UserEmail,
+  //         PasswordText: secreatKeys,
+  //         UserRole: userRole,
+  //       },
+  //     });
+  //     return response.data; 
+  //   } catch (error) {
+  //     console.error('Error fetching authorized user data:', error);
+  //     throw error; 
+  //   }
+  // }
 
+  
  
   async GetAllBooksDetails() {
     try {
