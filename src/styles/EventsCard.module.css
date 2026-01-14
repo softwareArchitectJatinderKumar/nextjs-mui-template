@@ -1,0 +1,27 @@
+.marqueeWrapper {
+  overflow: hidden; /* Hides cards outside the container */
+  width: 100%;
+  display: flex;
+}
+
+.marquee {
+  display: flex;
+  /* CRITICAL: width must be max-content so cards stay in one long line */
+  width: max-content; 
+  animation: marqueeAnim 25s linear infinite;
+}
+
+.marquee:hover {
+  animation-play-state: paused; /* Pause on hover functionality */
+}
+
+.eventCard {
+  /* CRITICAL: Prevents cards from shrinking to fit the screen */
+  flex-shrink: 0; 
+  /* To show ~3 cards, width should be around 30% of container or fixed px */
+  width: 350px; 
+  margin: 0 15px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}

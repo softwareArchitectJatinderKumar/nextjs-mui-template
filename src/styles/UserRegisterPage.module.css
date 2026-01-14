@@ -1,0 +1,179 @@
+
+.fullscreenLoader {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.stickyBar {
+    display: block; bottom: 15%; right: -138px; position: fixed;
+    z-index: 1040; width: 184px;
+}
+
+.stickyBar ul { margin: 0; padding: 0; list-style: none; }
+
+.stickyBar ul li {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+    background: #b1040e; margin: 4px; transition: all .2s ease-in;
+    padding: 0 10px; height: 45px; display: flex; align-items: center;
+}
+
+.stickyBar ul li:hover { margin-left: -122px; }
+
+.stickyBar ul li a {
+    color: #fff; font-size: 12px; font-weight: 600; display: flex;
+    align-items: center; text-decoration: none;
+}
+
+.stickyBar ul li img { height: 22px; padding-right: 11px; }
+
+.regDiv { padding: 10px 30px; }
+
+.cifRegister {
+    background: #fff; padding: 30px; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.lpuBtn {
+    background: #ef7d00; color: #fff; border: none;
+    padding: 12px 45px; border-radius: 6px; font-weight: bold;
+}
+
+.lpuBtn:disabled { background: #ccc; cursor: not-allowed; }
+
+.applyNowOuter { display: none; }
+
+@media(max-width:992px) {
+    .applyNowOuter { display: block; }
+    .stickyBar {
+        background: #b1040e; bottom: 0; right: 0;
+        width: 100%; display: block !important;
+    }
+    .stickyBar ul { display: flex; padding-left: 10px; }
+    .stickyBar ul li { background: transparent; box-shadow: none; }
+    .stickyBar ul li a span { display: none; }
+    .stickyBar ul li .applyNow {
+        background: #fff; color: #b1040e; padding: 5px 10px; font-weight: 700;
+    }
+}
+
+.stickyBar {
+    display: block;
+    bottom: 15%;
+    right: -138px;
+    position: fixed;
+    z-index: 1040;
+    width: 184px;
+}
+
+.stickyBar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.stickyBar ul li {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+    background: #b1040e;
+    margin: 4px;
+    transition: all .2s ease-in;
+    padding: 0 10px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.stickyBar ul li:hover {
+    margin-left: -122px;
+    background: #b1040e;
+}
+
+.stickyBar ul li a {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    display: flex;
+    align-items: center;
+    line-height: 14px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.stickyBar ul li img {
+    width: auto;
+    height: 22px;
+    padding-right: 11px;
+}
+
+.applyNowOuter {
+    display: none;
+}
+
+/* Form Container Styles */
+.regDiv {
+    padding: 10px 30px;
+}
+
+.cifRegister {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.lpuBtn {
+    background: #ef7d00;
+    color: #fff;
+    padding: 10px 30px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.lpuBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+@media(max-width:992px) {
+    .applyNowOuter {
+        display: block;
+    }
+
+    .stickyBar {
+        background: #b1040e;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        display: block !important;
+    }
+
+    .stickyBar ul {
+        display: flex;
+        justify-content: flex-start;
+        padding-left: 10px;
+    }
+
+    .stickyBar ul li {
+        background: transparent;
+        box-shadow: none;
+        height: 50px;
+    }
+
+    .stickyBar ul li a span {
+        display: none; /* Hide labels on mobile */
+    }
+
+    .stickyBar ul li .applyNow {
+        display: block;
+        font-size: 16px;
+        background: #fff;
+        color: #b1040e;
+        padding: 8px !important;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+}
