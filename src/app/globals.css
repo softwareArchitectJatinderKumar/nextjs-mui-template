@@ -86,3 +86,15 @@ a {
     color-scheme: dark;
   }
 }
+
+.section {
+    padding: 60px 0;
+  }
+  
+  .bgDarkYellow {
+  background-color: #fdf8ef;
+}
+
+  .bgLightYellow {
+    background-color: #fffaf0;
+  }

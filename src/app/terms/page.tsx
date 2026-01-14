@@ -22,14 +22,13 @@ export default function TermsandConditions() {
                     </div>
                 </div>
             )}
-            <section className={styles.section}>
+            <section className={styles.section + ' bgDarkYellow'}>
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-lg-12">
                             <div className={styles.termsContainer}>
                                 <div className={styles.termsHeader}>
-                                    <p>Legal Document</p>
-                                    <h1>Terms and Conditions</h1>
+                                    <h1>Our Terms and Conditions</h1>
                                 </div>
 
                                 <div className={styles.termsContent}>

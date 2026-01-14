@@ -1,7 +1,27 @@
 import React from 'react';
- import { Offer } from '../../types/cif';
-
+import { Offer } from '../../types/cif';
+import Swal from 'sweetalert2';
 const HeroSection: React.FC = () => {
+  const downloadTestCharge = () => {
+    Swal.fire({
+      title: 'Send Samples at Following Address :',
+      html: `
+           <address>
+            <div class="contact-text">
+           Central Instrumentation Facility (CIF) <br/>
+          Lovely Professional University <br/>
+          Block-38, Room No.106 <br/>
+          Jalandhar - Delhi G.T. Road, <br/>
+          Phagwara, Punjab (India) - 144411 <br/>
+          Phone : <a href="tel:+911824444021">+91 1824-444021</a><br>
+          Email : cif@lpu.co.in<br>
+          </div>
+           </address>`,
+      icon: 'info'
+    });
+
+  };
+
   const offers: Offer[] = [
     { title: "Leading class testing equipments", desc: "CIF is equipped with sophisticated instruments to carry out spectral measurements, structure determination, and chemical analysis." },
     { title: "High degree of reliable and quick test results", desc: "Given the time-tested machines & committed research base, CIF can assure authentic & reproducible results" },
@@ -11,18 +31,24 @@ const HeroSection: React.FC = () => {
   return (
     <section className="section bgDarkYellow pb-0">
       <div className="container">
-        <div className="headingWraper mb-4">
-          <div className="mainHead"><h1>Central Instrumentation Facility</h1></div>
+        <div className="headingWraper mb-4 d-flex justify-content-between  align-items-center">
+          <h1 className="mainHead">Central Instrumentation Facility</h1>
+
+          <div className="callAction">
+            <a onClick={() => downloadTestCharge()} className="lpu-btn">
+              Address for Sending Samples </a>
+          </div>
         </div>
+
         <p>
-           Central Instrumentation Facility (CIF) of Lovely Professional University (LPU) houses a wide range of
-             high-end instruments for pushing the boundaries of research in science and technology to higher level. These
-             instruments and facilities help the faculties, research scholars and students to carry out globally
-             competitive research in basic, applied and medical sciences. The center also hopes for expansion of the
-             facilities each year making it a core facility in the country. By realizing CIF, we expect a prominent hub
-             for pioneering and collaborative analytical research in our country. CIF runs under the purview of Research
-             and Development Cell of the university and is expected to self-sustain by revenue generation for the upkeep
-             and maintenance of the instruments.
+          Central Instrumentation Facility (CIF) of Lovely Professional University (LPU) houses a wide range of
+          high-end instruments for pushing the boundaries of research in science and technology to higher level. These
+          instruments and facilities help the faculties, research scholars and students to carry out globally
+          competitive research in basic, applied and medical sciences. The center also hopes for expansion of the
+          facilities each year making it a core facility in the country. By realizing CIF, we expect a prominent hub
+          for pioneering and collaborative analytical research in our country. CIF runs under the purview of Research
+          and Development Cell of the university and is expected to self-sustain by revenue generation for the upkeep
+          and maintenance of the instruments.
         </p>
         <div className="banner mb-5">
           <img src="https://www.lpu.in/lpu-assets/images/cif/banner.jpg" alt="CIF Banner" />
