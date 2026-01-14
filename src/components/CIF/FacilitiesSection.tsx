@@ -9,13 +9,13 @@ interface FacilitiesProps {
 
 const FacilitiesSection: React.FC<FacilitiesProps> = ({ instruments }) => {
   return (
-    <section className={styles.section}>
+    <section className="section bg-dark-yellow ">
       <div className="container">
-        <div className={`mb-4 mt-4 ${styles.headingWrapper}`}>
+        <div className="mb-4 mt-4 headingWrapper">
           <h2 className="fw-bold mb-0">Facilities</h2>
 
-          <div className={styles.callAction}>
-            <Link href="/OurInstruments" className="link-btn">
+          <div className="callAction">
+            <Link href="/OurInstruments" className="linkBtn">
               <img
                 src="https://www.lpu.in/lpu-assets/images/icons/chevron-right.svg"
                 alt="Know more"
@@ -32,7 +32,7 @@ const FacilitiesSection: React.FC<FacilitiesProps> = ({ instruments }) => {
         </p>
 
     
-        <div className={`${styles.InstrumentGrid} row`} id="instrumentGrid">
+        <div className={`${styles.instrumentGrid} row`} id="instrumentGrid">
           {instruments.map((instrument) => (
             <div className={`${styles.instrumentBlock} g-col-lg-3 g-col-6 d-grid col-md-3`} key={instrument.id}>
               <div className={`${styles.imgContainer} mb-3`}>
