@@ -1,13 +1,6 @@
-// services/myAppWebService.js
-
 import axios from 'axios';
-
 class MyAppWebService {
-  apiClient: any;
-  folderUrl: any
-  localApiUrl: any;
-  USER_KEY: any;
-
+  apiClient: any;     folderUrl: any;      localApiUrl: any;   USER_KEY: any;
 
 
   constructor() {
@@ -19,25 +12,20 @@ class MyAppWebService {
       },
     });
 
-
-    this.folderUrl = process.env.NEXT_PUBLIC_FOLDER_URL; // Use the folder URL from env
-    this.localApiUrl = process.env.NEXT_PUBLIC_AUTH_API_LOCAL; // Use the local API URL from env
+    this.folderUrl = process.env.NEXT_PUBLIC_FOLDER_URL;
+    this.localApiUrl = process.env.NEXT_PUBLIC_AUTH_API_LOCAL;
     this.USER_KEY = 'auth-user';
   }
 
   getFolderUrl() {
     return this.folderUrl;
   }
-
-
-
   clean(): void {
     window.sessionStorage.clear();
   }
   public saveUser(user: any): void {
     window.sessionStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
-
   public getUser(): any {
     const user = window.sessionStorage.getItem(this.USER_KEY);
     if (user) {
@@ -95,15 +83,7 @@ class MyAppWebService {
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
       throw error;
-    }
-    //    try {
-    //   const response = await this.apiClient.get('api/LpuCIF/GetStudentById?RegNo=' + regNo);
-    //   return response.data; 
-    // } catch (error) {
-    //   console.error('Error fetching authorized user data:', error);
-    //   throw error; 
-    // }
-
+    }    
   }
 
   async getAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
@@ -139,9 +119,6 @@ class MyAppWebService {
     }
   }
 
-
-
-  // Method to fetch instruments
   async getAllInstruments() {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllInstruments');
@@ -151,20 +128,6 @@ class MyAppWebService {
       throw error;
     }
   }
-  // api/LpuCIF/GetAllInstruments
-  // Method to fetch specifications
-  // fetchSpecifications(categoryId: any, instrumentId: any) {
-  //   return this.apiClient.get(`api/LpuCIF/GetAllSpecifications`, {
-  //     params: {
-  //       categoryId,
-  //       id: instrumentId,
-  //     },
-  //   });
-  // }
-
-
-  // New API added 
-
 
 
   async GetAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
@@ -309,7 +272,6 @@ class MyAppWebService {
       throw error;
     }
   }
-  // get 
   async GetAllBookingTests() {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetAllBookingTests', {
@@ -321,7 +283,6 @@ class MyAppWebService {
     }
   }
 
-  // post
   async MakePaymentforTest(newPaymentRecord: any) {
     try {
       const response = await this.apiClient.post('api/LpuCIF/MakePaymentNowNew', newPaymentRecord, {
@@ -335,7 +296,6 @@ class MyAppWebService {
       throw error;
     }
   }
-  // get call
   async GetUserPaymentDetails(UserEmailId: any) {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetUserPaymentDetails', {
@@ -350,8 +310,6 @@ class MyAppWebService {
     }
   }
 
-
-  // get request admin panel 
   async GetAllPaymentDetails() {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetAllPaymentDetails', {
@@ -363,9 +321,6 @@ class MyAppWebService {
     }
   }
 
-
-
-  // Post  
   async CIFResultsUploads(dataSoft: any) {
     try {
       const response = await this.apiClient.post('api/LpuCIF/CIFResultsUploads', dataSoft, {
@@ -379,9 +334,6 @@ class MyAppWebService {
       throw error;
     }
   }
-
-  // get request 
-
   async GetAllInstruments() {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetInstrumentsDetails', {
@@ -392,8 +344,6 @@ class MyAppWebService {
       throw error;
     }
   }
-
-  // Post  
   async CIFUpdateStatusInstruments(dataSoft: any) {
     try {
       const response = await this.apiClient.post('api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, {
@@ -407,9 +357,6 @@ class MyAppWebService {
       throw error;
     }
   }
-
-
-  // Post  
   async CIFAssignTestToStaff(dataSoft: any) {
     try {
       const response = await this.apiClient.post('api/LpuCIF/CIFAssignTestToStaff', dataSoft, {
@@ -423,9 +370,6 @@ class MyAppWebService {
       throw error;
     }
   }
-
-
-  // get request 
 
   async GetUserResultsDetails(EmailId: any, BookingId: any) {
     try {
@@ -442,10 +386,6 @@ class MyAppWebService {
     }
   }
 
-
-
-  // get request 
-
   async GetUserBookingStatus(UserEmailId: any) {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetUserBookingStatus', {
@@ -459,8 +399,6 @@ class MyAppWebService {
       throw error;
     }
   }
-  // get request 
-
   async GetAllUserData() {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetAllApprovedUserData', {
@@ -472,10 +410,6 @@ class MyAppWebService {
       throw error;
     }
   }
-
-
-
-  // Post  
   async CIFUpdateUserDetails(UpdateUserData: any) {
     try {
       const response = await this.apiClient.post('api/LpuCIF/CIFChangePasswordDetails', UpdateUserData,
@@ -490,10 +424,6 @@ class MyAppWebService {
       throw error;
     }
   }
-
-
-  // get request 
-
   async GetAnalysisData(Id: any, TypeId: any) {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetAnalysisIdWisePriceDetails', {
@@ -507,11 +437,6 @@ class MyAppWebService {
     }
   }
 
-
-
-
-  // get request 
-
   async GetUserAllBookingSlot(Id: any) {
     try {
       const response = await this.apiClient.get('api/LpuJournal/GetAllUserBookingSlot', {
@@ -524,11 +449,6 @@ class MyAppWebService {
     }
   }
 
-
-
-
-  // get request 
-
   async CIFGetUserDetails(UserEmail: any) {
     try {// LpuCIF/CIFGetUserDetails?EmailId=
       const response = await this.apiClient.get('api/LpuCIF/CIFGetUserDetails', {
@@ -540,14 +460,6 @@ class MyAppWebService {
       throw error;
     }
   }
-  // async fetchSpecifications(categoryId:any, instrumentId:any) {
-  //     return this.apiClient.get(`api/LpuCIF/GetAllSpecifications`, {
-  //       params: {
-  //         categoryId,
-  //         id: instrumentId,
-  //       },
-  //     });
-  //  }
 
   async fetchSpecifications() {
     try {
@@ -575,113 +487,6 @@ class MyAppWebService {
       throw error;
     }
   }
-
-  // Post  
-  // async CIFUpdateStatusInstruments(dataSoft: any) {
-  //   try {
-  //     const response = await this.apiClient.post('api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error adding booking slot:', error);
-  //     throw error;
-  //   }
-  // }
-
-
-  // GetDecodePaymentStatusDetails(Data: FormData): Observable<any> {
-  // let authToken = this.storageService.getUser();
-  // let headers = new HttpHeaders()
-  //   .set('Authorization', 'Bearer ' + this.authToken)
-  // return this.http.post(
-  //   // AUTH_API_LOCAL + 'api/LpuCIF/DecodePaymentStatusDetails', Data, { headers }
-  //     AUTH_API + 'api/LpuCIF/DecodePaymentStatusDetails', Data, { headers }
-  // );
-  // }
-  // GetUserPaymentStatusDetails(UserEmailId: string): Observable<any> {
-  // let token = this.storageService.getUser();
-  // let headers = new HttpHeaders()
-  // // .set('Authorization', 'Bearer ' + token)
-  // .set('Authorization', 'Bearer ' + this.authToken)
-  // .set('Content-Type', 'application/json');
-  // return this.http.get(
-  //    AUTH_API + 'api/LpuCIF/GetUserPaymentStatusDetails?UserId=' + UserEmailId,
-  // //  AUTH_API_LOCAL + 'api/LpuCIF/GetUserPaymentStatusDetails?UserId=' + UserEmailId,
-  //   {headers}
-  // );
-  // }
-
-  // GetAllInstrumentsData(): Observable<any> {
-  // let token = this.storageService.getUser();
-  // let headers = new HttpHeaders()
-  // .set('Authorization', 'Bearer ' + this.authToken)
-  // .set('Content-Type', 'application/json');
-  // return this.http.get(
-  //    AUTH_API + 'api/LpuCIF/GetAllInstruments',
-  //   // AUTH_API_LOCAL + 'api/LpuCIF/GetAllInstruments',
-  //   {headers}
-  // );
-  // }
-
-
-  // fetchSpecifications(): Observable<any> {
-  //   let token = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //     .set('Content-Type', 'application/json');
-  //   return this.http.get(
-  //     AUTH_API + 'api/LpuCIF/GetAllSpecifications', { headers }
-  //   );
-  // }
-  // InsertPaymentDetails(Data: any): Observable<any> {
-  //   let authToken = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //   return this.http.post(
-  //     AUTH_API_LOCAL + 'api/LpuCIF/AddPaymentDetails', Data, { headers }
-  //       // AUTH_API + 'api/LpuCIF/AddPaymentDetails', Data, { headers }
-  //   );
-
-  // }
-
-  // UpdateInstrumentImageFile(dataSoft:FormData): Observable<any> {
-  //   let authToken = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //   return this.http.post(
-  //      AUTH_API + 'api/LpuCIF/UpdateInstrumentImage',dataSoft,
-  //     // AUTH_API_LOCAL + 'api/LpuCIF/UpdateInstrumentImage',dataSoft,
-  //    {headers}
-  //   );
-  // }
-
-  // CIFInstrumentUpdateDetails(dataSoft:FormData): Observable<any> {
-  //   let authToken = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //   return this.http.post(
-  //     //  AUTH_API + 'api/LpuCIF/CIFInstrumentUpdateData',dataSoft,
-  //     AUTH_API_LOCAL + 'api/LpuCIF/CIFInstrumentUpdateData',dataSoft,
-  //    {headers}
-  //   );
-  // }
-
-
-  // GetChargesDetails(Id: any): Observable<any> {
-  //   let token = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //     .set('Content-Type', 'application/json');
-  //   return this.http.get(
-  //     // AUTH_API + 'api/LpuCIF/GetAGetInstrumentChargesDetailsllSpecifications', { headers }
-  //     AUTH_API_LOCAL + 'api/LpuCIF/GetInstrumentChargesDetails?InstrumentID='+Id, { headers }
-  //   );
-  // }
-
-
 }
 
 const myAppWebService = new MyAppWebService();

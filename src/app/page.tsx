@@ -1,18 +1,3 @@
-// import SimpleCard from "@/components/common/cards/SimpleCard";
-
-// import Image from "next/image";
-// import styles from "./page.module.css";
-
-// export default function Home() {
-//   return (
-//     <div className={styles.page}>
-//       <SimpleCard title="Home" content="Welcome to template" />
-
-//     </div>
-//   );
-// }
-
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -26,8 +11,8 @@ import FacilitiesSection from '@/components/CIF/FacilitiesSection';
 import PartnersSection from '@/components/CIF/PartnersAndEvents';
 import ResourcesSection from '@/components/CIF/ResourcesSection';
 import EventsSection from '@/components/CIF/EventsSection';
+import ContactSection from '@/components/CIF/ContactSection';
 
-// Define an interface for better type safety (Requirement #9)
 interface Instrument {
   id: string | number;
   instrumentName: string;
@@ -46,7 +31,6 @@ export default function Home() {
     const fetchInstruments = async () => {
       try {
         const response = await myAppWebService.getAllInstruments();
-        // Standardizing response check
         const data = response.item1 || response.data || response;
         setInstruments(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -82,14 +66,19 @@ export default function Home() {
           </div>
         </div>
       )}
+
       <HeroSection />
+      
       <FacilitiesSection instruments={instruments} />
 
-      <PartnersSection />
+      <EventsSection styles={Eventsstyles} />
+      {/* <PartnersSection />
 
       <ResourcesSection />
-      <EventsSection styles={Eventsstyles} />
-      <section className="section industry-partners-grid d-none">
+
+      <ContactSection /> */}
+
+      {/* <section className="section industry-partners-grid d-none">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-4">
@@ -129,7 +118,6 @@ export default function Home() {
             <div className="col-md-4">
               <div className="d-flex align-items-center gap-2">
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none">
-                  {/* Corrected SVG camelCase attributes */}
                   <g clipPath="url(#clip0_4273_280)">
                     <path d="M16 0.523438L7.95831 6.52344L0 0.523438" stroke="#EF7D00" strokeWidth="1.5" />
                   </g>
@@ -139,7 +127,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

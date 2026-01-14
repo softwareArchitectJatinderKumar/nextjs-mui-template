@@ -9,17 +9,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // const loadData = async () => {
-    //   try {
-    //     const response = await apiService.getProducts(); // Dummy API call
-    //     setData(response.data);
-    //   } catch (error) {
-    //     console.error("Failed to fetch data", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    // loadData();
   }, []);
 
   const columns = [

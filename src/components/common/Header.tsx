@@ -20,9 +20,9 @@ import page from '@/app/(auth)/auth/page';
 
 // Unified Navigation Data
 const navPages = [
-  { name: 'Home', path: '/' },
-  { name: 'Facilities', path: '/OurInstruments' },
-  { name: 'Test Charges', path: '//TestingChargesList.pdf' },
+  // { name: 'Home', path: '/' },
+  { name: 'Facilities', path: '/' },
+  { name: 'Test Charges', path: '/TestingChargesList.pdf' },
   { name: 'Terms & Conditions', path: '/terms' },
   { name: 'Login', path: '/login' },
   { name: 'Register', path: '/register' },

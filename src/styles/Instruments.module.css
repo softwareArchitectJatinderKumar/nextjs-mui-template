@@ -170,17 +170,6 @@
   justify-content: space-between;
   align-items: center;
 }
-.callAction {
-  display: flex;
-  align-items: center;
-}
-
-.callAction a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-}
 
 /* 
 .headingWrapper {

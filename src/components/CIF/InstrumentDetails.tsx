@@ -25,13 +25,6 @@ const InstrumentDetails: React.FC<Props> = ({ instrument, specs, onViewCharges }
               </a>
             
           </div>
-            {/* <button 
-              onClick={onViewCharges} 
-              className="btn btn-warning fw-bold px-4"
-              style={{ backgroundColor: '#ef7d00', border: 'none', color: 'white' }}
-            >
-              View Testing Charges
-            </button> */}
           </div>
           <div className={`alert ${instrument.isActive ? 'alert-success' : 'alert-danger'}`}>
             <strong>{instrument.isActive ? 'Instrument is Active' : 'Instrument is Currently Inactive'}</strong>
@@ -62,40 +55,3 @@ const InstrumentDetails: React.FC<Props> = ({ instrument, specs, onViewCharges }
 );
 
 export default InstrumentDetails;
-// import React from 'react';
-// import styles from '@/styles/Instruments.module.css';
-
-// const InstrumentDetails: React.FC<any> = ({ instrument, specs, onViewCharges }) => (
-//   <section className="section bg-dark-yellow py-5">
-//     <div className="container">
-//       <div className="row">
-//         <div className="col-lg-9">
-//           <div className="d-flex justify-content-between align-items-center mb-4">
-//             <h2>{instrument.instrumentName}</h2>
-//             <button onClick={onViewCharges} className="btn btn-warning">View Charges</button>
-//           </div>
-//           <img 
-//             src={instrument.imageUrl} 
-//             className={styles.imageSizes} 
-//             alt={instrument.instrumentName} 
-//           />
-//           <div className="mt-4" dangerouslySetInnerHTML={{ __html: instrument.description }} />
-//         </div>
-//         <div className="col-lg-3">
-//           <div className="section-light-red p-3 rounded text-white">
-//             <h4>Specifications</h4>
-//             <ul className="list-unstyled">
-//               {specs.map((s: any, i: number) => (
-//                 <li key={i} className="mb-2 border-bottom border-light pb-1">
-//                   <strong>{s.keyName}:</strong> {s.keyValue}
-//                 </li>
-//               ))}
-//             </ul>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </section>
-// );
-
-// export default InstrumentDetails;

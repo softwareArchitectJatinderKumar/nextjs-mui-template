@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
-import styles from '@/styles/Instruments.module.css'; // Using your existing style module
 import myAppWebService from '@/services/myAppWebService';
 
 export default function LoginPage() {

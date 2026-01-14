@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     const response = await fetch('https://includepages.lpu.in/newlpu/footer.php', {
-      cache: 'no-store', // Ensures you get the latest footer
+      cache: 'no-store',
     });
     
     if (!response.ok) throw new Error('Failed to fetch remote content');

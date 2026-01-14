@@ -104,49 +104,41 @@ export default function UserRegisterPage() {
                   </div>
 
                   <div className="row">
-                    {/* Email */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Email</label>
                       <input {...register('EmailId')} className={`form-control ${errors.EmailId ? 'is-invalid' : ''}`} placeholder="Enter Email" />
                       <div className="invalid-feedback">{errors.EmailId?.message}</div>
                     </div>
 
-                    {/* Name */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Candidate Name</label>
                       <input {...register('CandidateName')} className={`form-control ${errors.CandidateName ? 'is-invalid' : ''}`} placeholder="Enter Name" />
                       <div className="invalid-feedback">{errors.CandidateName?.message}</div>
                     </div>
 
-                    {/* Supervisor */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Supervisor Name</label>
                       <input {...register('Supervisorname')} className={`form-control ${errors.Supervisorname ? 'is-invalid' : ''}`} placeholder="Supervisor Name" />
                       <div className="invalid-feedback">{errors.Supervisorname?.message}</div>
                     </div>
 
-                    {/* Mobile */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Mobile</label>
                       <input {...register('MobileNumber')} className={`form-control ${errors.MobileNumber ? 'is-invalid' : ''}`} placeholder="10 Digit Mobile" />
                       <div className="invalid-feedback">{errors.MobileNumber?.message}</div>
                     </div>
 
-                    {/* Organization */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Organization</label>
                       <input {...register('InstituteName')} className={`form-control ${errors.InstituteName ? 'is-invalid' : ''}`} placeholder="Institute Name" />
                       <div className="invalid-feedback">{errors.InstituteName?.message}</div>
                     </div>
 
-                    {/* Department */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Department</label>
                       <input {...register('DepartmentName')} className={`form-control ${errors.DepartmentName ? 'is-invalid' : ''}`} placeholder="Department Name" />
                       <div className="invalid-feedback">{errors.DepartmentName?.message}</div>
                     </div>
-
-                    {/* ID Type */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">ID Proof Type</label>
                       <select {...register('IdProofType')} className={`form-select ${errors.IdProofType ? 'is-invalid' : ''}`}>
@@ -159,35 +151,30 @@ export default function UserRegisterPage() {
                       <div className="invalid-feedback">{errors.IdProofType?.message}</div>
                     </div>
 
-                    {/* ID Number */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">ID Proof Number</label>
                       <input {...register('IdProofNumber')} className={`form-control ${errors.IdProofNumber ? 'is-invalid' : ''}`} placeholder="ID Number" />
                       <div className="invalid-feedback">{errors.IdProofNumber?.message}</div>
                     </div>
 
-                    {/* Address */}
                     <div className="col-md-12 mb-3">
                       <label className="form-label">Address</label>
                       <textarea {...register('Address')} className={`form-control ${errors.Address ? 'is-invalid' : ''}`} placeholder="Full Address"></textarea>
                       <div className="invalid-feedback">{errors.Address?.message}</div>
                     </div>
 
-                    {/* Password */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Password</label>
                       <input type="password" {...register('Password')} className={`form-control ${errors.Password ? 'is-invalid' : ''}`} placeholder="Password" />
                       <div className="invalid-feedback">{errors.Password?.message}</div>
                     </div>
 
-                    {/* Confirm Password */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Confirm Password</label>
                       <input type="password" {...register('ConfirmPassword')} className={`form-control ${errors.ConfirmPassword ? 'is-invalid' : ''}`} placeholder="Confirm Password" />
                       <div className="invalid-feedback">{errors.ConfirmPassword?.message}</div>
                     </div>
 
-                    {/* User Role */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Role</label>
                       <select {...register('UserRole')} className={`form-select ${errors.UserRole ? 'is-invalid' : ''}`}>

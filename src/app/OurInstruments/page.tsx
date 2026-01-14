@@ -34,7 +34,6 @@ function InstrumentsContent() {
         setData(insts);
         setSpecs(allSpecs);
       } finally {
-        // setLoading(false);
       }
     };
     loadData();

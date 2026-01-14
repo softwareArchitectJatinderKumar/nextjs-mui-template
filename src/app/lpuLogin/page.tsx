@@ -4,9 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import styles from '@/styles/Instruments.module.css';
-// import styles from './LoginPage.module.css';
 import Cookies from 'js-cookie';
-// Mocking the services structure to match your API names import myAppWebService from '@/services/myAppWebService';
 import myAppWebService from '@/services/myAppWebService';
 
 export default function LoginPage() {
@@ -22,14 +20,11 @@ export default function LoginPage() {
         await getToken(Email, password, UserRoleS);
     };
 
-    // MATCHING API LOGIC: getToken
     const getToken = async (id: any, key: any, Role: any) => {
         try {
             const response = await myAppWebService.loginInternalUser(id, key);
             myAppWebService.saveUser(response.token);
-
             if (Role === 'Staff') {
-
                 await getEmployeeDetails(response.token);
             } else if (Role === 'Student') {
                 await getStudentById(id, key);
@@ -39,7 +34,6 @@ export default function LoginPage() {
         }
     };
 
-    // MATCHING API LOGIC: getStudentById
     const getStudentById = async (regNo: any, secretKey: any) => {
         try {
             const response = await myAppWebService.getStudentById(regNo);
@@ -61,18 +55,10 @@ export default function LoginPage() {
         }
     };
 
-    // MATCHING API LOGIC: GetEmployeeDetails
     const getEmployeeDetails = async (secretKey: any) => {
         try {
-            // 1. Double check the token exists in storage
             const token = localStorage.getItem('token');
-            console.log("Current Token:", token);
-
-            const response = await myAppWebService.GetEmployeeDetails(secretKey); // Removed secretKey if not needed by API
-
-            console.log('Raw Response:', response);
-
-            // Handle both possible structures (raw axios vs data only)
+            const response = await myAppWebService.GetEmployeeDetails(secretKey);
             const data = response.data ? response.data : response;
 
             if (data && data.item1 && data.item1.length > 0) {
@@ -81,13 +67,11 @@ export default function LoginPage() {
                 const userData = {
                     CandidateName: emp.employeeName,
                     UserId: emp.employeeCode,
-                    EmailId: emp.officialEmailId || emp.email, // Use official email first
+                    EmailId: emp.officialEmailId || emp.email,
                     Department: emp.departmentName,
-                    PasswordText: secretKey, // We pass the password here to save in local CIF DB
+                    PasswordText: secretKey,
                     UserRole: '400000'
                 };
-
-                console.log('Mapped User Data:', userData);
                 await proceedWithTerms(userData);
             } else {
                 console.error("API returned success but item1 is empty or missing");
@@ -100,8 +84,6 @@ export default function LoginPage() {
     };
  
     const proceedWithTerms = async (userData: any) => {
-        Cookies.set('InternalUserAuthData', JSON.stringify(userData));
-
         const result = await Swal.fire({
             title: 'Terms Conditions',
             html: `<div style="text-align: left; font-size: 14px;">

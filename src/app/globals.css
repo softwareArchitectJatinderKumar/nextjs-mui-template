@@ -2,14 +2,11 @@
   --background: #ffffff;
   --foreground: #171717;
 }
-/* global.css */
 @keyframes marqueeAnim {
   0% {
     transform: translateX(0);
   }
   100% {
-    /* This moves the content to the left. 
-       We move it by a portion of the total width to create the loop. */
     transform: translateX(-50%);
   }
 }
@@ -45,7 +42,6 @@ a {
   text-decoration: none;
 }
  
-/* Full Screen Loader - Merged from your Promo and Register modules */
 .fullScreenLoader {
   position: fixed;
   top: 0;
@@ -85,4 +81,23 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+
+.callAction {
+  display: flex;
+  align-items: center;
+}
+
+.callAction a {
+  margin-left: 22.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.callAction a img {
+  width: 20px;
+  height: 20px;
 }

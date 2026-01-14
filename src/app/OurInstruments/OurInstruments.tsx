@@ -7,8 +7,6 @@ import AboutSection from '../../components/CIF/AboutSection';
 import InstrumentGrid from '../../components/CIF/InstrumentGrid';
 import InstrumentDetails from '../../components/CIF/InstrumentDetails';
 import FaqSection  from '@/components/CIF/FaqSection';
-// import Faq from '../../components/CIF/FaqSection';
-
 const OurInstrumentsPage: React.FC = () => {
   const router = useRouter();
   const { id, categoryId } = router.query;
@@ -44,23 +42,12 @@ const OurInstrumentsPage: React.FC = () => {
 
   return (
     <>
-      {/* SECTION 1 & 2: About and Selection (Always visible) */}
       <AboutSection />
       <InstrumentGrid 
         instruments={instruments} 
         selectedId={Number(id)} 
         onSelect={handleSelect} 
       />
-
-      {/* SECTION 3: Specific details (Visible only if params are present) */}
-      {/* {selectedInstrument && (
-        <InstrumentDetails 
-          instrument={selectedInstrument} 
-          specs={filteredSpecs} 
-        />
-      )} */}
-
-      {/* SECTION 4: FAQs (Always visible) */}
       <FaqSection  />
     </>
   );
