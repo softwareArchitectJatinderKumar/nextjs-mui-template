@@ -7,8 +7,37 @@ import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 import styles from '@/styles/Instruments.module.css'; // Using your existing style module
 import myAppWebService from '@/services/myAppWebService';
+import FacilitiesSection from '@/components/CIF/FacilitiesSection';
+interface Instrument {
+  id: string | number;
+  instrumentName: string;
+  categoryId: string | number;
+  imageUrl?: string;
+}
 
 export default function LoginPage() {
+
+  const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchInstruments = async () => {
+      try {
+        const response = await myAppWebService.getAllInstruments();
+        const data = response.item1 || response.data || response;
+        setInstruments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error('Error fetching instruments:', err);
+        setError('Failed to load instruments');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInstruments();
+  }, []);
+
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -98,11 +127,11 @@ export default function LoginPage() {
                 </div>
             )}
 
-            <section className="section py-5">
+            <section className="section bgDarkYellow py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
-                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facility</h1>
+                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facilitiation</h1>
                             <h2 className="text-center">User <span style={{ color: '#ef7d00' }}>Login</span> Page</h2>
                         </div>
                     </div>
@@ -168,8 +197,7 @@ export default function LoginPage() {
                                     <div className="mb-4 text-center">
                                         <button
                                             type="submit"
-                                            className="btn btn-warning w-100 fw-bold text-white py-2"
-                                            style={{ backgroundColor: '#ef7d00', borderColor: '#ef7d00' }}
+                                            className="lpu-btn w-20"
                                             disabled={!isValid}
                                         >
                                             Submit
@@ -198,6 +226,7 @@ export default function LoginPage() {
                     </div>
                 </div>
             </section>
+            {/* <FacilitiesSection instruments={instruments} /> */}
         </>
     );
 }

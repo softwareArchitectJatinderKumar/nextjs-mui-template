@@ -16,32 +16,32 @@ const InstrumentDetails: React.FC<Props> = ({ instrument, specs, onViewCharges }
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="mb-0">{instrument.instrumentName}</h2>
             <div className={styles.callAction}>
-              <a className="d-flex align-items-center fw-bold text-decoration-none" href='/login'>
+              {/* <a className="d-flex align-items-center fw-bold text-decoration-none" href='/login'>
                 <img
                   src="https://www.lpu.in/lpu-assets/images/icons/chevron-right.svg"
                   alt="Know more"
                 />
                 Book Test
-              </a>
-            
-          </div>
-            {/* <button 
-              onClick={onViewCharges} 
-              className="btn btn-warning fw-bold px-4"
-              style={{ backgroundColor: '#ef7d00', border: 'none', color: 'white' }}
+              </a> */}
+             <button 
+              onClick={() => window.location.href='/login'} 
+              className="lpu-btn"
+              // style={{ backgroundColor: '#ef7d00', border: 'none', color: 'white' }}
             >
-              View Testing Charges
-            </button> */}
+              Login/ Register
+            </button>
+          </div>
+           
           </div>
           <div className={`alert ${instrument.isActive ? 'alert-success' : 'alert-danger'}`}>
             <strong>{instrument.isActive ? 'Instrument is Active' : 'Instrument is Currently Inactive'}</strong>
           </div>
           <img 
             src={instrument.imageUrl} 
-            className={styles.imageSizes} 
+            className={styles.imageSizes + ' img-fluid'} 
             alt={instrument.instrumentName} 
           />
-          <div className="mt-4 fs-5 " style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: instrument.description }} />
+          <p className="mt-4 fs-6 " style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: instrument.description }} />
         </div>
         <div className="col-lg-3">
           <div className={`${styles.sectionLightRed} p-3 rounded text-white shadow`}>

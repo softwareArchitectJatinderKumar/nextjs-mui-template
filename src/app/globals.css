@@ -86,3 +86,27 @@ a {
     color-scheme: dark;
   }
 }
+
+.section {
+    padding: 60px 0;
+  }
+  
+  .bgDarkYellow {
+  background-color: #fdf8ef;
+}
+
+  .bgLightYellow {
+    background-color: #fffaf0;
+  }
+
+  
+.cifLogin {
+  background-color: rgba(0, 0, 0, .05);
+  padding: 40px;
+  border-radius: 15px;
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+}
+
+.cifLogin h2 span {
+  color: #ef7d00;
+}

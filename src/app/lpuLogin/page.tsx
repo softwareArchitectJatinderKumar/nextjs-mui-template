@@ -3,20 +3,53 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
-import styles from '@/styles/Instruments.module.css';
+import styles from './LpuloginPage.module.css';
 // import styles from './LoginPage.module.css';
 import Cookies from 'js-cookie';
 // Mocking the services structure to match your API names import myAppWebService from '@/services/myAppWebService';
 import myAppWebService from '@/services/myAppWebService';
+import FacilitiesSection from '@/components/CIF/FacilitiesSection';
+import Link from 'next/link';
+
+interface Instrument {
+    id: string | number;
+    instrumentName: string;
+    categoryId: string | number;
+    imageUrl?: string;
+}
+
 
 export default function LoginPage() {
+
+    const [instruments, setInstruments] = useState<Instrument[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchInstruments = async () => {
+            try {
+                const response = await myAppWebService.getAllInstruments();
+                const data = response.item1 || response.data || response;
+                setInstruments(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error('Error fetching instruments:', err);
+                setError('Failed to load instruments');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchInstruments();
+    }, []);
+
+
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors, isValid } } = useForm({
-        mode: 'onChange'
+        mode: 'onTouched'
     });
-
+ 
     const onSubmit = async (data: any) => {
         const { Email, password, UserRoleS } = data;
         await getToken(Email, password, UserRoleS);
@@ -94,11 +127,11 @@ export default function LoginPage() {
                 loginFailed();
             }
         } catch (error: any) {
-            console.error("API Error Details:" );
+            console.error("API Error Details:");
             loginFailed();
         }
     };
- 
+
     const proceedWithTerms = async (userData: any) => {
         Cookies.set('InternalUserAuthData', JSON.stringify(userData));
 
@@ -114,7 +147,7 @@ export default function LoginPage() {
         });
 
         if (result.isConfirmed) {
-           
+
             await myAppWebService.NewUserRecord(userData);
             router.push('/NewBookings');
         } else {
@@ -126,7 +159,7 @@ export default function LoginPage() {
         Swal.fire('Login Failed', 'Invalid credentials!', 'warning');
     };
 
- 
+
     useEffect(() => {
         setLoading(true);
         const timer = setTimeout(() => setLoading(false), 1500);
@@ -141,13 +174,117 @@ export default function LoginPage() {
                     </div>
                 </div>
             )}
+            <section className={styles.section + ' bgDarkYellow py-5'}>
+                <div className="container">
+                    <div className={styles.mainHead + " mb-5"}>
+                        <h1>Central Instrumentation Facilitiation - Login</h1>
+                    </div>
 
-            <section className="section py-5">
+                    <div className="row align-items-center">
+                        <div className="col-md-6 d-none d-lg-block">
+                            <img
+                                src="https://www.lpu.in/lpu-assets/images/cif/login-left.png"
+                                alt="Login"
+                                className="img-fluid"
+                            />
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className={styles.cifLogin}>
+                                <h2 className="mb-4 text-center">
+                                    <span>Internal</span> User Login
+                                </h2>
+
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <div className={styles.inputGroup}>
+                                        <label className="form-label">Login ID / Email</label>
+                                        <input
+                                            type="text"
+                                            className={`form-control ${errors.Email ? 'is-invalid' : ''}`}
+                                            placeholder="Enter Login ID / Email"
+                                            {...register("Email", {
+                                                required: "Id is required",
+                                                pattern: {
+                                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                    message: "Invalid email address"
+                                                }
+                                            })}
+                                        />
+                                        {errors.Email && (
+                                            <span className="text-danger mt-1 d-block">
+                                                {errors.Email.message as string}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className={styles.inputGroup}>
+                                        <label className="form-label">Password</label>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            className={styles.formControl}
+                                            placeholder="Enter password"
+                                            {...register("password", { required: "Password is required" })}
+                                        />
+                                        <i
+                                            className={`${styles.inputEye} bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`}
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        />
+                                        {errors.password && <span className="text-danger small">{errors.password.message as string}</span>}
+                                    </div>
+
+                                    <div className={styles.inputGroup}>
+                                        <label className="form-label">Choose Role</label>
+                                        <select
+                                            className={styles.formControl}
+                                            {...register("UserRoleS", { required: "Role is required" })}
+                                        >
+                                            <option value="">Select Role</option>
+                                            <option value="Student">Student</option>
+                                            <option value="Staff">Staff</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" className={styles.loginBtn + " w-20 mt-3"}>
+                                        Login
+                                    </button>
+
+                                    <div className="d-flex justify-content-between mt-4">
+                                        <Link href="/login" className={styles.regLink}>User Login</Link>
+                                        <Link href="/recoverAccount" className={styles.regLink}>Recover Account</Link>
+                                    </div>
+                                     <div className="d-flex justify-content-center">
+                                        <Link href="/StaffLogins" className={styles.regLink}>Staff Login</Link>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div className="mt-4 text-center">
+                                Don't have an account? <Link href="/register" className={styles.regLink}>Register</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.stickyBar}>
+                    <ul>
+                        <li>
+                            <img src="/icons/apply.png" alt="" width="20" className="me-2" />
+                            <span>Apply Now</span>
+                        </li>
+                        <li>
+                            <img src="/icons/query.png" alt="" width="20" className="me-2" />
+                            <span>Enquire Now</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            {/* <section className="section py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
                             <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facility</h1>
-                            <h2 className="text-center">User <span style={{ color: '#ef7d00' }}>Login</span> Page</h2>
+                            <h2 className="text-center">Internal <span style={{ color: '#ef7d00' }}>User Login</span></h2>
                         </div>
                     </div>
 
@@ -204,20 +341,26 @@ export default function LoginPage() {
                                         </select>
                                         {errors.UserRoleS && <span className="text-red-500 text-sm">Role is required</span>}
                                     </div>
-
+                                    <div className='m-4 d-flex justify-content-center'> 
                                     <button
                                         type="submit"
-                                        className={`${styles.loginBtn} w-full mt-4`}
+                                         className="lpu-btn w-20"
                                         disabled={!isValid}
                                     >
                                         Login
                                     </button>
+                                    </div>
+                                    <div className="d-flex justify-content-between small">
+                                        <Link href="/lpuLogin" className="text-decoration-none text-secondary">Internal User Login</Link>
+                                        <Link href="/recoverAccount" className="text-decoration-none" style={{ color: '#ef7d00' }}>Recover Account</Link>
+                                    </div>
+
+                                    <div className="text-center mt-3">
+                                        <Link href="/StaffLogins" className="small text-decoration-none" style={{ color: '#ef7d00' }}>Staff Login</Link>
+                                    </div>
+                                
                                 </form>
 
-                                <div className="flex justify-between mt-6 text-sm">
-                                    <a href="/recoverAccount" className="text-orange-600 font-semibold">Recover Account</a>
-                                    <a href="/login" className="text-orange-600 font-semibold">Staff Login</a>
-                                </div>
                             </div>
 
                             <div className="text-center mt-6">
@@ -226,7 +369,8 @@ export default function LoginPage() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
+            {/* <FacilitiesSection instruments={instruments} /> */}
         </>
     );
 }
