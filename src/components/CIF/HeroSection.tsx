@@ -29,7 +29,7 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="section bgDarkYellow pb-0">
+    <section className="section  pb-0">
       <div className="container">
         <div className="headingWraper mb-4 d-flex justify-content-between  align-items-center">
           <h1 className="mainHead">Central Instrumentation Facility</h1>

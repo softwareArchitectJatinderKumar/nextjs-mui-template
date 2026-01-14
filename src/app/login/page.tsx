@@ -127,11 +127,11 @@ export default function LoginPage() {
                 </div>
             )}
 
-            <section className="section py-5">
+            <section className="section bgDarkYellow py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
-                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facility</h1>
+                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facilitiation</h1>
                             <h2 className="text-center">User <span style={{ color: '#ef7d00' }}>Login</span> Page</h2>
                         </div>
                     </div>
@@ -197,8 +197,7 @@ export default function LoginPage() {
                                     <div className="mb-4 text-center">
                                         <button
                                             type="submit"
-                                            className="btn btn-warning w-100 fw-bold text-white py-2"
-                                            style={{ backgroundColor: '#ef7d00', borderColor: '#ef7d00' }}
+                                            className="lpu-btn w-20"
                                             disabled={!isValid}
                                         >
                                             Submit
@@ -227,7 +226,7 @@ export default function LoginPage() {
                     </div>
                 </div>
             </section>
-            <FacilitiesSection instruments={instruments} />
+            {/* <FacilitiesSection instruments={instruments} /> */}
         </>
     );
 }

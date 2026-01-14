@@ -78,11 +78,11 @@ export default function UserRegisterPage() {
         </div>
       )}
 
-      <section className="section py-5">
+      <section className="section bgDarkYellow py-5">
         <div className="container">
           <div className="headingWraper mb-5">
             <div className="mainHead">
-              <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facility</h1>
+              <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facilitiation</h1>
               <h2 className="text-center">User <span style={{ color: '#ef7d00' }}>Registration</span> Page</h2>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function UserRegisterPage() {
             </div>
 
             <div className="col-md-6">
-              <div className="card p-4 shadow-sm border-0 bg-light">
+              <div className="cifLogin p-4 p-md-5">
                 <form onSubmit={handleSubmit(onFormSubmit)} >
                   <div className="mb-3">
                     If you already have an account, just <Link href="/login" className="text-danger fw-bold">sign in</Link>
@@ -200,10 +200,10 @@ export default function UserRegisterPage() {
                   </div>
 
                   <div className="text-center mt-4">
-                    <button type="submit" className={styles.lpuBtn} disabled={!isValid || loading}>
+                    <button type="submit"  className="btn btn-danger w-20" disabled={!isValid || loading}>
                       {loading ? 'Submitting...' : 'Submit'}
                     </button>
-                    <button type="button" className="btn btn-secondary ms-2 px-4" onClick={() => reset()}>Reset</button>
+                    <button type="button" className="btn btn-secondary m-3" onClick={() => reset()}>Reset</button>
                   </div>
                 </form>
               </div>
