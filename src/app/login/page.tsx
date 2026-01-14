@@ -7,8 +7,37 @@ import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 import styles from '@/styles/Instruments.module.css'; // Using your existing style module
 import myAppWebService from '@/services/myAppWebService';
+import FacilitiesSection from '@/components/CIF/FacilitiesSection';
+interface Instrument {
+  id: string | number;
+  instrumentName: string;
+  categoryId: string | number;
+  imageUrl?: string;
+}
 
 export default function LoginPage() {
+
+  const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchInstruments = async () => {
+      try {
+        const response = await myAppWebService.getAllInstruments();
+        const data = response.item1 || response.data || response;
+        setInstruments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error('Error fetching instruments:', err);
+        setError('Failed to load instruments');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInstruments();
+  }, []);
+
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -198,6 +227,7 @@ export default function LoginPage() {
                     </div>
                 </div>
             </section>
+            <FacilitiesSection instruments={instruments} />
         </>
     );
 }

@@ -20,9 +20,8 @@ import page from '@/app/(auth)/auth/page';
 
 // Unified Navigation Data
 const navPages = [
-  { name: 'Home', path: '/' },
-  { name: 'Facilities', path: '/OurInstruments' },
-  { name: 'Test Charges', path: '//TestingChargesList.pdf' },
+  { name: 'Facilities', path: '/' },
+  { name: 'Test Charges', path: '/TestingChargesList.pdf' },
   { name: 'Terms & Conditions', path: '/terms' },
   { name: 'Login', path: '/login' },
   { name: 'Register', path: '/register' },
@@ -64,106 +63,156 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ marginTop: 20 }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters >
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            onClick={() => handleNavigate('/')}
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            CIF
-          </Typography>
+    // <AppBar position="static" sx={{ marginTop: 20 }}>
+    //   <Container maxWidth="md">
+    //     <Toolbar disableGutters >
+    //       <Typography
+    //         variant="h6"
+    //         noWrap
+    //         component="div"
+    //         onClick={() => handleNavigate('/')}
+    //         sx={{
+    //           mr: 2,
+    //           display: { xs: 'none', md: 'flex' },
+    //           fontFamily: 'monospace',
+    //           fontWeight: 700,
+    //           letterSpacing: '.3rem',
+    //           color: 'inherit',
+    //           textDecoration: 'none',
+    //           cursor: 'pointer'
+    //         }}
+    //       >
+    //         CIF
+    //       </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="menu"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-              keepMounted
-              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-              {navPages.map((page) => (
-                page.name === 'Test Charges' ? (
-                  <MenuItem key={page.name} onClick={() => downloadTestCharge(page.path)}>
-                    <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
-                  </MenuItem>
-                ) : (
-                  <MenuItem key={page.name} onClick={() => handleNavigate(page.path)}>
-                    <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
-                  </MenuItem>
-                )
-              ))}
-            </Menu>
-          </Box>
+    //       <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+    //         <IconButton
+    //           size="large"
+    //           aria-label="menu"
+    //           onClick={handleOpenNavMenu}
+    //           color="inherit"
+    //         >
+    //           <MenuIcon />
+    //         </IconButton>
+    //         <Menu
+    //           id="menu-appbar"
+    //           anchorEl={anchorElNav}
+    //           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+    //           keepMounted
+    //           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+    //           open={Boolean(anchorElNav)}
+    //           onClose={handleCloseNavMenu}
+    //           sx={{ display: { xs: 'block', md: 'none' } }}
+    //         >
+    //           {navPages.map((page) => (
+    //             page.name === 'Test Charges' ? (
+    //               <MenuItem key={page.name} onClick={() => downloadTestCharge(page.path)}>
+    //                 <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
+    //               </MenuItem>
+    //             ) : (
+    //               <MenuItem key={page.name} onClick={() => handleNavigate(page.path)}>
+    //                 <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
+    //               </MenuItem>
+    //             )
+    //           ))}
+    //         </Menu>
+    //       </Box>
 
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            onClick={() => handleNavigate('/')}
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            CIF
-          </Typography>
+    //       <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+    //       <Typography
+    //         variant="h5"
+    //         noWrap
+    //         component="div"
+    //         onClick={() => handleNavigate('/')}
+    //         sx={{
+    //           mr: 2,
+    //           display: { xs: 'flex', md: 'none' },
+    //           flexGrow: 1,
+    //           fontFamily: 'monospace',
+    //           fontWeight: 700,
+    //           letterSpacing: '.3rem',
+    //           color: 'inherit',
+    //           textDecoration: 'none',
+    //           cursor: 'pointer'
+    //         }}
+    //       >
+    //         CIF
+    //       </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {navPages.map((page) => (
-              page.name === 'Test Charges' ? (
-                <Button
-                  key={page.name}
-                  onClick={() => downloadTestCharge(page.path)}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >  {page.name}</Button>
-              ) : (
-                <Button
-                  key={page.name}
-                  onClick={() => handleNavigate(page.path)}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page.name}
-                </Button>
-              )
-            ))}
-          </Box>
-        </Toolbar>
+    //       <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+    //         {navPages.map((page) => (
+    //           page.name === 'Test Charges' ? (
+    //             <Button
+    //               key={page.name}
+    //               onClick={() => downloadTestCharge(page.path)}
+    //               sx={{ my: 2, color: 'white', display: 'block' }}
+    //             >  {page.name}</Button>
+    //           ) : (
+    //             <Button
+    //               key={page.name}
+    //               onClick={() => handleNavigate(page.path)}
+    //               sx={{ my: 2, color: 'white', display: 'block' }}
+    //             >
+    //               {page.name}
+    //             </Button>
+    //           )
+    //         ))}
+    //       </Box>
+    //     </Toolbar>
+    //   </Container>
+    // </AppBar>
+    <Box sx={{ py: 2 ,marginTop: 20 }}>
+      <Container maxWidth="md">
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 2,
+            flexWrap: 'wrap',
+          }}
+        >
+          {navPages.map((page) =>
+            page.name === 'Test Charges' ? (
+              <Button
+                key={page.name}
+                variant="outlined"
+                onClick={() => downloadTestCharge(page.path)}
+                sx={{
+                  color: 'black',
+                  borderColor: 'black',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  '&:hover': {
+                    borderColor: 'black',
+                    backgroundColor: 'rgba(0,0,0,0.04)',
+                  },
+                }}
+              >
+                {page.name}
+              </Button>
+            ) : (
+              <Button
+                key={page.name}
+                variant="outlined"
+                onClick={() => handleNavigate(page.path)}
+                sx={{
+                  color: 'black',
+                  borderColor: 'black',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  '&:hover': {
+                    borderColor: 'black',
+                    backgroundColor: 'rgba(0,0,0,0.04)',
+                  },
+                }}
+              >
+                {page.name}
+              </Button>
+            )
+          )}
+        </Box>
       </Container>
-    </AppBar>
-    
+    </Box>
   );
 }
 export default ResponsiveAppBar;

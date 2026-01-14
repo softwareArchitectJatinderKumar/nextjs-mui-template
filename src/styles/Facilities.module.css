@@ -1,0 +1,190 @@
+.section {
+  padding: 3rem 0;
+}
+
+.bgDarkYellow {
+  background-color: #fdf8ef;
+}
+
+.sectionLightRed {
+  background-color: #a32a2a;
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: #ffffff;
+
+  h4 {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.InstrumentGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin: 20px auto;
+  padding: 10px;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.instrumentBlock {
+  color: #333;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  
+.instrumentLink {
+    color: inherit; 
+    text-decoration: none;
+    &:hover {
+      font-weight: 600;
+      text-decoration: underline;
+      color: #ef7d00;
+    }
+}
+
+ 
+}
+
+ 
+ 
+.imageSizes {
+  height: 11.2rem !important;
+  width: 100%;
+  max-width: 50.5rem;
+  object-fit: fill;
+  border-radius: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    height: 20rem;
+  }
+}
+
+.accordion {
+  width: 100%;
+
+  .accordionItem {
+    border-bottom: 1px solid #eee;
+
+    .accordionHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      background: #fff;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #fffbf5;
+      }
+    }
+
+    .activeHeader {
+      background: #fff9f2;
+
+      span {
+        color: #ef7d00;
+      }
+    }
+
+    .accordionIcon {
+      color: #ef7d00;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .accordionCollapse {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    }
+
+    .show {
+      max-height: 2000px;
+      opacity: 1;
+    }
+
+    .accordionContent {
+      padding: 1.5rem;
+      background-color: #fff;
+
+      dl {
+        margin: 0;
+
+        dt {
+          font-weight: bold;
+          color: #333;
+          margin-top: 1rem;
+
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+
+        dd {
+          margin-left: 0;
+          margin-bottom: 1rem;
+          color: #666;
+          padding-left: 1rem;
+          border-left: 3px solid #ef7d00;
+        }
+      }
+    }
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+}
+
+.headingWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.callAction {
+  display: flex;
+  align-items: center;
+}
+
+.callAction a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+ 

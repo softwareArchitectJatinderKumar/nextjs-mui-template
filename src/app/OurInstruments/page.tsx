@@ -14,7 +14,7 @@ import { Link } from 'lucide-react';
 function InstrumentsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const id = searchParams.get('id');
   const catId = searchParams.get('categoryId');
 
@@ -48,8 +48,8 @@ function InstrumentsContent() {
     if (!id) return;
     try {
       const response = await instrumentService.getCharges(Number(id));
-      setCharges(response); 
-      setShowModal(true); 
+      setCharges(response);
+      setShowModal(true);
     } catch (error) {
       console.error("Error fetching charges:", error);
     }
@@ -58,50 +58,49 @@ function InstrumentsContent() {
   const selectedInstrument = data.find(ins => ins.id === Number(id));
   const filteredSpecs = specs.filter(s => s.categoryId === Number(catId));
 
- useEffect(() => {
+  useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
   return (
-       <>
-        {loading && (
-                <div className="fullScreenLoader">
-                    <div className="customSpinnerOverlay">
-                        <img src="/assets/images/spinner.gif" alt="Loading..." />
-                    </div>
-                </div>
-            )}
-
-    <main>
-       {/* <FacilitiesSection instruments={data} /> */}
-      <section className={styles.section + " py-5"}>
-        <div className="container">
-          <InstrumentGrid 
-            instruments={data} 
-            selectedId={id ? Number(id) : null} 
-            onSelect={handleSelect} 
-          />
+    <>
+      {loading && (
+        <div className="fullScreenLoader">
+          <div className="customSpinnerOverlay">
+            <img src="/assets/images/spinner.gif" alt="Loading..." />
+          </div>
         </div>
-      </section>
- 
-      {selectedInstrument && (
-        <InstrumentDetails 
-          instrument={selectedInstrument} 
-          specs={filteredSpecs} 
-          onViewCharges={handleViewCharges} 
-        />
       )}
-      
-      <FaqSection />
 
-      {showModal && (
-        <ChargesModal 
-          charges={charges} 
-          onClose={() => setShowModal(false)} 
-        />
-      )}
-    </main>
+      <main>
+        <section className={styles.section + " py-5"}>
+          <div className="container">
+            <InstrumentGrid
+              instruments={data}
+              selectedId={id ? Number(id) : null}
+              onSelect={handleSelect}
+            />
+          </div>
+        </section>
+
+        {selectedInstrument && (
+          <InstrumentDetails
+            instrument={selectedInstrument}
+            specs={filteredSpecs}
+            onViewCharges={handleViewCharges}
+          />
+        )}
+
+        <FaqSection />
+
+        {showModal && (
+          <ChargesModal
+            charges={charges}
+            onClose={() => setShowModal(false)}
+          />
+        )}
+      </main>
     </>
   );
 }
