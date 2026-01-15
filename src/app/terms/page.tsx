@@ -2,11 +2,39 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import myAppWebService from '@/services/myAppWebService';
 import Link from 'next/link';
 import styles from '@/styles/TermsCondition.module.css';
-
+import FacilitiesSection from '@/components/CIF/FacilitiesSection';
+interface Instrument {
+  id: string | number;
+  instrumentName: string;
+  categoryId: string | number;
+  imageUrl?: string;
+}
 export default function TermsandConditions() {
     const [loading, setLoading] = useState(true);
+     const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchInstruments = async () => {
+      try {
+        const response = await myAppWebService.getAllInstruments();
+        const data = response.item1 || response.data || response;
+        setInstruments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error('Error fetching instruments:', err);
+        setError('Failed to load instruments');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInstruments();
+  }, []);
+
     useEffect(() => {
         setLoading(true);
         const timer = setTimeout(() => setLoading(false), 1500);
@@ -22,7 +50,7 @@ export default function TermsandConditions() {
                     </div>
                 </div>
             )}
-            <section className={styles.section + ' bgDarkYellow'}>
+            <section className={styles.section + ' '}>
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-lg-12">
@@ -91,6 +119,7 @@ export default function TermsandConditions() {
                     </div>
                 </div>
             </section>
+            <FacilitiesSection instruments={instruments} />
         </>
     );
 }
