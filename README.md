@@ -1,16 +1,4 @@
-Consider the following Requirements
-#1 Wanted to create a NEXT JS Project as a template which can be used for various project Repository 
-#2 Create  ready to use components namely Card with image, Card withoutImage, Card with carousel  , Static Header , Static Footer and Navbar 
-#3 Create a Component LoginRegisterPage which allows to switch between Login , Register uis 
-#4 Expected Responsive styles for all components using material ui styles
-#5 Add Dummy Pages like home , About and contact us as well as login , Register pages , 
-#6 could you please add steps to install packages like material ui 
-#7 Since there is need of a component to show or list of data in Grid with pagination, Search box , Next Prev buttons , Page size [5,10,15,20,25] dropdown as well as Export to Excel button which will be mostly used so could you please add this component with dynamic approach can be used in any page by sending dataArray to be used 
-#8 Apart from this API calls are to created separately so expected to create a separate file for api calls or signatures
-#9 Expected you to use latest coding standards, code reusability as well as code optimisation techniques 
-#10 Ready to use for production environment 
-
--------------
+ 
 
 
 Below is a production-ready blueprint for a Next.js reusable template project that satisfies all 10 of your stated requirements, using latest Next.js (App Router) and Material UI (MUI v5) with a strong focus on reusability, scalability, and clean architecture.
