@@ -206,7 +206,7 @@ export default function LoginPage() {
 
                                     <div className="d-flex justify-content-between small">
                                         <Link href="/lpuLogin" className="text-decoration-none text-secondary">Internal User Login</Link>
-                                        <Link href="/recoverAccount" className="text-decoration-none" style={{ color: '#ef7d00' }}>Recover Account</Link>
+                                        <Link href="/recover" className="text-decoration-none" style={{ color: '#ef7d00' }}>Recover Account</Link>
                                     </div>
 
                                     <div className="text-center mt-3">

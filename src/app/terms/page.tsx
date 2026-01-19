@@ -6,6 +6,7 @@ import myAppWebService from '@/services/myAppWebService';
 import Link from 'next/link';
 import styles from '@/styles/TermsCondition.module.css';
 import FacilitiesSection from '@/components/CIF/FacilitiesSection';
+
 interface Instrument {
   id: string | number;
   instrumentName: string;
@@ -14,9 +15,9 @@ interface Instrument {
 }
 export default function TermsandConditions() {
     const [loading, setLoading] = useState(true);
-     const [instruments, setInstruments] = useState<Instrument[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+    const [instruments, setInstruments] = useState<Instrument[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchInstruments = async () => {
