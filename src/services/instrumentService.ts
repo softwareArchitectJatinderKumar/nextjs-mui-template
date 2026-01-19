@@ -47,23 +47,51 @@ class InstrumentService {
   } 
 }
 
+  async CIFGetUserDetails(email: string) {
+    try {
+      const res = await this.apiClient.get(`api/LpuCIF/CIFGetUserDetails?EmailId=${email}`);
+      return res.data.item1 || [];
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      throw error;
+    }
+  }
+
+
   async getCharges(id: number) {
     const res = await this.apiClient.get(`api/LpuCIF/GetInstrumentChargesDetails?InstrumentID=${id}`);
     return res.data.item1 || [];
   }
 
+  // async  CIFUpdateUserDetails(UpdateUserData: FormData) {
+  //    try {
+  //     const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData);
+  //     return res.data;
+  //   } catch (error) {
+  //     console.error('Error submitting Details:', error);
+  //     throw error;
+  //   }
+    
+  // }
 
-  // GetChargesDetails(Id: any): Observable<any> {
-//   let token = this.storageService.getUser();
-//   let headers = new HttpHeaders()
-//     .set('Authorization', 'Bearer ' + this.authToken)
-//     .set('Content-Type', 'application/json');
-//   return this.http.get(
-//     // AUTH_API + 'api/LpuCIF/GetAGetInstrumentChargesDetailsllSpecifications', { headers }
-//     AUTH_API_LOCAL + 'api/LpuCIF/GetInstrumentChargesDetails?InstrumentID='+Id, { headers }
-//   );
-// }
+ 
+  async CIFUpdateUserDetails(UpdateUserData: FormData) {
+    try {
+      const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData, {
+        headers: {
+          // Setting this to undefined allows the browser/Axios to 
+          // automatically set 'multipart/form-data' with the correct boundary.
+          'Content-Type': 'multipart/form-data', 
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.error('Error submitting Details:', error);
+      throw error;
+    }
+  }
 
+ 
 }
 
 export const instrumentService = new InstrumentService();

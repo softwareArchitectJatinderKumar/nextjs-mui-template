@@ -250,7 +250,7 @@ export default function LoginPage() {
 
                                     <div className="d-flex justify-content-between mt-4">
                                         <Link href="/login" className={styles.regLink}>User Login</Link>
-                                        <Link href="/recoverAccount" className={styles.regLink}>Recover Account</Link>
+                                        <Link href="/recover" className={styles.regLink}>Recover Account</Link>
                                     </div>
                                      <div className="d-flex justify-content-center">
                                         <Link href="/StaffLogins" className={styles.regLink}>Staff Login</Link>
@@ -278,99 +278,6 @@ export default function LoginPage() {
                     </ul>
                 </div>
             </section>
-
-            {/* <section className="section py-5">
-                <div className="container">
-                    <div className="headingWraper mb-5">
-                        <div className="mainHead">
-                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facility</h1>
-                            <h2 className="text-center">Internal <span style={{ color: '#ef7d00' }}>User Login</span></h2>
-                        </div>
-                    </div>
-
-                    <div className="row justify-content-center">
-                        <div className="col-md-6 d-none d-md-block mt-5">
-                            <img
-                                src="https://www.lpu.in/lpu-assets/images/cif/login-left.png"
-                                alt="Login Illustration"
-                                className="img-fluid"
-                            />
-                        </div>
-
-                        <div className="col-md-6">
-                            <div className="card p-4 shadow-sm border-0 bg-light">
-                                <form onSubmit={handleSubmit(onSubmit)}>
-                                    <div className={styles.inputGroup}>
-                                        <label>Login ID</label>
-                                        <input
-                                            {...register('Email', { required: true })}
-                                            className="form-control w-full p-2 border rounded"
-                                            placeholder="Enter Login ID / Email"
-                                        />
-                                        {errors.Email && <span className="text-red-500 text-sm">ID is required</span>}
-                                    </div>
-
-                                    <div className={styles.inputGroup}>
-                                        <label>Password</label>
-                                        <div className="relative">
-                                            <input
-                                                type={showPassword ? 'text' : 'password'}
-                                                {...register('password', { required: true })}
-                                                className="form-control w-full p-2 border rounded"
-                                                placeholder="Enter password"
-                                            />
-                                            <span
-                                                className={styles.inputEye}
-                                                onClick={() => setShowPassword(!showPassword)}
-                                            >
-                                                {showPassword ? '🙈' : '👁️'}
-                                            </span>
-                                        </div>
-                                        {errors.password && <span className="text-red-500 text-sm">Password is required</span>}
-                                    </div>
-
-                                    <div className={styles.inputGroup}>
-                                        <label>Choose Role</label>
-                                        <select
-                                            {...register('UserRoleS', { required: true })}
-                                            className="form-select w-full p-2 border rounded"
-                                        >
-                                            <option value="">Select Role</option>
-                                            <option value="Student">Student</option>
-                                            <option value="Staff">Staff</option>
-                                        </select>
-                                        {errors.UserRoleS && <span className="text-red-500 text-sm">Role is required</span>}
-                                    </div>
-                                    <div className='m-4 d-flex justify-content-center'> 
-                                    <button
-                                        type="submit"
-                                         className="lpu-btn w-20"
-                                        disabled={!isValid}
-                                    >
-                                        Login
-                                    </button>
-                                    </div>
-                                    <div className="d-flex justify-content-between small">
-                                        <Link href="/lpuLogin" className="text-decoration-none text-secondary">Internal User Login</Link>
-                                        <Link href="/recoverAccount" className="text-decoration-none" style={{ color: '#ef7d00' }}>Recover Account</Link>
-                                    </div>
-
-                                    <div className="text-center mt-3">
-                                        <Link href="/StaffLogins" className="small text-decoration-none" style={{ color: '#ef7d00' }}>Staff Login</Link>
-                                    </div>
-                                
-                                </form>
-
-                            </div>
-
-                            <div className="text-center mt-6">
-                                Don't have an account? <a href="/register" className={styles.regLink}>Register</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
-            {/* <FacilitiesSection instruments={instruments} /> */}
         </>
     );
 }
