@@ -8,6 +8,7 @@ import styles from '@/styles/RecoverUser.module.css'; // Optional custom styles
 import swal from 'sweetalert2';
 import router from 'next/router';
 import { useRouter } from 'next/navigation';
+import { Height } from '@mui/icons-material';
 interface UserDetails {
     idProofType: string | number;
     idProofNumber: string | number;
@@ -75,7 +76,6 @@ export default function AccountRecovery() {
     };
     const onResetPassword = async (data: any) => {
         setLoading(true);
-        setLoading(true);
         const userId = getValues("email");
 
         const formData = new FormData();
@@ -120,7 +120,7 @@ export default function AccountRecovery() {
     };
 
     return (
-          <>
+        <>
             {loading && (
                 <div className="fullScreenLoader">
                     <div className="customSpinnerOverlay">
@@ -129,7 +129,7 @@ export default function AccountRecovery() {
                 </div>
             )}
 
-            <section className="section bgDarkYellow py-5 vh-100">
+            <section className="bgDarkYellow py-5 vh-100">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
@@ -146,215 +146,172 @@ export default function AccountRecovery() {
                                 className="img-fluid"
                             />
                         </div>
+                        <div className="col-md-6">
+                            <div
+                                className="p-4 shadow-lg border-0 d-flex flex-column"
+                                style={{ height: '31rem' }}
+                            >
+                                {/* ===== MAIN CONTENT (Steps) ===== */}
+                                <div className="flex-grow-1">
+                                    {currentStep === 1 && (
+                                        <div className="step-container">
+                                            <h3 className="fs-5 mb-3">Provide Your Email</h3>
+                                            <div className="form-group mb-3">
+                                                <input
+                                                    type="email"
+                                                    className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                                    placeholder="Enter Registered Email"
+                                                    {...register("email", {
+                                                        required: "Email is required",
+                                                        pattern: { value: /^\S+@\S+$/i, message: "Invalid email" }
+                                                    })}
+                                                />
+                                                {errors.email && (
+                                                    <small className="text-danger">
+                                                        {errors.email.message as string}
+                                                    </small>
+                                                )}
+                                            </div>
+                                            <button
+                                                className="btn btn-outline-danger w-50"
+                                                onClick={checkEmail}
+                                                disabled={loading}
+                                            >
+                                                {loading ? "Searching..." : "Next"}
+                                            </button>
+                                        </div>
+                                    )}
 
-                        <div className="col-md-6 ">
-                            <div className=" p-4 shadow-sm border-0 bg-light ">
+                                    {currentStep === 2 && (
+                                        <div className="step-container">
+                                            <h3 className="fs-5 mb-3">
+                                                Verify {userDetails[0].idProofType}
+                                            </h3>
+                                            <div className="form-group mb-3">
+                                                <input
+                                                    type="password"
+                                                    className={`form-control ${errors.idProofNumber ? 'is-invalid' : ''}`}
+                                                    placeholder={`Enter your ${userDetails[0].idProofType} number`}
+                                                    {...register("idProofNumber", {
+                                                        required: "Identity verification is required"
+                                                    })}
+                                                />
+                                                {errors.idProofNumber && (
+                                                    <small className="text-danger">
+                                                        This field is required.
+                                                    </small>
+                                                )}
+                                            </div>
+                                            <div className="d-flex justify-content-between gap-2">
+                                                <button
+                                                    className="btn btn-outline-dark w-50"
+                                                    onClick={previousStep}
+                                                >
+                                                    Back
+                                                </button>
+                                                <button
+                                                    className="btn btn-outline-danger w-50"
+                                                    onClick={verifyIdProof}
+                                                    disabled={loading}
+                                                >
+                                                    Next
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
 
-                                {currentStep === 1 && (
-                                    <div className="step-container">
-                                        <h3 className="fs-5 mb-3">Provide Your Email</h3>
-                                        <div className="form-group mb-3">
-                                            <input
-                                                type="email"
-                                                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                                                placeholder="Enter Registered Email"
-                                                {...register("email", {
-                                                    required: "Email is required",
-                                                    pattern: { value: /^\S+@\S+$/i, message: "Invalid email" }
-                                                })}
-                                            />
-                                            {errors.email && <small className="text-danger">{errors.email.message as string}</small>}
+                                    {currentStep === 3 && (
+                                        <form onSubmit={handleSubmit(onResetPassword)} className="step-container">
+                                            <h3 className="fs-5 mb-3">Reset Your Password</h3>
+
+                                            <div className="mb-3">
+                                                <label className="form-label small">New Password</label>
+                                                <input
+                                                    type="password"
+                                                    className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                                                    {...register("password", { required: true, minLength: 8 })}
+                                                />
+                                                {errors.password && (
+                                                    <small className="text-danger d-block">
+                                                        Min 8 characters required.
+                                                    </small>
+                                                )}
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <label className="form-label small">Confirm Password</label>
+                                                <input
+                                                    type="password"
+                                                    className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                                                    {...register("confirmPassword", {
+                                                        required: true,
+                                                        validate: (val) => val === password || "Passwords do not match"
+                                                    })}
+                                                />
+                                                {errors.confirmPassword && (
+                                                    <small className="text-danger d-block">
+                                                        {errors.confirmPassword.message as string}
+                                                    </small>
+                                                )}
+                                            </div>
+
+                                            <div className="d-flex justify-content-between gap-2">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-dark w-50"
+                                                    onClick={previousStep}
+                                                >
+                                                    Back
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-danger w-50"
+                                                    disabled={!isValid || loading}
+                                                >
+                                                    Reset
+                                                </button>
+                                            </div>
+                                        </form>
+                                    )}
+
+                                    {errorMessage && (
+                                        <div className="alert alert-danger mt-3 small p-2 text-center">
+                                            {errorMessage}
                                         </div>
-                                        <button className="btn btn-primary w-100" onClick={checkEmail} disabled={loading}>
-                                            {loading ? "Searching..." : "Next"}
-                                        </button>
-                                    </div>
-                                )}
-                                {currentStep === 2 && (
-                                    <div className="step-container">
-                                        <h3 className="fs-5 mb-3">Verify {userDetails[0].idProofType}</h3>
-                                        <div className="form-group mb-3">
-                                            <input
-                                                type="password"
-                                                className={`form-control ${errors.idProofNumber ? 'is-invalid' : ''}`}
-                                                placeholder={`Enter your ${userDetails[0].idProofType} number`}
-                                                {...register("idProofNumber", { required: "Identity verification is required" })}
-                                            />
-                                            {errors.idProofNumber && <small className="text-danger">This field is required.</small>}
-                                        </div>
-                                        <div className="d-flex justify-content-between gap-2">
-                                            <button className="btn btn-outline-secondary w-50" onClick={previousStep}>Back</button>
-                                            <button className="btn btn-primary w-50" onClick={verifyIdProof} disabled={loading}>Next</button>
-                                        </div>
-                                    </div>
-                                )}
-                                {currentStep === 3 && (
-                                    <form onSubmit={handleSubmit(onResetPassword)} className="step-container">
-                                        <h3 className="fs-5 mb-3">Reset Your Password</h3>
-                                        <div className="mb-3">
-                                            <label className="form-label small">New Password</label>
-                                            <input
-                                                type="password"
-                                                className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                                                {...register("password", { required: true, minLength: 8 })}
-                                            />
-                                            {errors.password && <small className="text-danger d-block">Min 8 characters required.</small>}
-                                        </div>
-                                        <div className="mb-3">
-                                            <label className="form-label small">Confirm Password</label>
-                                            <input
-                                                type="password"
-                                                className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
-                                                {...register("confirmPassword", {
-                                                    required: true,
-                                                    validate: (val) => val === password || "Passwords do not match"
-                                                })}
-                                            />
-                                            {errors.confirmPassword && <small className="text-danger d-block">{errors.confirmPassword.message as string}</small>}
-                                        </div>
-                                        <div className="d-flex justify-content-between gap-2">
-                                            <button type="button" className="btn btn-outline-secondary w-50" onClick={previousStep}>Back</button>
-                                            <button type="submit" className="btn btn-warning w-50" disabled={!isValid || loading}>Reset</button>
-                                        </div>
-                                    </form>
-                                )}
-                                {errorMessage && <div className="alert alert-danger mt-3 small p-2 text-center">{errorMessage}</div>}
+                                    )}
+                                </div>
+
+                                {/* ===== FOOTER (ALWAYS AT BOTTOM) ===== */}
                                 <hr />
-                                <div className="footer  text-center small">
+
+                                <div className="mt-auto text-center">
                                     <div className="d-flex justify-content-between mb-2">
-                                        <Link href="/lpuLogin" className="text-decoration-none fw-bold">Internal Login</Link>
-                                        <Link href="/login" className="text-decoration-none fw-bold" style={{ color: '#ef7d00' }}>Login</Link>
+                                        <Link href="/lpuLogin" className="text-decoration-none fw-bold">
+                                            Internal Login
+                                        </Link>
+                                        <Link
+                                            href="/login"
+                                            className="text-decoration-none fw-bold"
+                                            style={{ color: '#ef7d00' }}
+                                        >
+                                            Login
+                                        </Link>
                                     </div>
-                                    <p>Don't have an account? <Link href="/register" className="fw-bold text-danger">Register</Link></p>
+                                    <p className="mb-0">
+                                        Don't have an account?{" "}
+                                        <Link href="/register" className="fw-bold text-danger">
+                                            Register
+                                        </Link>
+                                    </p>
                                 </div>
                             </div>
                         </div>
+ 
                     </div>
                 </div>
-            </section>
+        </section >
           </>
-        // <>
-        //     {loading && (
-        //         <div className="fullScreenLoader">
-        //             <div className="customSpinnerOverlay">
-        //                 <img src="/assets/images/spinner.gif" alt="Loading..." />
-        //             </div>
-        //         </div>
-        //     )}
-        //     <section className={styles.section + ' bgDarkYellow py-5'}>
-        //         <div className="container">
-        //             <div className={styles.mainHead + " mb-5"}>
-        //                 <h2>Central Instrumentation Facilitiation - Login</h2>
-        //             </div>
-
-        //             <div className="row align-items-center">
-        //                 <div className="col-md-6 d-none d-lg-block">
-        //                     <img
-        //                         src="https://www.lpu.in/lpu-assets/images/cif/login-left.png"
-        //                         alt="Login"
-        //                         className="img-fluid"
-        //                     />
-        //                 </div>
-
-        //                 <div className="col-md-6">
-        //                      <div className={styles.cifLogin}>
-        //                         <h2 className="mb-4 text-center">
-        //                             <span>Account</span> Recovery
-        //                         </h2>
-        //                     <div className={`wizard-container  `}>
-        //                         <div className=" card p-4 mt-4  "  >
-        //                             <div className="text-center mb-4">
-        //                                 <h3 >Central Instrumentation Facility</h3>
-        //                                 <h2 className="h5 text-secondary">Account Recovery</h2>
-        //                             </div>
-
-        //                             {currentStep === 1 && (
-        //                                 <div className="step-container">
-        //                                     <h3 className="fs-5 mb-3">Provide Your Email</h3>
-        //                                     <div className="form-group mb-3">
-        //                                         <input
-        //                                             type="email"
-        //                                             className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-        //                                             placeholder="Enter Registered Email"
-        //                                             {...register("email", {
-        //                                                 required: "Email is required",
-        //                                                 pattern: { value: /^\S+@\S+$/i, message: "Invalid email" }
-        //                                             })}
-        //                                         />
-        //                                         {errors.email && <small className="text-danger">{errors.email.message as string}</small>}
-        //                                     </div>
-        //                                     <button className="btn btn-primary w-100" onClick={checkEmail} disabled={loading}>
-        //                                         {loading ? "Searching..." : "Next"}
-        //                                     </button>
-        //                                 </div>
-        //                             )}
-        //                             {currentStep === 2 && (
-        //                                 <div className="step-container">
-        //                                     <h3 className="fs-5 mb-3">Verify {userDetails[0].idProofType}</h3>
-        //                                     <div className="form-group mb-3">
-        //                                         <input
-        //                                             type="password"
-        //                                             className={`form-control ${errors.idProofNumber ? 'is-invalid' : ''}`}
-        //                                             placeholder={`Enter your ${userDetails[0].idProofType} number`}
-        //                                             {...register("idProofNumber", { required: "Identity verification is required" })}
-        //                                         />
-        //                                         {errors.idProofNumber && <small className="text-danger">This field is required.</small>}
-        //                                     </div>
-        //                                     <div className="d-flex justify-content-between gap-2">
-        //                                         <button className="btn btn-outline-secondary w-50" onClick={previousStep}>Back</button>
-        //                                         <button className="btn btn-primary w-50" onClick={verifyIdProof} disabled={loading}>Next</button>
-        //                                     </div>
-        //                                 </div>
-        //                             )}
-        //                             {currentStep === 3 && (
-        //                                 <form onSubmit={handleSubmit(onResetPassword)} className="step-container">
-        //                                     <h3 className="fs-5 mb-3">Reset Your Password</h3>
-        //                                     <div className="mb-3">
-        //                                         <label className="form-label small">New Password</label>
-        //                                         <input
-        //                                             type="password"
-        //                                             className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-        //                                             {...register("password", { required: true, minLength: 8 })}
-        //                                         />
-        //                                         {errors.password && <small className="text-danger d-block">Min 8 characters required.</small>}
-        //                                     </div>
-        //                                     <div className="mb-3">
-        //                                         <label className="form-label small">Confirm Password</label>
-        //                                         <input
-        //                                             type="password"
-        //                                             className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
-        //                                             {...register("confirmPassword", {
-        //                                                 required: true,
-        //                                                 validate: (val) => val === password || "Passwords do not match"
-        //                                             })}
-        //                                         />
-        //                                         {errors.confirmPassword && <small className="text-danger d-block">{errors.confirmPassword.message as string}</small>}
-        //                                     </div>
-        //                                     <div className="d-flex justify-content-between gap-2">
-        //                                         <button type="button" className="btn btn-outline-secondary w-50" onClick={previousStep}>Back</button>
-        //                                         <button type="submit" className="btn btn-warning w-50" disabled={!isValid || loading}>Reset</button>
-        //                                     </div>
-        //                                 </form>
-        //                             )}
-
-        //                             {errorMessage && <div className="alert alert-danger mt-3 small p-2 text-center">{errorMessage}</div>}
-
-        //                             <hr />
-        //                             <div className="footer  text-center small">
-        //                                 <div className="d-flex justify-content-between mb-2">
-        //                                     <Link href="/lpuLogin" className="text-decoration-none fw-bold">Internal Login</Link>
-        //                                     <Link href="/login" className="text-decoration-none fw-bold" style={{ color: '#ef7d00' }}>Login</Link>
-        //                                 </div>
-        //                                 <p>Don't have an account? <Link href="/register" className="fw-bold text-danger">Register</Link></p>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                 </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </section>
-        // </>
+        
     );
 }
 

@@ -1,4 +1,6 @@
 import Header from '@/components/common/Header';
+// import NavigationSwitcher from '@/components/common/NavigationSwitcher';
+
 import Footer from '@/components/common/Footer';
 import { RemoteHeader } from '@/components/common/RemoteHeader';
 import './globals.css';
@@ -6,6 +8,7 @@ import ThemeRegistry from '@/theme/ThemeRegistry';
 import Script from 'next/script';
 import React from 'react';
 import { RemoteFooter } from '@/components/common/RemoteFooter';
+import NavigationSwitcher from '@/components/CIF/NavigationSwitcher';
 
 export const metadata = {
   title: 'LPU -- Central Instrumentation Facility',
@@ -72,7 +75,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RemoteHeader />
 
         <ThemeRegistry>
-          <Header />
+          <NavigationSwitcher/>
+          {/* <Header /> */}
           <main style={{ minHeight: '70vh' }}>
             {children}
           </main>

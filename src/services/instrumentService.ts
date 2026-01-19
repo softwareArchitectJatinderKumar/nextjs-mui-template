@@ -91,6 +91,34 @@ class InstrumentService {
     }
   }
 
+async UpdateUserDetails(data: any) {
+  try {
+    // Convert JSON object to URL-encoded string (application/x-www-form-urlencoded)
+    const params = new URLSearchParams();
+    Object.keys(data).forEach(key => params.append(key, data[key] || ""));
+
+    const res = await this.apiClient.post(`api/LpuCIF/CIUpdateUserDetails`, params, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
+}
+  //   async UpdateUserDetails(UserData: any) {
+  //    try {
+  //     const res = await this.apiClient.post(`api/LpuCIF/CIUpdateUserDetails`, UserData);
+  //     return res.data;
+  //   } catch (error) {
+  //     console.error('Error submitting Details:', error);
+  //     throw error;
+  //   }
+    
+  // }
+
  
 }
 
