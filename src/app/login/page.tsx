@@ -105,7 +105,7 @@ export default function LoginPage() {
             cancelButtonText: 'No',
         }).then((result) => {
             if (result.isConfirmed) {
-                router.push('/NewBookings');
+                router.push('/InternalUserDashboard/Profile');
             } else {
                 Cookies.remove('InternalUserAuthData');
                 router.push('/login');
@@ -146,7 +146,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="col-md-6">
-                            <div className="card p-4 shadow-sm border-0 bg-light">
+                            <div className="cifLogin p-4 border-0">
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-4">
                                         <label className="form-label fw-bold">Login ID</label>

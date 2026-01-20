@@ -49,7 +49,7 @@ export default function LoginPage() {
     const { register, handleSubmit, formState: { errors, isValid } } = useForm({
         mode: 'onTouched'
     });
- 
+
     const onSubmit = async (data: any) => {
         const { Email, password, UserRoleS } = data;
         await getToken(Email, password, UserRoleS);
@@ -114,13 +114,13 @@ export default function LoginPage() {
                 const userData = {
                     CandidateName: emp.employeeName,
                     UserId: emp.employeeCode,
-                    EmailId: emp.officialEmailId || emp.email, // Use official email first
+                    EmailId: emp.officialEmailId || emp.email,
                     Department: emp.departmentName,
-                    PasswordText: secretKey, // We pass the password here to save in local CIF DB
+                    PasswordText: secretKey,
                     UserRole: '400000'
                 };
 
-                console.log('Mapped User Data:', userData);
+                // console.log('Mapped User Data:', userData);
                 await proceedWithTerms(userData);
             } else {
                 console.error("API returned success but item1 is empty or missing");
@@ -149,7 +149,7 @@ export default function LoginPage() {
         if (result.isConfirmed) {
 
             await myAppWebService.NewUserRecord(userData);
-            router.push('/NewBookings');
+            router.push('/InternalUserDashboard/Profile');
         } else {
             router.push('/login');
         }
@@ -174,7 +174,7 @@ export default function LoginPage() {
                     </div>
                 </div>
             )}
-            <section className={styles.section + ' bgDarkYellow py-5'}>
+            {/* <section className={styles.section + ' bgDarkYellow py-5'}>
                 <div className="container">
                     <div className={styles.mainHead + " mb-5"}>
                         <h1>Central Instrumentation Facilitiation - Login</h1>
@@ -193,12 +193,52 @@ export default function LoginPage() {
                             <div className={styles.cifLogin}>
                                 <h2 className="mb-4 text-center">
                                     <span>Internal</span> User Login
-                                </h2>
+                                </h2> */}
+            <section className="section bgDarkYellow py-5">
+                <div className="container">
+                    <div className="headingWraper mb-5">
+                        <div className="mainHead">
+                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facilitiation</h1>
+                            <h2 className="text-center" >Internal <span style={{ color: '#ef7d00' }}>User </span> Login</h2>
+                        </div>
+                    </div>
 
+                    <div className="row justify-content-center">
+                        <div className="col-md-6 d-none d-md-block mt-5">
+                            <img
+                                src="https://www.lpu.in/lpu-assets/images/cif/login-left.png"
+                                alt="Login Illustration"
+                                className="img-fluid"
+                            />
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className="cifLogin p-md-4">
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className={styles.inputGroup}>
                                         <label className="form-label">Login ID / Email</label>
                                         <input
+                                            type="text"
+                                            className={`form-control ${errors.Email ? 'is-invalid' : ''}`}
+                                            placeholder="Enter Login ID / Email"
+                                            {...register("Email", {
+                                                required: "Login ID or Email is required",
+                                                validate: (value) => {
+                                                    const emailRegex =
+                                                        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+                                                    const idRegex =
+                                                        /^[A-Za-z0-9_-]{4,30}$/; // adjust length if needed
+
+                                                    if (emailRegex.test(value) || idRegex.test(value)) {
+                                                        return true;
+                                                    }
+
+                                                    return "Enter a valid Email or Login ID";
+                                                }
+                                            })}
+                                        />
+                                        {/* <input
                                             type="text"
                                             className={`form-control ${errors.Email ? 'is-invalid' : ''}`}
                                             placeholder="Enter Login ID / Email"
@@ -209,7 +249,7 @@ export default function LoginPage() {
                                                     message: "Invalid email address"
                                                 }
                                             })}
-                                        />
+                                        /> */}
                                         {errors.Email && (
                                             <span className="text-danger mt-1 d-block">
                                                 {errors.Email.message as string}
@@ -252,7 +292,7 @@ export default function LoginPage() {
                                         <Link href="/login" className={styles.regLink}>User Login</Link>
                                         <Link href="/recover" className={styles.regLink}>Recover Account</Link>
                                     </div>
-                                     <div className="d-flex justify-content-center">
+                                    <div className="d-flex justify-content-center">
                                         <Link href="/StaffLogins" className={styles.regLink}>Staff Login</Link>
                                     </div>
                                 </form>
