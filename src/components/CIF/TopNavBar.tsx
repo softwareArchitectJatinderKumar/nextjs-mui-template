@@ -1,124 +1,15 @@
-// 'use client';
-
-// import React, { useState, useEffect } from 'react';
-// import { AppBar, Toolbar, Typography, Button, Tabs, Tab, Box, Container, IconButton, Tooltip } from '@mui/material';
-// import { Logout as LogoutIcon, AccountCircle, ShieldMoon } from '@mui/icons-material';
-// import { usePathname, useRouter } from 'next/navigation';
-// import Link from 'next/link';
-// import Cookies from 'js-cookie';
-// import Swal from 'sweetalert2';
-
-// const TopNavBar = () => {
-//   const pathname = usePathname();
-//   const router = useRouter();
-//   const [value, setValue] = useState(0);
-
-//   const navItems = [
-//     { label: 'New Booking', path: '/InternalUserDashboard/NewBooking' },
-//     { label: 'View Bookings', path: '/InternalUserDashboard/ViewAllBookings' },
-//     { label: 'My Feedback', path: '/InternalUserDashboard/MyFeedback' },
-//     { label: 'Profile', path: '/InternalUserDashboard/Profile' },
-//   ];
-
-//   // Sync tab highlight with current URL
-//   useEffect(() => {
-//     const index = navItems.findIndex(item => item.path === pathname);
-//     if (index !== -1) setValue(index);
-//   }, [pathname]);
-
-//   const handleLogout = () => {
-//     Swal.fire({
-//       title: 'Logout?',
-//       text: "Are you sure you want to exit?",
-//       icon: 'warning',
-//       showCancelButton: true,
-//       confirmButtonColor: '#d32f2f',
-//       confirmButtonText: 'Logout',
-//     }).then((result) => {
-//       if (result.isConfirmed) {
-//         Cookies.remove('InternalUserAuthData');
-//         router.push('/login');
-//       }
-//     });
-//   };
-
-//   return (
-//     <AppBar position="sticky" elevation={1} sx={{ bgcolor: 'white', color: 'text.primary', borderBottom: '1px solid #e0e0e0' }}>
-//       <Container maxWidth="xl">
-//         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          
-//           {/* LEFT: Branding */}
-//           <Typography
-//             variant="h6"
-//             component={Link}
-//             href="/InternalUserDashboard"
-//             sx={{
-//               fontWeight: 800,
-//               textDecoration: 'none',
-//               color: 'inherit',
-//               letterSpacing: 1,
-//               display: 'flex',
-//               alignItems: 'center'
-//             }}
-//           >
-//             CIF <Box component="span" sx={{ color: '#ff6a00', ml: 0.5 }}>LPU</Box>
-//           </Typography>
-
-//           {/* CENTER: Navigation Tabs */}
-//           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-//             <Tabs 
-//               value={value} 
-//               textColor="primary"
-//               indicatorColor="primary"
-//               sx={{
-//                 '& .MuiTab-root': { fontWeight: 600, fontSize: '0.85rem' },
-//                 '& .Mui-selected': { color: '#ff6a00 !important' },
-//                 '& .MuiTabs-indicator': { backgroundColor: '#ff6a00' }
-//               }}
-//             >
-//               {navItems.map((item, index) => (
-//                 <Tab 
-//                   key={index} 
-//                   label={item.label} 
-//                   component={Link} 
-//                   href={item.path} 
-//                 />
-//               ))}
-//             </Tabs>
-//           </Box>
-
-//           {/* RIGHT: Actions */}
-//           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-//             <Tooltip title="Change Password">
-//               <IconButton component={Link} href="/InternalUserDashboard/ChangePassword" size="small">
-//                 <ShieldMoon fontSize="small" />
-//               </IconButton>
-//             </Tooltip>
-            
-//             <Button
-//               variant="outlined"
-//               color="error"
-//               size="small"
-//               startIcon={<LogoutIcon />}
-//               onClick={handleLogout}
-//               sx={{ borderRadius: '4px', textTransform: 'none', fontWeight: 600 }}
-//             >
-//               Logout
-//             </Button>
-//           </Box>
-
-//         </Toolbar>
-//       </Container>
-//     </AppBar>
-//   );
-// };
-
-// export default TopNavBar;
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button, Tabs, Tab, Box, Paper } from '@mui/material';
-import { Logout as LogoutIcon, ShieldMoon } from '@mui/icons-material';
+import { 
+  Typography, Button, Tabs, Tab, Box, Paper, 
+  IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar 
+} from '@mui/material';
+import { 
+  Logout as LogoutIcon, 
+  Menu as MenuIcon, 
+  Close as CloseIcon 
+} from '@mui/icons-material';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
@@ -128,18 +19,23 @@ const TopNavBar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [value, setValue] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const navItems = [
+    { label: 'Profile', path: '/InternalUserDashboard/Profile' },
     { label: 'New Booking', path: '/InternalUserDashboard/NewBooking' },
     { label: 'View Bookings', path: '/InternalUserDashboard/ViewAllBookings' },
-    { label: 'Feedback', path: '/InternalUserDashboard/MyFeedback' },
-    { label: 'Profile', path: '/InternalUserDashboard/Profile' },
+    { label: 'Feedback', path: '/InternalUserDashboard/Feedback' },
+    { label: 'Sample Status', path: '/InternalUserDashboard/SampleStatus' },
+    { label: 'Change Password', path: '/InternalUserDashboard/changePassword' },
   ];
 
   useEffect(() => {
     const index = navItems.findIndex(item => item.path === pathname);
     if (index !== -1) setValue(index);
   }, [pathname]);
+
+  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   const handleLogout = () => {
     Swal.fire({
@@ -157,59 +53,62 @@ const TopNavBar = () => {
   };
 
   return (
-    // Box wrapper to provide padding at the top so it doesn't touch the screen edge
-    <Box sx={{ width: '100%', pt: 2, pb: 1, display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{ width: '100%', pt: { xs: 1, md: 2 }, pb: 1, px: { xs: 2, md: 0 }, display: 'flex', justifyContent: 'center' }}>
       <Paper 
         elevation={3} 
         sx={{ 
-          width: 'auto', // Takes only needed width
-          minWidth: '800px', // Prevents it from getting too small
-          borderRadius: '50px', // Pill shape
-          px: 3,
+          width: { xs: '100%', md: 'auto' }, 
+          maxWidth: '1200px',
+          borderRadius: { xs: '10px', md: '50px' }, 
+          px: { xs: 1, md: 3 },
           bgcolor: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(0,0,0,0.05)'
+          border: '1px solid rgba(0,0,0,0.05)',
+          overflowX: 'auto'
         }}
       >
-        <Toolbar variant="dense" sx={{ justifyContent: 'space-between', gap: 4 }}>
+        <Toolbar variant="dense" sx={{ justifyContent: 'space-between', px: { xs: 1, md: 0 } }}>
           
-          {/* LEFT: Mini Brand */}
           <Typography
             variant="subtitle1"
             component={Link}
             href="/InternalUserDashboard"
-            sx={{ fontWeight: 800, textDecoration: 'none', color: '#333' }}
+            sx={{ fontWeight: 800, textDecoration: 'none', color: '#333', minWidth: 'max-content' }}
           >
             CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box>
           </Typography>
 
-          {/* CENTER: Compact Tabs */}
-          <Tabs 
-            value={value} 
-            sx={{
-              minHeight: '40px',
-              '& .MuiTab-root': { 
-                fontWeight: 600, 
-                fontSize: '0.8rem', 
+          {/* Desktop Navigation - Hidden on Mobile */}
+          <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
+            <Tabs 
+              value={value} 
+              sx={{
                 minHeight: '40px',
-                minWidth: '100px',
-                color: '#666'
-              },
-              '& .Mui-selected': { color: '#ff6a00 !important' },
-              '& .MuiTabs-indicator': { backgroundColor: '#ff6a00', height: '3px', borderRadius: '3px' }
-            }}
-          >
-            {navItems.map((item, index) => (
-              <Tab key={index} label={item.label} component={Link} href={item.path} />
-            ))}
-          </Tabs>
+                '& .MuiTab-root': { 
+                  fontWeight: 600, 
+                  fontSize: '0.75rem', 
+                  minHeight: '40px',
+                  minWidth: 'auto',
+                  px: 2,
+                  color: '#666'
+                },
+                '& .Mui-selected': { color: '#ff6a00 !important' },
+                '& .MuiTabs-indicator': { backgroundColor: '#ff6a00', height: '3px', borderRadius: '3px' }
+              }}
+            >
+              {navItems.map((item, index) => (
+                <Tab key={index} label={item.label} component={Link} href={item.path} />
+              ))}
+            </Tabs>
+          </Box>
 
-          {/* RIGHT: Actions */}
+          {/* Desktop Logout & Mobile Menu Toggle */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Button
               onClick={handleLogout}
               size="small"
               sx={{ 
+                display: { xs: 'none', md: 'flex' }, // Hide text on small mobile
                 color: '#666', 
                 textTransform: 'none', 
                 fontWeight: 700,
@@ -219,10 +118,66 @@ const TopNavBar = () => {
             >
               Logout
             </Button>
-          </Box>
 
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ display: { lg: 'none' }, color: '#ff6a00' }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </Paper>
+
+      {/* Mobile Drawer (Side Menu) */}
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }} // Better open performance on mobile.
+        sx={{
+          display: { xs: 'block', lg: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, p: 2 },
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+          <IconButton onClick={handleDrawerToggle}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Typography variant="h6" sx={{ fontWeight: 800, mb: 2, px: 2 }}>
+          CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box>
+        </Typography>
+        <List>
+          {navItems.map((item) => (
+            <ListItem key={item.label} disablePadding>
+              <ListItemButton 
+                component={Link} 
+                href={item.path}
+                onClick={handleDrawerToggle}
+                selected={pathname === item.path}
+                sx={{ 
+                  borderRadius: '8px',
+                  '&.Mui-selected': { bgcolor: 'rgba(255, 106, 0, 0.1)', color: '#ff6a00' }
+                }}
+              >
+                <ListItemText   primary={item.label}   slotProps={{primary: { sx: { fontWeight: 600 } }   }} />
+                {/* <ListItemText primary={item.label} primaryTypographyProps={{ fontWeight: 600 }} /> */}
+              </ListItemButton>
+            </ListItem>
+          ))}
+          <ListItem disablePadding sx={{ mt: 2 }}>
+            <ListItemButton onClick={handleLogout} sx={{ borderRadius: '8px', color: '#d32f2f' }}>
+              <LogoutIcon sx={{ mr: 2 }} />
+              <ListItemText   primary="Logout"   slotProps={{primary: { sx: { fontWeight: 600 } }   }} />
+              {/* <ListItemText primary="Logout" primaryTypographyProps={{ fontWeight: 700 }} /> */}
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Drawer>
     </Box>
   );
 };

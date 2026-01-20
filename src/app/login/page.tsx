@@ -1,3 +1,157 @@
+// "use client";
+// import React, { useState } from 'react';
+// import { useForm } from 'react-hook-form';
+// import { useRouter } from 'next/navigation';
+// import Swal from 'sweetalert2';
+// import Cookies from 'js-cookie';
+
+// // Services
+// import { authService } from '@/services/authService';
+// import { storageService } from '@/services/storageService';
+// import myAppWebService from '@/services/myAppWebService';
+
+// export default function LoginForm() {
+//     const router = useRouter();
+//     const [loading, setLoading] = useState(false);
+//     const [showPassword, setShowPassword] = useState(false);
+
+//     const { register, handleSubmit, formState: { errors, isValid } } = useForm({
+//         mode: 'onChange',
+//         defaultValues: { Email: '', password: '', UserRoleS: '' }
+//     });
+
+//     const onSubmit = async (data: any) => {
+//         setLoading(true);
+
+//         try {
+//             /** * STEP 1: Authorise User (Matching Angular's authoriseUser)
+//              * Note: If your .NET API expects FormData, we use a URLSearchParams or FormData object
+//              */
+//             const formData = new FormData();
+//             formData.append('Email', data.Email);
+//             formData.append('PasswordText', data.password);
+//             formData.append('UserRole', data.UserRoleS);
+
+//             // Calling the main web service first (as per Angular logic)
+//             const authResponse = await myAppWebService.GetAuthoriseUserData(formData);
+
+//             if (authResponse?.item1 && authResponse.item1.length > 0) {
+//                 const user = authResponse.item1[0];
+
+//                 /** * STEP 2: Create Token (Matching Angular's createToken)
+//                  * We call the AuthService only after the initial login is valid
+//                  */
+//                 const tokenData = await authService.LoginJournalAccessTemp(user.email);
+                
+//                 // Save the token data to local storage
+//                 storageService.saveUser(tokenData);
+
+//                 // Proceed to handle cookies and navigation
+//                 handlePostLogin(user);
+//             } else {
+//                 Swal.fire('Invalid Login', 'Check Details!', 'warning');
+//                 setLoading(false);
+//             }
+//         } catch (error) {
+//             console.error("Login Flow Error:", error);
+//             Swal.fire('Error', 'Server communication failed', 'error');
+//             setLoading(false);
+//         }
+//     };
+
+//     const handlePostLogin = (user: any) => {
+//         // Prepare cookie data exactly as Angular does
+//         const userCookiesData = {
+//             CandidateName: user.candidateName,
+//             UserId: user.emailId,
+//             Department: user.department,
+//             DepartmentName: user.departmentName,
+//             EmailId: user.emailId,
+//             MobileNo: user.mobileNumber,
+//             UserRole: user.userRole,
+//             SupervisorName: user.supervisorName,
+//             ProofNumber: btoa(user.idProofNumber || ''),
+//             ProofName: user.idProofType,
+//         };
+
+//         Cookies.set('InternalUserAuthData', JSON.stringify(userCookiesData));
+
+//         // STEP 3: Password Update Check (Logic from Angular)
+//         if (user.isPasswordUpdated !== true) {
+//             Swal.fire('Security Update', 'Please update your password to proceed.', 'info').then(() => {
+//                 router.push('/SecurityIssue');
+//             });
+//             return;
+//         }
+
+//         // STEP 4: Terms and Conditions
+//         Swal.fire({
+//             title: 'Terms & Conditions',
+//             html: `<div style="max-height: 300px; overflow-y: auto; text-align: left; font-size: 14px;">
+//                     <p>Welcome to Lovely Professional University CIF...</p>
+//                     <ul><li>We agree to acknowledge CIF, LPU...</li></ul>
+//                   </div>`,
+//             icon: 'info',
+//             showCancelButton: true,
+//             confirmButtonText: 'Yes, Agreed',
+//             cancelButtonText: 'No',
+//         }).then((result) => {
+//             if (result.isConfirmed) {
+//                 router.push('/NewBookings'); // Matches Angular route
+//             } else {
+//                 Cookies.remove('InternalUserAuthData');
+//                 storageService.clean();
+//                 setLoading(false);
+//             }
+//         });
+//     };
+
+//     return (
+//         <div className="cifLogin p-4 shadow-sm bg-white rounded">
+//             <form onSubmit={handleSubmit(onSubmit)}>
+//                 {/* Email Field */}
+//                 <div className="mb-3">
+//                     <label className="form-label fw-bold">Login ID</label>
+//                     <input
+//                         type="text"
+//                         className={`form-control ${errors.Email ? 'is-invalid' : ''}`}
+//                         placeholder="Enter Email"
+//                         {...register('Email', { required: 'Required', minLength: 5 })}
+//                     />
+//                 </div>
+
+//                 {/* Password Field */}
+//                 <div className="mb-3">
+//                     <label className="form-label fw-bold">Password</label>
+//                     <div className="input-group">
+//                         <input
+//                             type={showPassword ? 'text' : 'password'}
+//                             className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+//                             {...register('password', { required: 'Required', minLength: 5 })}
+//                         />
+//                         <button type="button" className="btn btn-outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+//                             {showPassword ? 'Hide' : 'Show'}
+//                         </button>
+//                     </div>
+//                 </div>
+
+//                 {/* Role Field */}
+//                 <div className="mb-4">
+//                     <label className="form-label fw-bold">Choose Role</label>
+//                     <select className="form-select" {...register('UserRoleS', { required: 'Required' })}>
+//                         <option value="">Select Role</option>
+//                         <option value="400001">External Academia</option>
+//                         <option value="400002">Industry User</option>
+//                     </select>
+//                 </div>
+
+//                 <button type="submit" className="lpu-btn w-100" disabled={!isValid || loading}>
+//                     {loading ? 'Processing...' : 'Submit'}
+//                 </button>
+//             </form>
+//         </div>
+//     );
+// }
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -5,38 +159,36 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
-import styles from '@/styles/Instruments.module.css'; // Using your existing style module
 import myAppWebService from '@/services/myAppWebService';
-import FacilitiesSection from '@/components/CIF/FacilitiesSection';
 interface Instrument {
-  id: string | number;
-  instrumentName: string;
-  categoryId: string | number;
-  imageUrl?: string;
+    id: string | number;
+    instrumentName: string;
+    categoryId: string | number;
+    imageUrl?: string;
 }
 
 export default function LoginPage() {
 
-  const [instruments, setInstruments] = useState<Instrument[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+    const [instruments, setInstruments] = useState<Instrument[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchInstruments = async () => {
-      try {
-        const response = await myAppWebService.getAllInstruments();
-        const data = response.item1 || response.data || response;
-        setInstruments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('Error fetching instruments:', err);
-        setError('Failed to load instruments');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    useEffect(() => {
+        const fetchInstruments = async () => {
+            try {
+                const response = await myAppWebService.getAllInstruments();
+                const data = response.item1 || response.data || response;
+                setInstruments(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error('Error fetching instruments:', err);
+                setError('Failed to load instruments');
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    fetchInstruments();
-  }, []);
+        fetchInstruments();
+    }, []);
 
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -226,7 +378,6 @@ export default function LoginPage() {
                     </div>
                 </div>
             </section>
-            {/* <FacilitiesSection instruments={instruments} /> */}
         </>
     );
 }

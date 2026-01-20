@@ -9,7 +9,6 @@ import { instrumentService } from '@/services/instrumentService';
 import UserProfileForm, {
   UserProfileFormData
 } from './UserProfileForm';
-// Ensure this path matches where you saved the Navbar component
 import Navbar from '@/components/CIF/TopNavBar'; 
 
 export default function UserProfilePage() {
@@ -39,7 +38,6 @@ export default function UserProfilePage() {
   useEffect(() => {
     const cookieData = Cookies.get('InternalUserAuthData');
     if (!cookieData) {
-      // Redirect to login if cookie is missing
       window.location.href = '/login';
       return;
     }

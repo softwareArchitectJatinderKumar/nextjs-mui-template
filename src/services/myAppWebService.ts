@@ -165,23 +165,34 @@ class MyAppWebService {
 
   // New API added 
 
-
-
-  async GetAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
+async GetAuthoriseUserData(formData: FormData) {
     try {
-      const response = await this.apiClient.get('api/LpuCIF/GetUserDataIdWise', {
-        params: {
-          Email: UserEmail,
-          PasswordText: secreatKeys,
-          UserRole: userRole,
-        },
-      });
+      const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', 
+        formData
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
       throw error;
     }
+    
   }
+
+  // async GetAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
+  //   try {
+  //     const response = await this.apiClient.get('api/LpuCIF/GetUserDataIdWise', {
+  //       params: {
+  //         Email: UserEmail,
+  //         PasswordText: secreatKeys,
+  //         UserRole: userRole,
+  //       },
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error fetching authorized user data:', error);
+  //     throw error;
+  //   }
+  // }
 
 
   async GetInstrumentsDetails() {
