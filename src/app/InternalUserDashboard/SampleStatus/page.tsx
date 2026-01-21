@@ -23,6 +23,7 @@ export default function SampleStatusPage() {
 
                 const userEmail = JSON.parse(cookieData).EmailId;
                 const response = await instrumentService.GetSampleStatusByUserId(userEmail);
+                // const response = await instrumentService.GetSampleStatusByUserId('prashant.16477@lpu.co.in');
 
                 // Handle both response structures (wrapped in item1 or direct array)
                 const dataArray = response?.item1 || response || [];

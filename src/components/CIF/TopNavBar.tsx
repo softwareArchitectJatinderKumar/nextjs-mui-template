@@ -14,6 +14,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
+import { storageService } from '@/services/storageService';
 
 const TopNavBar = () => {
   const pathname = usePathname();
@@ -24,7 +25,7 @@ const TopNavBar = () => {
   const navItems = [
     { label: 'Profile', path: '/InternalUserDashboard/Profile' },
     { label: 'New Booking', path: '/InternalUserDashboard/NewBooking' },
-    { label: 'View Bookings', path: '/InternalUserDashboard/ViewAllBookings' },
+    { label: 'View Bookings', path: '/InternalUserDashboard/ViewBookings' },
     { label: 'Feedback', path: '/InternalUserDashboard/Feedback' },
     { label: 'Sample Status', path: '/InternalUserDashboard/SampleStatus' },
     { label: 'Change Password', path: '/InternalUserDashboard/changePassword' },
@@ -46,6 +47,7 @@ const TopNavBar = () => {
       confirmButtonText: 'Logout',
     }).then((result) => {
       if (result.isConfirmed) {
+        storageService.clean();
         Cookies.remove('InternalUserAuthData');
         router.push('/login');
       }
@@ -72,10 +74,10 @@ const TopNavBar = () => {
           <Typography
             variant="subtitle1"
             component={Link}
-            href="/InternalUserDashboard"
+            href="/InternalUserDashboard/Profile"
             sx={{ fontWeight: 800, textDecoration: 'none', color: '#333', minWidth: 'max-content' }}
           >
-            CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box>
+          <Box component="span" sx={{ marginRight:'3rem'}}> CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box></Box>
           </Typography>
 
           {/* Desktop Navigation - Hidden on Mobile */}

@@ -6,6 +6,7 @@ import myAppWebService from '@/services/myAppWebService';
 import Link from 'next/link';
 import styles from '@/styles/TermsCondition.module.css';
 import FacilitiesSection from '@/components/CIF/FacilitiesSection';
+import EventsCarousel from '@/components/CIF/EventsSection';
 
 interface Instrument {
   id: string | number;
@@ -121,6 +122,7 @@ export default function TermsandConditions() {
                 </div>
             </section>
             <FacilitiesSection instruments={instruments} />
+            <EventsCarousel/>
         </>
     );
 }

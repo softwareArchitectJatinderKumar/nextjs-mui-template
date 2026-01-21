@@ -80,7 +80,6 @@ export default function SampleStatusTable({ data, loading }: { data: SampleStatu
                 rows={filteredRows}
                 columns={columns}
                 loading={loading}
-                // FIX: Uses index + bookingId because your data has duplicate bookingIds
                 getRowId={(row) => `${row.bookingId}-${row.receivedDate}-${Math.random()}`} 
                 initialState={{
                     pagination: { paginationModel: { pageSize: 10 } },

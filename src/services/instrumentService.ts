@@ -72,10 +72,11 @@ class InstrumentService {
 
   async CIFUpdateUserDetails(UpdateUserData: FormData) {
     try {
-      const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData, {
+      const Token = storageService.getUser();
+        const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData, {
         headers: {
-
-          'Content-Type': 'multipart/form-data',
+           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${Token}`,
         },
       });
       return res.data;

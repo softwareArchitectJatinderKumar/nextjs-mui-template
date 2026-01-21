@@ -96,14 +96,6 @@ class MyAppWebService {
       console.error('Error fetching authorized user data:', error);
       throw error;
     }
-    //    try {
-    //   const response = await this.apiClient.get('api/LpuCIF/GetStudentById?RegNo=' + regNo);
-    //   return response.data; 
-    // } catch (error) {
-    //   console.error('Error fetching authorized user data:', error);
-    //   throw error; 
-    // }
-
   }
 
   async getAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
@@ -112,8 +104,6 @@ class MyAppWebService {
       loginData.append('Email', UserEmail);
       loginData.append('PasswordText', secreatKeys);
       loginData.append('UserRole', userRole);
-
-
       const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', loginData, {
         headers: {
           'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
@@ -131,7 +121,7 @@ class MyAppWebService {
 
   async GetAllBooksDetails() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetAllJournalData');
+      const response = await this.apiClient.get('api/LpuCIF/GetAllJournalData');
       return response.data;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
@@ -151,25 +141,10 @@ class MyAppWebService {
       throw error;
     }
   }
-  // api/LpuCIF/GetAllInstruments
-  // Method to fetch specifications
-  // fetchSpecifications(categoryId: any, instrumentId: any) {
-  //   return this.apiClient.get(`api/LpuCIF/GetAllSpecifications`, {
-  //     params: {
-  //       categoryId,
-  //       id: instrumentId,
-  //     },
-  //   });
-  // }
-
-
-  // New API added 
-
-async GetAuthoriseUserData(formData: FormData) {
+ 
+async GetAllSampleStatus() {
     try {
-      const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', 
-        formData
-      );
+      const response = await this.apiClient.get('api/LpuCIF/GetAllSampleStatus');
       return response.data;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
@@ -177,27 +152,33 @@ async GetAuthoriseUserData(formData: FormData) {
     }
     
   }
+  // New API added 
 
-  // async GetAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any) {
-  //   try {
-  //     const response = await this.apiClient.get('api/LpuCIF/GetUserDataIdWise', {
-  //       params: {
-  //         Email: UserEmail,
-  //         PasswordText: secreatKeys,
-  //         UserRole: userRole,
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error fetching authorized user data:', error);
-  //     throw error;
-  //   }
-  // }
+  async GetAuthoriseUserData(formData: FormData) {
+    try {
+      const res = await this.apiClient.post(`api/LpuCIF/GetUserDataIdWise`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
+      });
+      return res.data;
+      // const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', 
+      //   formData,
 
+      // );
+      // return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+
+ 
 
   async GetInstrumentsDetails() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetInstrumentsDetails', {
+      const response = await this.apiClient.get('api/LpuCIF/GetInstrumentsDetails', {
       });
       return response.data;
     } catch (error) {
@@ -299,7 +280,7 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetAllBooking() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/CIFGetAllAssignedTesttoStaff', {
+      const response = await this.apiClient.get('api/LpuCIF/CIFGetAllAssignedTesttoStaff', {
       });
       return response.data;
     } catch (error) {
@@ -312,7 +293,7 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetAllUploadedResultsByStaff() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/CIFGetAllAssignedTesttoStaff', {
+      const response = await this.apiClient.get('api/LpuCIF/CIFGetAllAssignedTesttoStaff', {
       });
       return response.data;
     } catch (error) {
@@ -323,7 +304,7 @@ async GetAuthoriseUserData(formData: FormData) {
   // get 
   async GetAllBookingTests() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetAllBookingTests', {
+      const response = await this.apiClient.get('api/LpuCIF/GetAllBookingTests', {
       });
       return response.data;
     } catch (error) {
@@ -349,7 +330,7 @@ async GetAuthoriseUserData(formData: FormData) {
   // get call
   async GetUserPaymentDetails(UserEmailId: any) {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetUserPaymentDetails', {
+      const response = await this.apiClient.get('api/LpuCIF/GetUserPaymentDetails', {
         params: {
           UserId: UserEmailId
         },
@@ -365,7 +346,7 @@ async GetAuthoriseUserData(formData: FormData) {
   // get request admin panel 
   async GetAllPaymentDetails() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetAllPaymentDetails', {
+      const response = await this.apiClient.get('api/LpuCIF/GetAllPaymentDetails', {
       });
       return response.data;
     } catch (error) {
@@ -395,7 +376,7 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetAllInstruments() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetInstrumentsDetails', {
+      const response = await this.apiClient.get('api/LpuCIF/GetInstrumentsDetails', {
       });
       return response.data;
     } catch (error) {
@@ -440,7 +421,7 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetUserResultsDetails(EmailId: any, BookingId: any) {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetUserResultsDetails', {
+      const response = await this.apiClient.get('api/LpuCIF/GetUserResultsDetails', {
         params: {
           Uid: EmailId,
           BookingId: BookingId
@@ -459,7 +440,7 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetUserBookingStatus(UserEmailId: any) {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetUserBookingStatus', {
+      const response = await this.apiClient.get('api/LpuCIF/GetUserBookingStatus', {
         params: {
           Uid: UserEmailId,
         },
@@ -474,7 +455,7 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetAllUserData() {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetAllApprovedUserData', {
+      const response = await this.apiClient.get('api/LpuCIF/GetAllApprovedUserData', {
 
       });
       return response.data;
@@ -507,7 +488,7 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetAnalysisData(Id: any, TypeId: any) {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetAnalysisIdWisePriceDetails', {
+      const response = await this.apiClient.get('api/LpuCIF/GetAnalysisIdWisePriceDetails', {
         AnalysisId: Id,
         TypeId: TypeId
       });
@@ -525,14 +506,14 @@ async GetAuthoriseUserData(formData: FormData) {
 
   async GetUserAllBookingSlot(Id: any) {
     try {
-      const response = await this.apiClient.get('api/LpuJournal/GetAllUserBookingSlot', {
-        UserId: Id,
+      const response = await this.apiClient.get('api/LpuCIF/GetAllUserBookingSlot', {
+         params: {UserId: Id},
       });
       return response.data;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
       throw error;
-    }
+    } 
   }
 
 

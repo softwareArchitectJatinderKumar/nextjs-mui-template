@@ -8,10 +8,12 @@ import Swal from 'sweetalert2';
 import styles from '@/styles/UserRegisterPage.module.css';
 import { registerSchema } from './registerSchema';
 import myAppWebService from '@/services/myAppWebService';
-
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 export default function UserRegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -163,8 +165,66 @@ export default function UserRegisterPage() {
                       <textarea {...register('Address')} className={`form-control ${errors.Address ? 'is-invalid' : ''}`} placeholder="Full Address"></textarea>
                       <div className="invalid-feedback">{errors.Address?.message}</div>
                     </div>
-
                     <div className="col-md-6 mb-3">
+                      <label className="form-label fw-bold">Password</label>
+                      <div className="input-group">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          {...register('Password')}
+                          className={`form-control border-end-0 ${errors.Password ? 'is-invalid' : ''}`}
+                          placeholder="Password"
+                        />
+                        <span
+                          className={`input-group-text bg-white border-start-0 ${errors.Password ? 'border-danger' : ''}`}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                        </span>
+                      </div>
+                      {errors.Password && <div className="text-danger small mt-1">{errors.Password?.message as string}</div>}
+                    </div>
+
+                    {/* Confirm Password Field */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label fw-bold">Confirm Password</label>
+                      <div className="input-group">
+                        <input
+                          type={showConfirmPassword ? 'text' : 'password'}
+                          {...register('ConfirmPassword')}
+                          className={`form-control border-end-0 ${errors.ConfirmPassword ? 'is-invalid' : ''}`}
+                          placeholder="Confirm Password"
+                        />
+                        <span
+                          className={`input-group-text bg-white border-start-0 ${errors.ConfirmPassword ? 'border-danger' : ''}`}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                          {showConfirmPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                        </span>
+                      </div>
+                      {errors.ConfirmPassword && <div className="text-danger small mt-1">{errors.ConfirmPassword?.message as string}</div>}
+                    </div>
+
+                    {/* Role Field */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label fw-bold">Role</label>
+                      <select {...register('UserRole')} className={`form-select ${errors.UserRole ? 'is-invalid' : ''}`}>
+                        <option value="">Select Role</option>
+                        <option value="400001">External Academia</option>
+                        <option value="400002">Industry Users</option>
+                      </select>
+                      <div className="invalid-feedback">{errors.UserRole?.message as string}</div>
+                    </div>
+                  </div>
+
+                  <div className="text-center mt-4">
+                    <button type="submit" className="btn btn-danger px-5" disabled={!isValid || loading}>
+                      {loading ? 'Submitting...' : 'Submit'}
+                    </button>
+                    <button type="button" className="btn btn-secondary ms-3" onClick={() => reset()}>Reset</button>
+                  </div>
+                  {/* <div className="col-md-6 mb-3">
                       <label className="form-label">Password</label>
                       <input type="password" {...register('Password')} className={`form-control ${errors.Password ? 'is-invalid' : ''}`} placeholder="Password" />
                       <div className="invalid-feedback">{errors.Password?.message}</div>
@@ -192,7 +252,7 @@ export default function UserRegisterPage() {
                       {loading ? 'Submitting...' : 'Submit'}
                     </button>
                     <button type="button" className="btn btn-secondary m-3" onClick={() => reset()}>Reset</button>
-                  </div>
+                  </div> */}
                 </form>
               </div>
             </div>

@@ -66,7 +66,8 @@ export default function Home() {
       <HeroSection />
       <FacilitiesSection instruments={instruments} />
 
-      <EventsSection styles={Eventsstyles} />
+      <EventsSection />
+      {/* <EventsSection styles={Eventsstyles} /> */}
       
       
     </>
