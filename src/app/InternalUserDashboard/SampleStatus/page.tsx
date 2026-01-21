@@ -28,7 +28,7 @@ export default function SampleStatusPage() {
                 // Handle both response structures (wrapped in item1 or direct array)
                 const dataArray = response?.item1 || response || [];
                 
-                console.log("Data received in Page:", dataArray);
+                // console.log("Data received in Page:", dataArray);
                 
                 if (Array.isArray(dataArray)) {
                     setSamplesData(dataArray);
