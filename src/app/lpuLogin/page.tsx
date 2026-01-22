@@ -110,17 +110,17 @@ export default function LoginPage() {
 
             if (data && data.item1 && data.item1.length > 0) {
                 const emp = data.item1[0];
-
                 const userData = {
                     CandidateName: emp.employeeName,
                     UserId: emp.employeeCode,
-                    EmailId: emp.officialEmailId || emp.email,
                     Department: emp.departmentName,
+                    Designation: emp.department,
+                    EmailId:  emp.email,
+                    MobileNo: emp.contactNo,
+                    UserRole: '400000',
+                    SupervisorName: emp.employeeName,
                     PasswordText: secretKey,
-                    UserRole: '400000'
                 };
-
-                // console.log('Mapped User Data:', userData);
                 await proceedWithTerms(userData);
             } else {
                 console.error("API returned success but item1 is empty or missing");
@@ -137,10 +137,19 @@ export default function LoginPage() {
 
         const result = await Swal.fire({
             title: 'Terms Conditions',
-            html: `<div style="text-align: left; font-size: 14px;">
-                    <p>Welcome to LPU. Do you agree to acknowledge CIF in publications?</p>
-                    <ul><li>I abide by safety guidelines...</li></ul>
-                   </div>`,
+            html: `<div style="max-height: 400px; overflow-y: auto; text-align: left; padding: 10px;">
+            <p>Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in</p>
+            <p><strong>You specifically agree to all of the following undertakings:</strong></p>
+            <ul style="list-style-type: disc; padding-left: 20px; font-size: 14px; line-height: 1.6;">
+              <li>We agree to acknowledge CIF, LPU in our publications and thesis if the results from CIF instrumentation are incorporated/used in them.</li>
+              <li>I/We undertake to abide by the safety, standard sample preparation guidelines and precautions during testing of samples.</li>
+              <li>I/We understand the possibility of samples getting damaged during handling and analysis. I/We shall not claim for any loss/damage of the sample submitted to CIF and agree to resubmit the new sample requested by CIF for analysis.</li>
+              <li>CIF, LPU reserves the rights to return the samples without performing analysis and will refund the analytical charges (after deduction of GST, if applicable) under special circumstances.</li>
+              <li>I/we agree to maintain decorum during the visit in CIF labs for sample analysis and fully agree that CIF has full right to take action if decorum of CIF’s labs functionality is disturbed/hampered by me.</li>
+              <li>CIF shall not take any responsibility about the analysis, interpretation and publication of data acquired by the end user.</li>
+              <li>I/We hereby declare that the results of the analysis will not be used for the settlement of any legal issue.</li>
+            </ul>
+          </div>`,
             showCancelButton: true,
             confirmButtonText: 'Yes, Agreed',
             cancelButtonText: 'No'
@@ -149,7 +158,7 @@ export default function LoginPage() {
         if (result.isConfirmed) {
 
             await myAppWebService.NewUserRecord(userData);
-            router.push('/InternalUserDashboard/Profile');
+            router.push('/InternalUserDashboard/ViewBookings');
         } else {
             router.push('/login');
         }
@@ -174,31 +183,12 @@ export default function LoginPage() {
                     </div>
                 </div>
             )}
-            {/* <section className={styles.section + ' bgDarkYellow py-5'}>
-                <div className="container">
-                    <div className={styles.mainHead + " mb-5"}>
-                        <h1>Central Instrumentation Facilitiation - Login</h1>
-                    </div>
-
-                    <div className="row align-items-center">
-                        <div className="col-md-6 d-none d-lg-block">
-                            <img
-                                src="https://www.lpu.in/lpu-assets/images/cif/login-left.png"
-                                alt="Login"
-                                className="img-fluid"
-                            />
-                        </div>
-
-                        <div className="col-md-6">
-                            <div className={styles.cifLogin}>
-                                <h2 className="mb-4 text-center">
-                                    <span>Internal</span> User Login
-                                </h2> */}
+        
             <section className="section bgDarkYellow py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
-                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facilitiation</h1>
+                            <h1>Central Instrumentation Facilitiation</h1>
                             <h2 className="text-center" >Internal <span style={{ color: '#ef7d00' }}>User </span> Login</h2>
                         </div>
                     </div>
@@ -216,20 +206,18 @@ export default function LoginPage() {
                             <div className="cifLogin p-md-4">
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className={styles.inputGroup}>
-                                        <label className="form-label">Login ID / Email</label>
+                                        <label className="form-label">User Id</label>
                                         <input
                                             type="text"
                                             className={`form-control ${errors.Email ? 'is-invalid' : ''}`}
-                                            placeholder="Enter Login ID / Email"
+                                            placeholder="Staff Id / Student Id"
                                             {...register("Email", {
-                                                required: "Login ID or Email is required",
+                                                required: "ID is required",
                                                 validate: (value) => {
                                                     const emailRegex =
                                                         /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
                                                     const idRegex =
-                                                        /^[A-Za-z0-9_-]{4,30}$/; // adjust length if needed
-
+                                                        /^[A-Za-z0-9_-]{4,30}$/; 
                                                     if (emailRegex.test(value) || idRegex.test(value)) {
                                                         return true;
                                                     }
@@ -238,18 +226,7 @@ export default function LoginPage() {
                                                 }
                                             })}
                                         />
-                                        {/* <input
-                                            type="text"
-                                            className={`form-control ${errors.Email ? 'is-invalid' : ''}`}
-                                            placeholder="Enter Login ID / Email"
-                                            {...register("Email", {
-                                                required: "Id is required",
-                                                pattern: {
-                                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                                    message: "Invalid email address"
-                                                }
-                                            })}
-                                        /> */}
+                                
                                         {errors.Email && (
                                             <span className="text-danger mt-1 d-block">
                                                 {errors.Email.message as string}

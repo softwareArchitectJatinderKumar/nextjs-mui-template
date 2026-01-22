@@ -1,5 +1,5 @@
 // services/myAppWebService.js
-
+import { storageService } from './storageService';
 import axios from 'axios';
 
 class MyAppWebService {
@@ -70,10 +70,11 @@ class MyAppWebService {
   }
 
   async GetEmployeeDetails(token:any) {
+    const Token = storageService.getUser();
     try {
       const response = await this.apiClient.get('api/Mou/GetEmployeeDetails', {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${Token}`,
         },
       });
       return response.data;
