@@ -50,7 +50,7 @@ const StaffMenuBar = () => {
       setIsLoggedIn(false);
       // Only redirect if we aren't already on the login page to avoid loops
       if (pathname !== '/StaffLogin' && pathname !== '/login') {
-        router.push('/StaffLogin');
+        router.push('/StaffUser/StaffLogin');
       }
       return;
     }
@@ -65,7 +65,7 @@ const StaffMenuBar = () => {
       console.error("Error parsing auth cookie:", error);
       // If cookie is corrupted, clear it and redirect
       Cookies.remove('StaffUserAuthData');
-      router.push('/StaffLogin');
+      router.push('/StaffUser/StaffLogin');
     }
   }, [pathname, router]);
 
@@ -87,7 +87,7 @@ const StaffMenuBar = () => {
       if (result.isConfirmed) {
         storageService.clean();
         Cookies.remove('StaffUserAuthData');
-        router.push('/StaffLogin');
+        router.push('/StaffUser/StaffLogin');
       }
     });
   };
