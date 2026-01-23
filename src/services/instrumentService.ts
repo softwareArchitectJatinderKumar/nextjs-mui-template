@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { storageService } from './storageService';
 
 class InstrumentService {
   private apiClient: AxiosInstance;
@@ -18,34 +19,34 @@ class InstrumentService {
   async getAllInstruments() {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllInstruments');
-      return response.data.item1; 
+      return response.data.item1;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
-      throw error; 
+      throw error;
     }
   }
 
   async getSpecifications() {
-  try {
-    const response = await this.apiClient.get('api/LpuCIF/GetAllSpecifications', {
-    });
-    return response.data.item1; 
-  } catch (error) {
-    console.error('Error fetching authorized user data:', error);
-    throw error; 
-  } 
-}
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetAllSpecifications', {
+      });
+      return response.data.item1;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
 
   async fetchSpecifications() {
-  try {
-    const response = await this.apiClient.get('api/LpuCIF/GetAllSpecifications', {
-    });
-    return response.data; 
-  } catch (error) {
-    console.error('Error fetching authorized user data:', error);
-    throw error; 
-  } 
-}
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetAllSpecifications', {
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
 
   async CIFGetUserDetails(email: string) {
     try {
@@ -63,25 +64,19 @@ class InstrumentService {
     return res.data.item1 || [];
   }
 
-  // async  CIFUpdateUserDetails(UpdateUserData: FormData) {
-  //    try {
-  //     const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData);
-  //     return res.data;
-  //   } catch (error) {
-  //     console.error('Error submitting Details:', error);
-  //     throw error;
-  //   }
-    
-  // }
+  async GetSampleStatusByUserId(UserEmailId: string) {
+    const res = await this.apiClient.get(`api/LpuCIF/GetSampleStatusByUserId?UserId=${UserEmailId}`);
+    return res.data.item1 || [];
 
- 
+  }
+
   async CIFUpdateUserDetails(UpdateUserData: FormData) {
     try {
-      const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData, {
+      const Token = storageService.getUser();
+        const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData, {
         headers: {
-          // Setting this to undefined allows the browser/Axios to 
-          // automatically set 'multipart/form-data' with the correct boundary.
-          'Content-Type': 'multipart/form-data', 
+           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${Token}`,
         },
       });
       return res.data;
@@ -91,35 +86,53 @@ class InstrumentService {
     }
   }
 
-async UpdateUserDetails(data: any) {
-  try {
-    // Convert JSON object to URL-encoded string (application/x-www-form-urlencoded)
-    const params = new URLSearchParams();
-    Object.keys(data).forEach(key => params.append(key, data[key] || ""));
+  async UpdateUserDetails(data: any) {
+    try {
 
-    const res = await this.apiClient.post(`api/LpuCIF/CIUpdateUserDetails`, params, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error('API Error:', error);
-    throw error;
+      const params = new URLSearchParams();
+      Object.keys(data).forEach(key => params.append(key, data[key] || ""));
+
+      const res = await this.apiClient.post(`api/LpuCIF/CIUpdateUserDetails`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
+    }
   }
-}
-  //   async UpdateUserDetails(UserData: any) {
-  //    try {
-  //     const res = await this.apiClient.post(`api/LpuCIF/CIUpdateUserDetails`, UserData);
-  //     return res.data;
-  //   } catch (error) {
-  //     console.error('Error submitting Details:', error);
-  //     throw error;
-  //   }
-    
-  // }
 
+
+  async NewCifFeedback(feedbackData: any) {
+     const user = storageService.getUser();
+    const token = user?.token; // Adjust based on your user object structure
+    try {
+      const params = new URLSearchParams();
+      Object.keys(feedbackData).forEach(key => {
+        params.append(key, feedbackData[key]);
+      });
+
+      const res = await this.apiClient.post(`api/LpuCIF/NewFeedback`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+           'Authorization': `Bearer ${token}`
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
+    }
+  }
  
+async getAuthoriseUserData(formData: FormData) {
+    // Note: Do NOT set 'Content-Type' manually when sending FormData, 
+    // Axios will set it automatically with the correct boundary.
+    const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', formData);
+    return response.data;
+}
 }
 
 export const instrumentService = new InstrumentService();
