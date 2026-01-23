@@ -4,45 +4,11 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import styles from './LpuloginPage.module.css';
-// import styles from './LoginPage.module.css';
 import Cookies from 'js-cookie';
-// Mocking the services structure to match your API names import myAppWebService from '@/services/myAppWebService';
 import myAppWebService from '@/services/myAppWebService';
-import FacilitiesSection from '@/components/CIF/FacilitiesSection';
 import Link from 'next/link';
 
-interface Instrument {
-    id: string | number;
-    instrumentName: string;
-    categoryId: string | number;
-    imageUrl?: string;
-}
-
-
-export default function LoginPage() {
-
-    const [instruments, setInstruments] = useState<Instrument[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        const fetchInstruments = async () => {
-            try {
-                const response = await myAppWebService.getAllInstruments();
-                const data = response.item1 || response.data || response;
-                setInstruments(Array.isArray(data) ? data : []);
-            } catch (err) {
-                console.error('Error fetching instruments:', err);
-                setError('Failed to load instruments');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchInstruments();
-    }, []);
-
-
+export default function staffLogin() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -51,54 +17,24 @@ export default function LoginPage() {
     });
 
     const onSubmit = async (data: any) => {
-        const { Email, password, UserRoleS } = data;
-        await getToken(Email, password, UserRoleS);
+        const { Email, password } = data;
+        await getToken(Email, password);
     };
 
-    // MATCHING API LOGIC: getToken
-    const getToken = async (id: any, key: any, Role: any) => {
+    const getToken = async (id: any, key: any) => {
         try {
             const response = await myAppWebService.loginInternalUser(id, key);
             myAppWebService.saveUser(response.token);
-
-            if (Role === 'Staff') {
-                await getEmployeeDetails(response.token);
-            } else if (Role === 'Student') {
-                await getStudentById(id, key);
-            }
+            await getEmployeeDetails(response.token);
         } catch (error) {
-            loginFailed();
+            loginFailed(' Server Error');
         }
     };
 
-    // MATCHING API LOGIC: getStudentById
-    const getStudentById = async (regNo: any, secretKey: any) => {
-        try {
-            const response = await myAppWebService.getStudentById(regNo);
-            if (response.item1 && response.item1.length > 0) {
-                const student = response.item1[0];
-                const userData = {
-                    CandidateName: student.studentName,
-                    UserId: student.registerationNumber,
-                    Department: student.schoolName || 'LPU',
-                    EmailId: student.officialEmail || student.studentEmail,
-                    PasswordText: secretKey,
-                    UserRole: '400000'
-                };
-
-                await proceedWithTerms(userData);
-            }
-        } catch (error) {
-            loginFailed();
-        }
-    };
-
-    // MATCHING API LOGIC: GetEmployeeDetails
+  
     const getEmployeeDetails = async (secretKey: any) => {
         try {
-            const token = localStorage.getItem('token');
             const response = await myAppWebService.GetEmployeeDetails(secretKey); // Removed secretKey if not needed by API
-
             const data = response.data ? response.data : response;
 
             if (data && data.item1 && data.item1.length > 0) {
@@ -108,26 +44,63 @@ export default function LoginPage() {
                     UserId: emp.employeeCode,
                     Department: emp.departmentName,
                     Designation: emp.department,
-                    EmailId:  emp.email,
+                    EmailId: emp.email,
                     MobileNo: emp.contactNo,
-                    UserRole: '400000',
+                    UserRole: 'Admin-User',
                     SupervisorName: emp.employeeName,
-                    PasswordText: secretKey,
+                    PasswordText: btoa(secretKey),
                 };
-                await proceedWithTerms(userData);
-            } else {
+
+                const AllallowedIds = [
+                    { uid: '24374' },
+                    { uid: '20362' },
+                    { uid: '25760' },
+                    { uid: '34228' },
+                    { uid: '34185' },
+                    { uid: '16477' },
+                    { uid: '27727' },
+                    { uid: '27808' },
+                    { uid: '26918' },
+                    { uid: '30694' },
+                    { uid: '29159' },
+                    { uid: '31691' },
+                    { uid: '33476' },
+                    { uid: '31309' },
+                ];
+
+                const isAllowed = AllallowedIds.some(item => item.uid === userData.UserId);
+                if (!isAllowed) {
+                    loginFailed('Not Authorised to access the Interface');
+                } else {
+                    await proceedWithTerms(userData);
+                }
+            }
+            else {
                 console.error("API returned success but item1 is empty or missing");
-                loginFailed();
+                loginFailed('Invalid Login Details ');
             }
         } catch (error: any) {
             console.error("API Error Details:");
-            loginFailed();
+            loginFailed('Invalid Login Details');
         }
     };
 
     const proceedWithTerms = async (userData: any) => {
-        Cookies.set('InternalUserAuthData', JSON.stringify(userData));
 
+const UserCookies = JSON.stringify(userData);
+    const expirationMinutes = 45;
+    
+    
+    const expirationDate = new Date();
+    expirationDate.setMinutes(expirationDate.getMinutes() + expirationMinutes);
+
+    
+    Cookies.set('StaffUserAuthData', UserCookies, {
+        expires: expirationDate,
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax'
+    });
         const result = await Swal.fire({
             title: 'Terms Conditions',
             html: `<div style="max-height: 400px; overflow-y: auto; text-align: left; padding: 10px;">
@@ -151,14 +124,14 @@ export default function LoginPage() {
         if (result.isConfirmed) {
 
             await myAppWebService.NewUserRecord(userData);
-            router.push('/InternalUserDashboard/ViewBookings');
+            router.push('/StaffUser/MyUploads');
         } else {
-            router.push('/login');
+            router.push('/StaffUser/StaffLogin');
         }
     };
 
-    const loginFailed = () => {
-        Swal.fire('Login Failed', 'Invalid credentials!', 'warning');
+    const loginFailed = (Message: any) => {
+        Swal.fire('Login Failed', Message, 'warning');
     };
 
 
@@ -176,13 +149,13 @@ export default function LoginPage() {
                     </div>
                 </div>
             )}
-        
+
             <section className="section bgDarkYellow py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
                             <h1>Central Instrumentation Facilitiation</h1>
-                            <h2 className="text-center" >Internal <span style={{ color: '#ef7d00' }}>User </span> Login</h2>
+                            <h2 className="text-center" > Staff <span style={{ color: '#ef7d00' }}>Login </span>Page</h2>
                         </div>
                     </div>
 
@@ -210,7 +183,7 @@ export default function LoginPage() {
                                                     const emailRegex =
                                                         /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
                                                     const idRegex =
-                                                        /^[A-Za-z0-9_-]{4,30}$/; 
+                                                        /^[A-Za-z0-9_-]{4,30}$/;
                                                     if (emailRegex.test(value) || idRegex.test(value)) {
                                                         return true;
                                                     }
@@ -219,7 +192,7 @@ export default function LoginPage() {
                                                 }
                                             })}
                                         />
-                                
+
                                         {errors.Email && (
                                             <span className="text-danger mt-1 d-block">
                                                 {errors.Email.message as string}
@@ -242,18 +215,6 @@ export default function LoginPage() {
                                         {errors.password && <span className="text-danger small">{errors.password.message as string}</span>}
                                     </div>
 
-                                    <div className={styles.inputGroup}>
-                                        <label className="form-label">Choose Role</label>
-                                        <select
-                                            className={styles.formControl}
-                                            {...register("UserRoleS", { required: "Role is required" })}
-                                        >
-                                            <option value="">Select Role</option>
-                                            <option value="Student">Student</option>
-                                            <option value="Staff">Staff</option>
-                                        </select>
-                                    </div>
-
                                     <button type="submit" className={styles.loginBtn + " w-20 mt-3"}>
                                         Login
                                     </button>
@@ -262,14 +223,15 @@ export default function LoginPage() {
                                         <Link href="/login" className={styles.regLink}>User Login</Link>
                                         <Link href="/recover" className={styles.regLink}>Recover Account</Link>
                                     </div>
-                                    <div className="d-flex justify-content-center">
-                                        <Link href="/StaffUser/StaffLogin" className={styles.regLink}>Staff Login</Link>
-                                    </div>
+
                                 </form>
                             </div>
 
                             <div className="mt-4 text-center">
                                 Don't have an account? <Link href="/register" className={styles.regLink}>Register</Link>
+                            </div>
+                            <div className="mt-3 small text-center text-muted">
+                                By Login you agree with <Link href="/terms">terms and conditions</Link> and <Link href="/terms">privacy policy</Link>
                             </div>
                         </div>
                     </div>

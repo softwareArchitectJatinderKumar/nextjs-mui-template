@@ -281,7 +281,12 @@ async GetAllSampleStatus() {
 
   async GetAllBooking() {
     try {
+      const token = storageService.getUser();
       const response = await this.apiClient.get('api/LpuCIF/CIFGetAllAssignedTesttoStaff', {
+         headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
       });
       return response.data;
     } catch (error) {
@@ -545,6 +550,17 @@ async GetAllSampleStatus() {
   async fetchSpecifications() {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllSpecifications', {
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+  async GetUploadedResultDetails(UserEmailId: any) {
+    try {
+      const response =  await this.apiClient.get('api/LpuCIF/GetUploadedResultDetails', {
+        params: { UserId: '33476'}
       });
       return response.data;
     } catch (error) {

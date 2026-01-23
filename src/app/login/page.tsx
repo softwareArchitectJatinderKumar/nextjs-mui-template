@@ -195,7 +195,7 @@ export default function LoginForm() {
 
                                     </div>
                                     <div className="d-flex justify-content-center">
-                                         <Link href="/recover" className="link-btn justify-content-end"  style={{ color: '#ef7d00' }}>Staff Login</Link>
+                                         <Link href="/StaffUser/StaffLogin" className="link-btn justify-content-end"  style={{ color: '#ef7d00' }}>Staff Login</Link>
                                     </div>
                                 </form>
 

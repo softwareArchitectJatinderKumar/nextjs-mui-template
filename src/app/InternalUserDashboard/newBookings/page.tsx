@@ -67,7 +67,6 @@ export default function NewBookings() {
     const selectedValue = e.target.value;
     if (selectedValue === "Select") return;
 
-    // Angular logic: Split by space to get ID and Name
     const [idStr, ...nameParts] = selectedValue.split(' ');
     const id = parseInt(idStr);
     const name = nameParts.join(' ');
@@ -84,11 +83,9 @@ export default function NewBookings() {
     
     setLoadingIndicator(true);
     try {
-      // Angular: GetInstrumentIDWiseAnalysisDetails
       const response = await instrumentService.GetAnalysisDetails(id);
       setAnalysisData(response.item1 || []);
       
-      // Auto-download template logic from Angular testClick(id)
       window.open(`https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/${id}.xlsx`, '_blank');
       Swal.fire({
         title: "A Format File is being Downloaded. You need to fill and upload this Excel sheet!",

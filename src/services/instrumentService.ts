@@ -215,11 +215,11 @@ async GetAllSampleStatus() {
 
   async CIFUpdateUserDetails(UpdateUserData: FormData) {
     try {
-      const Token = storageService.getUser();
+      // const Token = storageService.getUser();
         const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData, {
         headers: {
            'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${Token}`,
+          // 'Authorization': `Bearer ${Token}`,
         },
       });
       return res.data;
