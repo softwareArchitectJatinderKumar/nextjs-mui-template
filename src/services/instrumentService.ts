@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { storageService } from './storageService';
+import { Type } from 'lucide-react';
 
 class InstrumentService {
   private apiClient: AxiosInstance;
@@ -16,15 +17,157 @@ class InstrumentService {
     this.folderUrl = process.env.NEXT_PUBLIC_FOLDER_URL;
   }
 
-  async getAllInstruments() {
+  
+  async GetAllBooksDetails() {
     try {
-      const response = await this.apiClient.get('api/LpuCIF/GetAllInstruments');
-      return response.data.item1;
+      const response = await this.apiClient.get('api/LpuCIF/GetAllJournalData');
+      return response.data;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
       throw error;
     }
   }
+
+
+
+  // Method to fetch instruments
+  async getAllInstruments() {
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetAllInstruments');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+ 
+async GetAllSampleStatus() {
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetAllSampleStatus');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+    
+  }
+  // New API added 
+
+  async GetAuthoriseUserData(formData: FormData) {
+    try {
+      const res = await this.apiClient.post(`api/LpuCIF/GetUserDataIdWise`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
+      });
+      return res.data;
+      // const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', 
+      //   formData,
+
+      // );
+      // return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+
+  async GetAnalysisData(analysisId: number | string, typeId: number | string) {
+  try {
+    const response = await this.apiClient.get('api/LpuCIF/GetAnalysisIdWisePriceDetails',
+      {
+        params: {
+          AnalysisId: analysisId,
+          TypeId: typeId, // In Angular, this is passed as this.UserId
+        },
+      }
+    );
+
+    // Return the full data object so the component can access response.item1 
+    // to match your Angular logic: if (response.item1 && response.item1.length > 0)
+    return response.data; 
+  } catch (error) {
+    console.error('Error fetching analysis data:', error);
+    throw error;
+  }
+}
+// async GetAnalysisData(analysisId: number | string, typeId: number | string) {
+//   try {
+//     const response = await this.apiClient.get('api/LpuCIF/GetAnalysisIdWisePriceDetails',
+//       {
+//         params: {
+//           AnalysisId: analysisId,
+//           TypeId: typeId,
+//         },
+//       }
+//     );
+
+//     return response.data?.item1 || [];
+//   } catch (error) {
+//     console.error('Error fetching analysis data:', error);
+//     throw error;
+//   }
+// }
+
+
+  async GetInstrumentsDetails() {
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetInstrumentsDetails', {
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+
+  async GetAnalysisDetails(InstrumentId: any) {
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetInstrumentWiseAnalysisDetails', {
+        params: {
+          InstrumentId: InstrumentId
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+
+
+  async GetDuationAndPrice(AnalysisId: any, UserId: any, Duration: any) {
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetDuationAndPrice', {
+        params: {
+          AnalysisId: AnalysisId,
+          UserId: UserId,
+          Duration: Duration
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+
+  async addBookingSlot(newBookingData: any) {
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/NewBookingSlot', newBookingData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
+
+ 
 
   async getSpecifications() {
     try {
@@ -72,11 +215,11 @@ class InstrumentService {
 
   async CIFUpdateUserDetails(UpdateUserData: FormData) {
     try {
-      const Token = storageService.getUser();
+      // const Token = storageService.getUser();
         const res = await this.apiClient.post(`api/LpuCIF/CIFChangePasswordDetails`, UpdateUserData, {
         headers: {
            'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${Token}`,
+          // 'Authorization': `Bearer ${Token}`,
         },
       });
       return res.data;
