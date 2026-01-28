@@ -32,6 +32,7 @@ export default function UserProfilePage() {
     });
 
     // --- Initialization & Auth Guard ---
+
     useEffect(() => {
         const initializeProfile = async () => {
             const cookieData = Cookies.get('InternalUserAuthData');
@@ -45,7 +46,7 @@ export default function UserProfilePage() {
             try {
                 const parsed = JSON.parse(cookieData);
                 const email = parsed.EmailId;
-
+                const Role =parsed.UserRole;
                 // Fetch User Details from API
                 const res = await instrumentService.CIFGetUserDetails(email);
                 const user = res?.[0];

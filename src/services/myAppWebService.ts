@@ -1,5 +1,5 @@
 // services/myAppWebService.js
-
+import { storageService } from './storageService';
 import axios from 'axios';
 
 class MyAppWebService {
@@ -70,10 +70,11 @@ class MyAppWebService {
   }
 
   async GetEmployeeDetails(token:any) {
+    const Token = storageService.getUser();
     try {
       const response = await this.apiClient.get('api/Mou/GetEmployeeDetails', {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${Token}`,
         },
       });
       return response.data;
@@ -280,7 +281,13 @@ async GetAllSampleStatus() {
 
   async GetAllBooking() {
     try {
+      const token = storageService.getUser();
       const response = await this.apiClient.get('api/LpuCIF/CIFGetAllAssignedTesttoStaff', {
+         headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
       });
       return response.data;
     } catch (error) {
@@ -544,6 +551,17 @@ async GetAllSampleStatus() {
   async fetchSpecifications() {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllSpecifications', {
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+  async GetUploadedResultDetails(UserEmailId: any) {
+    try {
+      const response =  await this.apiClient.get('api/LpuCIF/GetUploadedResultDetails', {
+        params: { UserId: UserEmailId}
       });
       return response.data;
     } catch (error) {

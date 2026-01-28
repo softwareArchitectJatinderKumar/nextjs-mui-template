@@ -74,10 +74,19 @@ export default function LoginForm() {
         }
         Swal.fire({
             title: 'Terms & Conditions',
-            html: `<div style="max-height: 300px; overflow-y: auto; text-align: left; font-size: 14px;">
-                    <p>Welcome to Lovely Professional University CIF...</p>
-                    <ul><li>We agree to acknowledge CIF, LPU...</li></ul>
-                  </div>`,
+            html: `<div style="max-height: 400px; overflow-y: auto; text-align: left; padding: 10px;">
+            <p>Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in</p>
+            <p><strong>You specifically agree to all of the following undertakings:</strong></p>
+            <ul style="list-style-type: disc; padding-left: 20px; font-size: 14px; line-height: 1.6;">
+              <li>We agree to acknowledge CIF, LPU in our publications and thesis if the results from CIF instrumentation are incorporated/used in them.</li>
+              <li>I/We undertake to abide by the safety, standard sample preparation guidelines and precautions during testing of samples.</li>
+              <li>I/We understand the possibility of samples getting damaged during handling and analysis. I/We shall not claim for any loss/damage of the sample submitted to CIF and agree to resubmit the new sample requested by CIF for analysis.</li>
+              <li>CIF, LPU reserves the rights to return the samples without performing analysis and will refund the analytical charges (after deduction of GST, if applicable) under special circumstances.</li>
+              <li>I/we agree to maintain decorum during the visit in CIF labs for sample analysis and fully agree that CIF has full right to take action if decorum of CIF’s labs functionality is disturbed/hampered by me.</li>
+              <li>CIF shall not take any responsibility about the analysis, interpretation and publication of data acquired by the end user.</li>
+              <li>I/We hereby declare that the results of the analysis will not be used for the settlement of any legal issue.</li>
+            </ul>
+          </div>`,
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: 'Yes, Agreed',
@@ -107,7 +116,7 @@ export default function LoginForm() {
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
-                            <h1 style={{ color: '#ef7d00' }}>Central Instrumentation Facilitiation</h1>
+                            <h1 >Central Instrumentation Facilitiation</h1>
                             <h2 className="text-center">User <span style={{ color: '#ef7d00' }}>Login</span> Page</h2>
                         </div>
                     </div>
@@ -161,7 +170,7 @@ export default function LoginForm() {
                                         </div>
                                         {errors.password && <small className="text-danger">{errors.password.message as string}</small>}
                                     </div>
-                              
+
                                     {/* Role Field */}
                                     <div className="mb-4">
                                         <label className="form-label fw-bold">Choose Role</label>
@@ -172,14 +181,27 @@ export default function LoginForm() {
                                         </select>
                                     </div>
 
-                                    <button type="submit" className="lpu-btn w-100" disabled={!isValid || loading}>
-                                        {loading ? 'Processing...' : 'Submit'}
-                                    </button>
+
+
+
+                                        <button type="submit" className="lpu-btn w-40" disabled={!isValid || loading}>
+                                            {loading ? 'Processing...' : 'Submit'}
+                                        </button>
+                                    <div className="mb-4 mt-3 text-center">
+                                        <div className="d-flex justify-content-between">
+                                            <Link href="/lpuLogin" className="link-btn justify-content-start" >Internal User Login</Link>
+                                            <Link href="/recover" className="link-btn justify-content-end" style={{ color: '#ef7d00' }}>Recover Account</Link>
+                                        </div>
+
+                                    </div>
+                                    <div className="d-flex justify-content-center">
+                                         <Link href="/StaffUser/StaffLogin" className="link-btn justify-content-end"  style={{ color: '#ef7d00' }}>Staff Login</Link>
+                                    </div>
                                 </form>
 
 
                                 <div className="mt-4 text-center">
-                                    Don't have an account? <Link href="/register" className="fw-bold text-decoration-none" style={{ color: '#ef7d00' }}>Register</Link>
+                                    Don't have an account? <Link href="/register" className="fw-bold text-decoration-none ms-5" style={{ color: '#ef7d00' }}>Register</Link>
                                 </div>
 
                                 <div className="mt-3 small text-center text-muted">

@@ -15,6 +15,7 @@ function InstrumentsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const name = searchParams.get('name');
   const id = searchParams.get('id');
   const catId = searchParams.get('categoryId');
 

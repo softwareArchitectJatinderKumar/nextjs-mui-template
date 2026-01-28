@@ -22,7 +22,6 @@ export default function FeedbackPage() {
             Suggestions: data.suggestions
         };
 
-        console.log("Submitting Payload:", payload);
 
         const response = await instrumentService.NewCifFeedback(payload);
         

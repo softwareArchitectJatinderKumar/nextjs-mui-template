@@ -1,12 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 node_modules
-*.rar
-*.7z
-*.zip
-
 .next
 .env*
-
+.7z
+.7z*
 # dependencies
 /node_modules
 /.pnp
