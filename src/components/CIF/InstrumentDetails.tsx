@@ -34,7 +34,7 @@ const InstrumentDetails: React.FC<Props> = ({ instrument, specs, onViewCharges }
            
           </div>
           <div className={`alert ${instrument.isActive ? 'alert-success' : 'alert-danger'}`}>
-            <strong>{instrument.isActive ? 'Instrument is Active' : 'Instrument is Currently Inactive'}</strong>
+            <strong>{instrument.isActive ? 'Instrument is Operational' : 'Instrument is Currently un Operational'}</strong>
           </div>
           <img 
             src={instrument.imageUrl} 

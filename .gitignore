@@ -2,7 +2,8 @@
 node_modules
 .next
 .env*
-
+.7z
+.7z*
 # dependencies
 /node_modules
 /.pnp

@@ -64,6 +64,7 @@ a {
   display: flex;
   align-items: center;
   gap: 12rem;
+  /* justify-content: center; */
   
 }
   .headingWraper .mainHead h1 {
@@ -98,15 +99,68 @@ a {
   .bgLightYellow {
     background-color: #fffaf0;
   }
-
-  
+      
 .cifLogin {
   background-color: rgba(0, 0, 0, .05);
-  padding: 40px;
-  border-radius: 15px;
-  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+  padding: 15px;
 }
 
 .cifLogin h2 span {
   color: #ef7d00;
+}
+
+/* Center-Aligned Navbar Styles */
+.cif-navbar {
+    border-bottom: 1px solid #e0e0e0;
+    min-height: 70px;
+}
+
+/* Center links styling */
+.navbar-nav.mx-auto .cif-nav-link {
+    color: #444 !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.navbar-nav.mx-auto .cif-nav-link:hover {
+    color: #ff6a00 !important;
+}
+
+.navbar-nav.mx-auto .cif-nav-link.active {
+    color: #ff6a00 !important;
+    border-bottom: 3px solid #ff6a00; /* Active indicator at bottom */
+}
+
+/* Logout Button - Compact & Professional */
+.logout-btn {
+    background-color: transparent;
+    border: 1px solid #dee2e6;
+    color: #666;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: #f8f9fa;
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Mobile adjustments */
+@media (max-width: 991px) {
+    .navbar-nav.mx-auto {
+        padding: 1rem 0;
+        text-align: center;
+    }
+    .logout-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
 }
