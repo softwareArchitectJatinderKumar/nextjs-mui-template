@@ -79,7 +79,6 @@ export default function PaymentDetails() {
         try {
             const response = await myAppWebService.GetAllPaymentDetails();
             const data = response?.item1 || [];
-            console.log(JSON.stringify(data))
             const sorted = [...data].sort((a, b) => Number(b.bookingId) - Number(a.bookingId));
             // setFilteredData(sorted);
             setOriginalData(sorted);
