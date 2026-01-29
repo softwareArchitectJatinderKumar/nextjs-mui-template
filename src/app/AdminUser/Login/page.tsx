@@ -141,13 +141,20 @@ export default function StaffLogin() {
     return (
         <>
             {loading && (
+                <div className="fullScreenLoader">
+                    <div className="customSpinnerOverlay">
+                        <img src="/assets/images/spinner.gif" alt="Loading..." />
+                    </div>
+                </div>
+            )}
+            {/* {loading && (
                 <div className={styles.fullScreenLoader} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255,255,255,0.8)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <div className="text-center">
                         <img src="/assets/images/spinner.gif" alt="Loading..." width="80" />
                         <p className="mt-2" style={{ color: '#ef7d00', fontWeight: 'bold' }}>Authenticating...</p>
                     </div>
                 </div>
-            )}
+            )} */}
 
             <section className="section bgDarkYellow py-5" style={{ minHeight: '100vh' }}>
                 <div className="container">

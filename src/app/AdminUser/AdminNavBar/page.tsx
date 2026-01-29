@@ -81,6 +81,7 @@ export default function AdminNavBar() {
                   <span style={{ borderBottom: '1px solid #ef7d00' }}>Tests & Results</span>
                 </a>
                 <ul className="dropdown-menu">
+                  <li><button className="dropdown-item" onClick={() => handleNavigation('ViewBookings')}>View Bookings</button></li>
                   <li><button className="dropdown-item" onClick={() => handleNavigation('AssignTest')}>Assign Test</button></li>
                   <li><button className="dropdown-item" onClick={() => handleNavigation('UploadResults')}>Upload Results</button></li>
                 </ul>
