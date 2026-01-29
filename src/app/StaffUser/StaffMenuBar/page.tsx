@@ -37,7 +37,8 @@ const StaffMenuBar = () => {
 
   // 1. Initialize with state so we can update it based on the cookie
   const [navItems, setNavItems] = useState([
-    { label: 'Upload Results', path: '/StaffUser/StaffActionBookings' },
+    { label: 'Upload Results', path: '/StaffUser/UploadResults' },
+    // { label: 'Upload Results', path: '/StaffUser/StaffActionBookings' },
     { label: 'Results Uploaded', path: '/StaffUser/MyUploads' },
     { label: 'All Payments', path: '/StaffUser/PendingPayments' },
     { label: 'All User', path: '/StaffUser/UserDetails' },

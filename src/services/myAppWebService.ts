@@ -285,6 +285,7 @@ async GetAllSampleStatus() {
       const response = await this.apiClient.get('api/LpuCIF/CIFGetAllAssignedTesttoStaff', {
          headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
           // 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
         },
       });
@@ -311,6 +312,18 @@ async GetAllSampleStatus() {
   async GetAllBookingTests() {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllBookingTests', {
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+  // get
+ 
+  async GetAllUserLists() {
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/GetCIFAssignTestProperties', {
       });
       return response.data;
     } catch (error) {
@@ -407,20 +420,7 @@ async GetAllSampleStatus() {
   }
 
 
-  // Post  
-  async CIFAssignTestToStaff(dataSoft: any) {
-    try {
-      const response = await this.apiClient.post('api/LpuCIF/CIFAssignTestToStaff', dataSoft, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error adding booking slot:', error);
-      throw error;
-    }
-  }
+ 
 
 
   // get request 
@@ -489,6 +489,39 @@ async GetAllSampleStatus() {
     }
   }
 
+  // Post  
+  async CIFAssignTestToStaff(dataSoft: any) {
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/CIFAssignTestToStaff', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
+
+
+  async ReAssignTestToStaff(dataSoft: any) {
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
+
+
+
 
   // get request 
 
@@ -538,14 +571,7 @@ async GetAllSampleStatus() {
       throw error;
     }
   }
-  // async fetchSpecifications(categoryId:any, instrumentId:any) {
-  //     return this.apiClient.get(`api/LpuCIF/GetAllSpecifications`, {
-  //       params: {
-  //         categoryId,
-  //         id: instrumentId,
-  //       },
-  //     });
-  //  }
+ 
 
   async fetchSpecifications() {
     try {
@@ -560,7 +586,7 @@ async GetAllSampleStatus() {
   async GetUploadedResultDetails(UserEmailId: any) {
     try {
       const response =  await this.apiClient.get('api/LpuCIF/GetUploadedResultDetails', {
-        params: { UserId: '33476'}
+        params: { UserId: UserEmailId}
       });
       return response.data;
     } catch (error) {
@@ -585,110 +611,7 @@ async GetAllSampleStatus() {
     }
   }
 
-  // Post  
-  // async CIFUpdateStatusInstruments(dataSoft: any) {
-  //   try {
-  //     const response = await this.apiClient.post('api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error adding booking slot:', error);
-  //     throw error;
-  //   }
-  // }
 
-
-  // GetDecodePaymentStatusDetails(Data: FormData): Observable<any> {
-  // let authToken = this.storageService.getUser();
-  // let headers = new HttpHeaders()
-  //   .set('Authorization', 'Bearer ' + this.authToken)
-  // return this.http.post(
-  //   // AUTH_API_LOCAL + 'api/LpuCIF/DecodePaymentStatusDetails', Data, { headers }
-  //     AUTH_API + 'api/LpuCIF/DecodePaymentStatusDetails', Data, { headers }
-  // );
-  // }
-  // GetUserPaymentStatusDetails(UserEmailId: string): Observable<any> {
-  // let token = this.storageService.getUser();
-  // let headers = new HttpHeaders()
-  // // .set('Authorization', 'Bearer ' + token)
-  // .set('Authorization', 'Bearer ' + this.authToken)
-  // .set('Content-Type', 'application/json');
-  // return this.http.get(
-  //    AUTH_API + 'api/LpuCIF/GetUserPaymentStatusDetails?UserId=' + UserEmailId,
-  // //  AUTH_API_LOCAL + 'api/LpuCIF/GetUserPaymentStatusDetails?UserId=' + UserEmailId,
-  //   {headers}
-  // );
-  // }
-
-  // GetAllInstrumentsData(): Observable<any> {
-  // let token = this.storageService.getUser();
-  // let headers = new HttpHeaders()
-  // .set('Authorization', 'Bearer ' + this.authToken)
-  // .set('Content-Type', 'application/json');
-  // return this.http.get(
-  //    AUTH_API + 'api/LpuCIF/GetAllInstruments',
-  //   // AUTH_API_LOCAL + 'api/LpuCIF/GetAllInstruments',
-  //   {headers}
-  // );
-  // }
-
-
-  // fetchSpecifications(): Observable<any> {
-  //   let token = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //     .set('Content-Type', 'application/json');
-  //   return this.http.get(
-  //     AUTH_API + 'api/LpuCIF/GetAllSpecifications', { headers }
-  //   );
-  // }
-  // InsertPaymentDetails(Data: any): Observable<any> {
-  //   let authToken = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //   return this.http.post(
-  //     AUTH_API_LOCAL + 'api/LpuCIF/AddPaymentDetails', Data, { headers }
-  //       // AUTH_API + 'api/LpuCIF/AddPaymentDetails', Data, { headers }
-  //   );
-
-  // }
-
-  // UpdateInstrumentImageFile(dataSoft:FormData): Observable<any> {
-  //   let authToken = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //   return this.http.post(
-  //      AUTH_API + 'api/LpuCIF/UpdateInstrumentImage',dataSoft,
-  //     // AUTH_API_LOCAL + 'api/LpuCIF/UpdateInstrumentImage',dataSoft,
-  //    {headers}
-  //   );
-  // }
-
-  // CIFInstrumentUpdateDetails(dataSoft:FormData): Observable<any> {
-  //   let authToken = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //   return this.http.post(
-  //     //  AUTH_API + 'api/LpuCIF/CIFInstrumentUpdateData',dataSoft,
-  //     AUTH_API_LOCAL + 'api/LpuCIF/CIFInstrumentUpdateData',dataSoft,
-  //    {headers}
-  //   );
-  // }
-
-
-  // GetChargesDetails(Id: any): Observable<any> {
-  //   let token = this.storageService.getUser();
-  //   let headers = new HttpHeaders()
-  //     .set('Authorization', 'Bearer ' + this.authToken)
-  //     .set('Content-Type', 'application/json');
-  //   return this.http.get(
-  //     // AUTH_API + 'api/LpuCIF/GetAGetInstrumentChargesDetailsllSpecifications', { headers }
-  //     AUTH_API_LOCAL + 'api/LpuCIF/GetInstrumentChargesDetails?InstrumentID='+Id, { headers }
-  //   );
-  // }
 
 
 }

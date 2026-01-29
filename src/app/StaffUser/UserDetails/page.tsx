@@ -1,8 +1,9 @@
 import React from 'react'
+import StaffUserDetails from './StaffUserDetails'
 
 function UserDetails() {
   return (
-     <div className='section'>All User</div>
+      <StaffUserDetails/>
   )
 }
 

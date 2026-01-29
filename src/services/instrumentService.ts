@@ -34,7 +34,7 @@ class InstrumentService {
   async getAllInstruments() {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllInstruments');
-      return response.data;
+      return response.data.item1 || [];
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
       throw error;

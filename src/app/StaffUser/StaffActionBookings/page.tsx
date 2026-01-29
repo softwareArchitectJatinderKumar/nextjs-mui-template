@@ -25,6 +25,7 @@ interface BookingData {
 
 export default function StaffActionBookings() {
   const [loading, setLoading] = useState(false);
+  const [bookingData, setBookingData] = useState<BookingData[]>([]);
   const [originalData, setOriginalData] = useState<BookingData[]>([]);
   const [filteredData, setFilteredData] = useState<BookingData[]>([]);
   const [bookingResults, setBookingResults] = useState<BookingData[]>([]);
@@ -50,12 +51,27 @@ export default function StaffActionBookings() {
     setLoading(true);
     const startTime = Date.now();
     try {
-      const [bookings, results] = await Promise.all([
+       const [bookings, results] = await Promise.all([
         myAppWebService.GetAllBooking(),
+        // myAppWebService.GetUploadedResultDetails('33476');
         myAppWebService.GetUploadedResultDetails('33476')
       ]);
+       const response =await myAppWebService.GetUploadedResultDetails('33476');
 
-      const bookingList = bookings?.item1 || bookings || [];
+      let data: BookingData[] = [];
+      if (Array.isArray(response)) {
+        data = response;
+      } else if (response?.item1 && Array.isArray(response.item1)) {
+        data = response.item1;
+      } else if (response && typeof response === 'object') {
+        data = [response];
+      }
+
+      setBookingData(data);
+      console.log(bookingData+'Bookings')
+      console.log(JSON.stringify(results)+'results')
+
+      const bookingList = results?.item1 || results || [];
       setOriginalData(bookingList);
       setFilteredData(bookingList);
 
@@ -95,10 +111,8 @@ export default function StaffActionBookings() {
     setCurrentPage(1);
   }, [searchQuery, selectedStatus, originalData]);
 
-  // 3. New Pagination Handler with Loader
   const handlePageChange = (direction: 'next' | 'prev') => {
     setLoading(true);
-    // Simulate a brief loading state for UX
     setTimeout(() => {
       if (direction === 'next') {
         setCurrentPage(prev => prev + 1);
@@ -106,7 +120,7 @@ export default function StaffActionBookings() {
         setCurrentPage(prev => prev - 1);
       }
       setLoading(false);
-    }, 500); // 0.5 second loader for page switch
+    }, 500);
   };
 
   const isResultUploaded = (bookingId: string | number) => {
@@ -118,12 +132,10 @@ export default function StaffActionBookings() {
     );
   };
 
-  // 2. Updated Filter Logic with Loader for Status Change
   const handleStatusChange = (status: string) => {
     setLoading(true);
     setSelectedStatus(status);
     
-    // Artificial delay so the user sees the filter being applied
     setTimeout(() => {
       let data = [...originalData];
       if (status) {
@@ -133,7 +145,6 @@ export default function StaffActionBookings() {
         });
       }
       
-      // Apply search filter if search query exists
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         data = data.filter(item =>
@@ -163,7 +174,7 @@ export default function StaffActionBookings() {
       formData.append('UserEmailId', selectedBooking.userId);
       formData.append('CreatedBy', auth.UserId);
       formData.append('FilePath', fileName);
-      formData.append('File', fileData); // Sending as base64 string per your TS logic
+      formData.append('File', fileData);
 
       const res = await myAppWebService.CIFResultsUploads(formData);
       if (res?.item1?.[0]?.msg === 'Success') {
@@ -196,8 +207,6 @@ export default function StaffActionBookings() {
   };
   return (
     <>
-      {/* LOADER OVERLAY */}
-  
       {loading && (
         <div className="fullScreenLoader"  >
           <div className="customSpinnerOverlay text-center">
@@ -214,7 +223,6 @@ export default function StaffActionBookings() {
           </div>
         </div>
 
-        {/* Filters Area */}
         <div className="row d-flex gap-4 mb-4 items-center justify-center bgDarkYellow p-3 rounded mx-0">
           <div className='col-md-2 text-center'>
             <button
