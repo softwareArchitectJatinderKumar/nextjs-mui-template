@@ -1,5 +1,5 @@
 'use client';
-
+import Swal from 'sweetalert2';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -46,8 +46,16 @@ export default function AdminNavBar() {
   };
 
   useEffect(() => {
-    const authData = Cookies.get('authData');
-    if (authData) {
+    // Initial Check & Data Load
+    const checkAuth = () => {
+      const authData = Cookies.get('authData');
+      
+      if (!authData) {
+        // If cookie is gone (expired or manually deleted), force logout
+        handleLogout();
+        return;
+      }
+
       try {
         const parsed = JSON.parse(authData);
         setUserData({
@@ -56,8 +64,29 @@ export default function AdminNavBar() {
           departmentName: parsed.Department,
           candidateName: parsed.CandidateName
         });
-      } catch (e) { console.error(e); }
-    }
+      } catch (e) {
+        console.error("Auth Parsing Error", e);
+        handleLogout();
+      }
+    };
+
+    checkAuth();
+
+    const interval = setInterval(() => {
+      const authData = Cookies.get('authData');
+      if (!authData) {
+        Swal.fire({
+          title: 'Session Expired',
+          text: 'Your 1-hour session has timed out. Please login again.',
+          icon: 'info',
+          confirmButtonColor: '#ef7d00'
+        }).then(() => {
+          handleLogout();
+        });
+      }
+    }, 10000); // Check every 10 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -98,7 +127,7 @@ export default function AdminNavBar() {
                 Tests & Results
               </Button>
               <Menu anchorEl={anchorElTests} open={Boolean(anchorElTests)} onClose={handleClose}>
-                <MenuItem onClick={() => handleNavigation('ViewBookings')}>View Bookings</MenuItem>
+                {/* <MenuItem onClick={() => handleNavigation('ViewBookings')}>View Bookings</MenuItem> */}
                 <MenuItem onClick={() => handleNavigation('AssignTest')}>Assign Test</MenuItem>
                 <MenuItem onClick={() => handleNavigation('UploadResults')}>Upload Results</MenuItem>
               </Menu>
@@ -125,7 +154,7 @@ export default function AdminNavBar() {
               <Menu anchorEl={anchorElInstr} open={Boolean(anchorElInstr)} onClose={handleClose}>
                 <MenuItem onClick={() => handleNavigation('InstrumentAction')}>Change State</MenuItem>
                 <MenuItem onClick={() => handleNavigation('AdminUploadImage')}>Upload Image</MenuItem>
-                <MenuItem onClick={() => handleNavigation('AdminInstrumentPrice')}>Update Prices</MenuItem>
+                <MenuItem onClick={() => handleNavigation('UpdateInstrumentPrices')}>Update Prices</MenuItem>
               </Menu>
             </Box>
 
@@ -224,78 +253,7 @@ export default function AdminNavBar() {
            </div>
          </div>
        </div>
-      {/* <Container maxWidth={false} sx={{ px: { xs: 2, md: 6 }, mt: 4 }}>
-        <Box sx={{ mb: 6 }}>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: '#0f172a', mb: 1, letterSpacing: '-1px' }}>Admin Dashboard</Typography>
-          <Typography variant="h6" sx={{ color: '#64748b', fontWeight: 400 }}>Overview for {userData.candidateName}</Typography>
-        </Box>
-
-        <Grid container spacing={4} alignItems="stretch">
-          <Grid sx={{xs:12, md:4}}>
-            <Card elevation={0} sx={{ borderRadius: 6, border: '1px solid #e2e8f0', height: '100%', transition: '0.3s', '&:hover': { boxShadow: '0 10px 30px rgba(0,0,0,0.05)' } }}>
-              <CardContent sx={{ p: 5 }}>
-                <Stack spacing={4}>
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    <Box sx={{ p: 2, bgcolor: '#fff7ed', borderRadius: 4 }}><Person sx={{ color: '#ea580c' }} /></Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Candidate</Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 800, color: '#1e293b' }}>{userData.candidateName}</Typography>
-                    </Box>
-                  </Stack>
-                  <Divider />
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    <Box sx={{ p: 2, bgcolor: '#f0f9ff', borderRadius: 4 }}><Fingerprint sx={{ color: '#0284c7' }} /></Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>User ID</Typography>
-                      <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b' }}>{userData.userId || 'N/A'}</Typography>
-                    </Box>
-                  </Stack>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid sx={{xs:12, md:4}}>
-            <Card elevation={0} sx={{ 
-              borderRadius: 6, height: '100%', 
-              background: 'linear-gradient(135deg, #ff6a00 0%, #ff9d2f 100%)',
-              color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 4
-            }}>
-              <CardContent sx={{ textAlign: 'center' }}>
-                <Typography variant="h2" sx={{ fontWeight: 900, mb: 1, letterSpacing: '-2px' }}>CIF</Typography>
-                <Typography variant="h6" sx={{ fontWeight: 500, opacity: 0.9 }}>Central Instrumentation Facility</Typography>
-                <Box sx={{ mt: 4, px: 4, py: 1.5, bgcolor: 'rgba(255,255,255,0.2)', borderRadius: 10, backdropFilter: 'blur(5px)' }}>
-                  <Typography variant="body2" sx={{ fontWeight: 800, letterSpacing: '1px' }}>ADMIN CONSOLE</Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid sx={{xs:12, md:4}}>
-            <Card elevation={0} sx={{ borderRadius: 6, border: '1px solid #e2e8f0', height: '100%', transition: '0.3s', '&:hover': { boxShadow: '0 10px 30px rgba(0,0,0,0.05)' } }}>
-              <CardContent sx={{ p: 5 }}>
-                <Stack spacing={4}>
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    <Box sx={{ p: 2, bgcolor: '#f0fdf4', borderRadius: 4 }}><Business sx={{ color: '#16a34a' }} /></Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Department</Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 800, color: '#1e293b' }}>{userData.departmentName}</Typography>
-                    </Box>
-                  </Stack>
-                  <Divider />
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    <Box sx={{ p: 2, bgcolor: '#f5f3ff', borderRadius: 4 }}><Fingerprint sx={{ color: '#7c3aed' }} /></Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Official Email</Typography>
-                      <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b' }}>{userData.userEmail || 'N/A'}</Typography>
-                    </Box>
-                  </Stack>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container> */}
+    
     </Box>
   );
 }

@@ -404,20 +404,7 @@ async GetAllSampleStatus() {
     }
   }
 
-  // Post  
-  async CIFUpdateStatusInstruments(dataSoft: any) {
-    try {
-      const response = await this.apiClient.post('api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error adding booking slot:', error);
-      throw error;
-    }
-  }
+
 
 
  
@@ -470,8 +457,88 @@ async GetAllSampleStatus() {
       throw error;
     }
   }
+// added on 2-FEb-26
+
+     async CIFUpdatePrice(PriceDataLoad: any) {
+ try {
+      const token = storageService.getUser();
+      const response = await this.apiClient.post('api/LpuCIF/CIFUpdatePrice', PriceDataLoad, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error due to Authorized user data:', error);
+      throw error;
+    }
+     
+  }
 
 
+    async ReplaceExcelSheetSample(dataSoft: any) {
+       try {
+      const response = await this.apiClient.post('api/LpuCIF/ReplaceExcelSheetSample', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+     
+  }
+
+  async UpdateInstrumentImageFile(dataSoft: any) {
+     try {
+      const response = await this.apiClient.post('api/LpuCIF/UpdateInstrumentImage', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+     
+  }
+
+   // Post  
+  async CIFUpdateStatusInstruments(dataSoft: any) {
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
+
+  //post
+
+  async CIFLockUser(dataSoft: any){
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/CIFLockUserLogin', dataSoft,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
 
   // Post  
   async CIFUpdateUserDetails(UpdateUserData: any) {
@@ -524,12 +591,15 @@ async GetAllSampleStatus() {
 
 
   // get request 
+  
 
   async GetAnalysisData(Id: any, TypeId: any) {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAnalysisIdWisePriceDetails', {
-        AnalysisId: Id,
-        TypeId: TypeId
+        params: {
+          AnalysisId: Id,
+          TypeId: TypeId
+        }
       });
       return response.data;
     } catch (error) {
