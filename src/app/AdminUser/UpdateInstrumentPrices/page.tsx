@@ -152,7 +152,7 @@ export default function AdminUpdatePricing() {
       instrumentName: formData.instrumentName,
       instrumentId: formData.instrumentId,
       analysisId: formData.analysisId,
-      duration: formData.selectedType,
+      typeName: formData.selectedType,
       oldPrice: formData.charges,
       newPrice: formData.totalAmount,
       userRole: formData.userRole,
@@ -161,11 +161,23 @@ export default function AdminUpdatePricing() {
 
     setLoading(true);
     try {
-      await myAppWebService.CIFUpdatePrice(payload);
-      Swal.fire('Success', 'Price update added to list.', 'success');
+      const response = await myAppWebService.CIFUpdatePrice(payload);
+      const msg = response.item1?.[0]?.msg || '';
+      if (msg.toLowerCase().includes('success')) {
+        Swal.fire('Price updated Successfully', msg, 'success').then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire('Failed', msg || 'Price update failed', 'error').then(() => {
+          window.location.reload();
+        });
+      }
+      
       setFormData(prev => ({ ...prev, charges: 0, totalAmount: '' }));
     } catch (e) {
-      Swal.fire('Error', 'Failed to update', 'error');
+      Swal.fire('Error', 'Failed to update price', 'error').then(() => {
+        window.location.reload();
+      });
     } finally {
       setLoading(false);
     }

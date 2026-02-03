@@ -457,10 +457,28 @@ async GetAllSampleStatus() {
       throw error;
     }
   }
-// added on 2-FEb-26
+  // Added on 3-feb -26
 
-     async CIFUpdatePrice(PriceDataLoad: any) {
- try {
+    async CIFInstrumentUpdateDetails(dataSoft: any) {
+       try {
+      const token = storageService.getUser();
+      const response = await this.apiClient.post('api/LpuCIF/UpdateInstrumentImage', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // 'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error due to Authorized user data:', error);
+      throw error;
+    }
+  }
+
+
+  async CIFUpdatePrice(PriceDataLoad: any) {
+    try {
       const token = storageService.getUser();
       const response = await this.apiClient.post('api/LpuCIF/CIFUpdatePrice', PriceDataLoad, {
         headers: {
@@ -474,7 +492,7 @@ async GetAllSampleStatus() {
       console.error('Error due to Authorized user data:', error);
       throw error;
     }
-     
+
   }
 
 
@@ -507,7 +525,7 @@ async GetAllSampleStatus() {
     }
      
   }
-
+// added on 2-FEb-26
    // Post  
   async CIFUpdateStatusInstruments(dataSoft: any) {
     try {

@@ -153,7 +153,7 @@ export default function AdminNavBar() {
               </Button>
               <Menu anchorEl={anchorElInstr} open={Boolean(anchorElInstr)} onClose={handleClose}>
                 <MenuItem onClick={() => handleNavigation('InstrumentAction')}>Change State</MenuItem>
-                <MenuItem onClick={() => handleNavigation('AdminUploadImage')}>Upload Image</MenuItem>
+                <MenuItem onClick={() => handleNavigation('AdminInstruments')}>Upload Image</MenuItem>
                 <MenuItem onClick={() => handleNavigation('UpdateInstrumentPrices')}>Update Prices</MenuItem>
               </Menu>
             </Box>
