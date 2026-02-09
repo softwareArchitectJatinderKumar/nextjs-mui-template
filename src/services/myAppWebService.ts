@@ -55,12 +55,9 @@ class MyAppWebService {
       loginData.append('userName', userId);
       loginData.append('password', key);
 
-      const response = await this.apiClient.post('security/createtoken', loginData, {
-        headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-      });
+      // Note: Do NOT set 'Content-Type' manually when sending FormData
+      // Axios will set it automatically with the correct boundary
+      const response = await this.apiClient.post('security/createtoken', loginData);
 
       return response.data;
     } catch (error) {
@@ -92,9 +89,14 @@ class MyAppWebService {
           RegNo: regNo
         },
       });
+      console.log('getStudentById response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching authorized user data:', error);
+      console.error('Error fetching student data:', error);
+      // Return a more descriptive error object
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch student data: ${error.message}`);
+      }
       throw error;
     }
   }
@@ -105,12 +107,10 @@ class MyAppWebService {
       loginData.append('Email', UserEmail);
       loginData.append('PasswordText', secreatKeys);
       loginData.append('UserRole', userRole);
-      const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', loginData, {
-        headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      
+      // Note: Do NOT set 'Content-Type' manually when sending FormData
+      // Axios will set it automatically with the correct boundary
+      const response = await this.apiClient.post('api/LpuCIF/GetUserDataIdWise', loginData);
 
       return response.data;
     } catch (error) {
@@ -136,6 +136,7 @@ class MyAppWebService {
   async getAllInstruments() {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllInstruments');
+      console.log(JSON.stringify(response))
       return response.data;
     } catch (error) {
       console.error('Error fetching authorized user data:', error);
