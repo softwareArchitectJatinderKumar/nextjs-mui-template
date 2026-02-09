@@ -1,19 +1,28 @@
 import { NextResponse } from 'next/server';
-// export const dynamic = "force-static";
 
 export async function GET() {
   try {
     const response = await fetch('https://includepages.lpu.in/newlpu/footer.php', {
-      cache: 'no-store', // Ensures you get the latest footer
+      cache: 'no-store',
+      headers: {
+        'User-Agent': 'Next.js Server',
+      },
     });
     
-    if (!response.ok) throw new Error('Failed to fetch remote content');
+    if (!response.ok) {
+      console.error(`Remote footer fetch failed: ${response.status} ${response.statusText}`);
+      throw new Error(`Failed to fetch remote content: ${response.status}`);
+    }
     
     const html = await response.text();
     return new NextResponse(html, {
       headers: { 'Content-Type': 'text/html' },
     });
   } catch (error) {
-    return NextResponse.json({ error: 'External header unavailable' }, { status: 500 });
+    console.error('Error fetching remote footer:', error);
+    return new NextResponse('<footer>Footer unavailable</footer>', {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' },
+    });
   }
 }
