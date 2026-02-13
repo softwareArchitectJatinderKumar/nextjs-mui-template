@@ -13,6 +13,7 @@ export default function StaffLogin() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [serverDown, setServerDown] = useState(false);
 
     const { 
         register, 
@@ -21,6 +22,31 @@ export default function StaffLogin() {
     } = useForm({
         mode: 'onTouched'
     });
+
+    // Check if server is available on mount
+    useEffect(() => {
+        const checkServer = async () => {
+            try {
+                await myAppWebService.getAllInstruments();
+                setServerDown(false);
+            } catch (err: any) {
+                const errorMessage = err?.message || '';
+                // Check for network error message from axios interceptor
+                const isNetworkError = errorMessage.includes('Network error') || 
+                                      errorMessage.includes('Network Error') ||
+                                      errorMessage.includes('ECONNREFUSED') ||
+                                      errorMessage.includes('Failed to fetch') ||
+                                      errorMessage.includes('fetch failed') ||
+                                      err?.code === 'ECONNREFUSED' ||
+                                      err?.code === 'ERR_NETWORK';
+                
+                if (isNetworkError || err?.status >= 500) {
+                    setServerDown(true);
+                }
+            }
+        };
+        checkServer();
+    }, []);
 
     // 1. Initial Page Loader
     useEffect(() => {
@@ -166,7 +192,12 @@ export default function StaffLogin() {
 
                         <div className="col-md-5">
                             <div className="card shadow-lg p-4 bg-white rounded">
-                                <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                                {serverDown ? (
+                                    <div className="alert alert-danger text-center py-3">
+                                        <strong>Server down. Please try after a while.</strong>
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                                     {/* User ID Field */}
                                     <div className="mb-3">
                                         <label className="form-label fw-bold">User ID</label>
@@ -216,6 +247,7 @@ export default function StaffLogin() {
                                         {loading ? 'Logging in...' : 'Login'}
                                     </button>
                                 </form>
+                                )}
 
                                 <div className="mt-4 text-center">
                                     <span className="text-muted small">Don't have an account? </span>

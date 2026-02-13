@@ -31,6 +31,9 @@ export default function AdminNewInstruments() {
       const res = await myAppWebService.GetAllInstruments();
       setInstruments(res.item1 || []);
       setFilteredData(res.item1 || []);
+    } catch (err: any) {
+      console.error('Error loading instruments:', err);
+      Swal.fire('Error', err?.message || 'Failed to load instruments. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
