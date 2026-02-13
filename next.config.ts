@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['www.lpu.in', 'includepages.lpu.in'],
   },
-  // Add the rewrites section below
   async rewrites() {
     return [
       {
