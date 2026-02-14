@@ -19,6 +19,56 @@ class MyAppWebService {
       },
     });
 
+    // Add response interceptor to handle API errors
+    this.apiClient.interceptors.response.use(
+      (response: any) => {
+        // Check if the response indicates an error (common patterns)
+        const data = response.data;
+        
+        // Check for common error indicators in the response
+        if (data && typeof data === 'object') {
+          if (data.success === false || data.isError === true || data.error === true) {
+            const errorMessage = data.message || data.errorMessage || 'An error occurred';
+            return Promise.reject(new Error(errorMessage));
+          }
+        }
+        
+        return response;
+      },
+      (error: any) => {
+        // Handle axios errors (network errors, HTTP errors, etc.)
+        let errorMessage = 'An error occurred';
+        
+        if (error.response) {
+          // Server responded with error status
+          const status = error.response.status;
+          const data = error.response.data;
+          
+          if (data && data.message) {
+            errorMessage = data.message;
+          } else if (status === 401) {
+            errorMessage = 'Unauthorized. Please login again.';
+          } else if (status === 403) {
+            errorMessage = 'Access denied.';
+          } else if (status === 404) {
+            errorMessage = 'Resource not found.';
+          } else if (status === 500) {
+            errorMessage = 'Server error. Please try again later.';
+          } else {
+            errorMessage = `Error: ${status}`;
+          }
+        } else if (error.request) {
+          // Request made but no response received
+          errorMessage = 'Network error. Please check your connection.';
+        } else {
+          // Error in setting up the request
+          errorMessage = error.message || 'An error occurred';
+        }
+        
+        return Promise.reject(new Error(errorMessage));
+      }
+    );
+
 
     this.folderUrl = process.env.NEXT_PUBLIC_FOLDER_URL; // Use the folder URL from env
     this.localApiUrl = process.env.NEXT_PUBLIC_AUTH_API_LOCAL; // Use the local API URL from env
@@ -81,7 +131,7 @@ class MyAppWebService {
     }
   }
 
-
+///api/LpuCIFBridge/GetAllApprovedUserData
   async getStudentById(regNo: any) {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetStudentById', {
@@ -405,20 +455,7 @@ async GetAllSampleStatus() {
     }
   }
 
-  // Post  
-  async CIFUpdateStatusInstruments(dataSoft: any) {
-    try {
-      const response = await this.apiClient.post('api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error adding booking slot:', error);
-      throw error;
-    }
-  }
+
 
 
  
@@ -471,8 +508,106 @@ async GetAllSampleStatus() {
       throw error;
     }
   }
+  // Added on 3-feb -26
+
+    async CIFInstrumentUpdateDetails(dataSoft: any) {
+       try {
+      const token = storageService.getUser();
+      const response = await this.apiClient.post('api/LpuCIF/UpdateInstrumentImage', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // 'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error due to Authorized user data:', error);
+      throw error;
+    }
+  }
 
 
+  async CIFUpdatePrice(PriceDataLoad: any) {
+    try {
+      const token = storageService.getUser();
+      const response = await this.apiClient.post('api/LpuCIF/CIFUpdatePrice', PriceDataLoad, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error due to Authorized user data:', error);
+      throw error;
+    }
+
+  }
+
+
+    async ReplaceExcelSheetSample(dataSoft: any) {
+       try {
+      const response = await this.apiClient.post('api/LpuCIF/ReplaceExcelSheetSample', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+     
+  }
+
+  async UpdateInstrumentImageFile(dataSoft: any) {
+     try {
+      const response = await this.apiClient.post('api/LpuCIF/UpdateInstrumentImage', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+     
+  }
+// added on 2-FEb-26
+   // Post  
+  async CIFUpdateStatusInstruments(dataSoft: any) {
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
+
+  //post
+
+  async CIFLockUser(dataSoft: any){
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/CIFLockUserLogin', dataSoft,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
 
   // Post  
   async CIFUpdateUserDetails(UpdateUserData: any) {
@@ -525,12 +660,15 @@ async GetAllSampleStatus() {
 
 
   // get request 
+  
 
   async GetAnalysisData(Id: any, TypeId: any) {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAnalysisIdWisePriceDetails', {
-        AnalysisId: Id,
-        TypeId: TypeId
+        params: {
+          AnalysisId: Id,
+          TypeId: TypeId
+        }
       });
       return response.data;
     } catch (error) {

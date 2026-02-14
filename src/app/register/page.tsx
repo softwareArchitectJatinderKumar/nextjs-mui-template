@@ -14,6 +14,7 @@ export default function UserRegisterPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [serverDown, setServerDown] = useState(false);
 
   const {
     register,
@@ -24,6 +25,31 @@ export default function UserRegisterPage() {
     resolver: yupResolver(registerSchema),
     mode: 'onTouched'
   });
+
+  // Check if server is available on mount
+  useEffect(() => {
+    const checkServer = async () => {
+      try {
+        await myAppWebService.getAllInstruments();
+        setServerDown(false);
+      } catch (err: any) {
+        const errorMessage = err?.message || '';
+        // Check for network error message from axios interceptor
+        const isNetworkError = errorMessage.includes('Network error') || 
+                              errorMessage.includes('Network Error') ||
+                              errorMessage.includes('ECONNREFUSED') ||
+                              errorMessage.includes('Failed to fetch') ||
+                              errorMessage.includes('fetch failed') ||
+                              err?.code === 'ECONNREFUSED' ||
+                              err?.code === 'ERR_NETWORK';
+        
+        if (isNetworkError || err?.status >= 500) {
+          setServerDown(true);
+        }
+      }
+    };
+    checkServer();
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -63,8 +89,9 @@ export default function UserRegisterPage() {
       } else {
         Swal.fire({ title: 'Technical Issue', text: resultMsg, icon: 'error' });
       }
-    } catch (error) {
-      Swal.fire({ title: 'Error Occurred', text: 'Unable to complete request.', icon: 'error' });
+    } catch (error: any) {
+      const errorMessage = error?.message || 'Server issue. Please try again later.';
+      Swal.fire({ title: 'Error Occurred', text: errorMessage, icon: 'error' });
     } finally {
       setLoading(false);
     }
@@ -100,7 +127,12 @@ export default function UserRegisterPage() {
 
             <div className="col-md-6">
               <div className="cifLogin p-md-4">
-                <form onSubmit={handleSubmit(onFormSubmit)} >
+                {serverDown ? (
+                  <div className="alert alert-danger text-center py-3">
+                    <strong>Server down. Please try after a while.</strong>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit(onFormSubmit)} >
                   <div className="mb-3">
                     If you already have an account, just <Link href="/login" className="text-danger fw-bold">sign in</Link>
                   </div>
@@ -254,6 +286,7 @@ export default function UserRegisterPage() {
                     <button type="button" className="btn btn-secondary m-3" onClick={() => reset()}>Reset</button>
                   </div> */}
                 </form>
+                )}
               </div>
             </div>
           </div>

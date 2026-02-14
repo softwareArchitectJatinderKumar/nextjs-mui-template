@@ -113,3 +113,9 @@
 @media (max-width: 600px) {
   .modalBox { width: 95%; padding: 1.5rem; }
 }
+
+.headerCell {
+  background-color:  #ef7d00 !important;
+  color: white !important;
+  font-weight: bold !important;
+}

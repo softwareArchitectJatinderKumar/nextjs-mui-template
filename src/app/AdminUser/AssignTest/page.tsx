@@ -160,11 +160,9 @@ export default function AdminAssignTest() {
 
   useEffect(() => {
     let result = [...AllBookingTestsData];
-
     if (selectedPaymentStatus && selectedPaymentStatus !== 'All') {
       result = result.filter(item => {
         const apiStatus = (item.paymentStatus || 'pending').toLowerCase();
-
         if (selectedPaymentStatus === 'pending') {
           return apiStatus === 'pending' || apiStatus === 'null' || !item.paymentStatus;
         }
@@ -239,23 +237,23 @@ export default function AdminAssignTest() {
             </Grid>
           </Grid>
 
-          <TableContainer component={Paper} variant="outlined" className={styles.tableResponsive}>
+            <TableContainer component={Paper} variant="outlined" className={styles.tableResponsive}>
             <Table size="small" className={styles.stripedTable}>
               <TableHead>
-                <TableRow sx={{ bgcolor: '#f8f9fa' }}>
-                  <TableCell className={styles.tableHeader}>Booking Id</TableCell>
-                  <TableCell className={styles.tableHeader}>Instrument Name</TableCell>
-                  <TableCell className={styles.tableHeader}>Sample Count</TableCell>
-                  <TableCell className={styles.tableHeader}>Total Charges</TableCell>
-                  <TableCell className={styles.tableHeader}>Request Sheet</TableCell>
-                  <TableCell className={styles.tableHeader}>Request Date</TableCell>
-                  <TableCell className={styles.tableHeader}>Candidate Id</TableCell>
-                  <TableCell className={styles.tableHeader}>Candidate Name</TableCell>
-                  <TableCell className={styles.tableHeader}>Organisation</TableCell>
-                  <TableCell className={styles.tableHeader}>User Type</TableCell>
-                  <TableCell className={styles.tableHeader}>Payment Status</TableCell>
-                  <TableCell className={styles.tableHeader}>Payment Date</TableCell>
-                  <TableCell className={styles.tableHeader}>Action</TableCell>
+                <TableRow > 
+                  <TableCell className={styles.headerCell}>Booking Id</TableCell>
+                  <TableCell className={styles.headerCell}>Instrument Name</TableCell>
+                  <TableCell className={styles.headerCell}>Sample Count</TableCell>
+                  <TableCell className={styles.headerCell}>Total Charges</TableCell>
+                  <TableCell className={styles.headerCell}>Request Sheet</TableCell>
+                  <TableCell className={styles.headerCell}>Request Date</TableCell>
+                  <TableCell className={styles.headerCell}>Candidate Id</TableCell>
+                  <TableCell className={styles.headerCell}>Candidate Name</TableCell>
+                  <TableCell className={styles.headerCell}>Organisation</TableCell>
+                  <TableCell className={styles.headerCell}>User Type</TableCell>
+                  <TableCell className={styles.headerCell}>Payment Status</TableCell>
+                  <TableCell className={styles.headerCell}>Payment Date</TableCell>
+                  <TableCell className={styles.headerCell}>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

@@ -195,7 +195,7 @@ export default function AdminActionBookings() {
           {/* Toolbar */}
           <Grid container spacing={2} alignItems="center" sx={{ width: '100%', mb: 3 }} >
             <Grid size={{ xs: 12, sm: 6, md: 1.5, lg: 1.4 }} sx={{ textAlign: 'center' }} >
-              <Button variant="contained" color="inherit" startIcon={<FileDownload />} onClick={exportToExcel}>
+              <Button variant="contained" className={styles.btnAction} startIcon={<FileDownload />} onClick={exportToExcel}>
                 Export to Excel
               </Button>
             </Grid>
@@ -227,9 +227,9 @@ export default function AdminActionBookings() {
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 1.5 }} textAlign="center">
-              <Button
-                variant="outlined"
-                color="primary"
+              <Button className={styles.btnAction}
+                variant="contained"
+                // color="primary"
                 startIcon={showAdvancedSearch ? <FilterListOff /> : <FilterList />}
                 onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
               >
@@ -279,7 +279,7 @@ export default function AdminActionBookings() {
               <TableHead>
                 <TableRow>
                   {["Booking ID", "Instrument", "Samples", "Charges", "Sheet", "Candidate", "Role", "Status", "Action"].map(head => (
-                    <TableCell key={head} sx={{ fontWeight: 'bold', bgcolor: '#f0f0f0' }}>{head}</TableCell>
+                    <TableCell key={head} sx={{ fontWeight: 'bold', bgcolor: '#f0f0f0' }} className={styles.headerCell}>{head}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>

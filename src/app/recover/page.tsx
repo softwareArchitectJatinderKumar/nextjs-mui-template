@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { instrumentService } from '@/services/instrumentService';
+import myAppWebService from '@/services/myAppWebService';
 import styles from '@/styles/RecoverUser.module.css'; // Optional custom styles
 import swal from 'sweetalert2';
 import router from 'next/router';
@@ -20,6 +21,7 @@ export default function AccountRecovery() {
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [serverDown, setServerDown] = useState(false);
     const router = useRouter();
     const [userDetails, setUserDetails] = useState<UserDetails[]>([]);
 
@@ -33,6 +35,31 @@ export default function AccountRecovery() {
     } = useForm({ mode: "onTouched" });
 
     const password = watch("password");
+
+    // Check if server is available on mount
+    useEffect(() => {
+        const checkServer = async () => {
+            try {
+                await myAppWebService.getAllInstruments();
+                setServerDown(false);
+            } catch (err: any) {
+                const errorMessage = err?.message || '';
+                // Check for network error message from axios interceptor
+                const isNetworkError = errorMessage.includes('Network error') || 
+                                      errorMessage.includes('Network Error') ||
+                                      errorMessage.includes('ECONNREFUSED') ||
+                                      errorMessage.includes('Failed to fetch') ||
+                                      errorMessage.includes('fetch failed') ||
+                                      err?.code === 'ECONNREFUSED' ||
+                                      err?.code === 'ERR_NETWORK';
+                
+                if (isNetworkError || err?.status >= 500) {
+                    setServerDown(true);
+                }
+            }
+        };
+        checkServer();
+    }, []);
     const checkEmail = async () => {
         const isEmailValid = await trigger("email");
         if (!isEmailValid) return;
@@ -151,6 +178,13 @@ export default function AccountRecovery() {
                                 className="p-4 shadow-lg border-0 d-flex flex-column"
                                 style={{ height: '31rem' }}
                             >
+                                {/* Server Down Message */}
+                                {serverDown && (
+                                    <div className="alert alert-danger text-center py-3">
+                                        <strong>Server down. Please try after a while.</strong>
+                                    </div>
+                                )}
+
                                 {/* ===== MAIN CONTENT (Steps) ===== */}
                                 <div className="flex-grow-1">
                                     {currentStep === 1 && (

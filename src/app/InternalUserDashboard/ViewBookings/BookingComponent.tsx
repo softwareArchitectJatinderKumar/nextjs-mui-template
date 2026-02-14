@@ -146,9 +146,10 @@ const BookingDashboard = () => {
             } else {
                 throw new Error('Payment URL not found');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Payment Error:', error);
-            Swal.fire({ title: 'Error', text: 'Payment Gateway Failed!', icon: 'error' });
+            const errorMessage = error?.message || 'Server issue. Please try again later.';
+            Swal.fire({ title: 'Error', text: errorMessage, icon: 'error' });
             setLoading(false);
         }
     };

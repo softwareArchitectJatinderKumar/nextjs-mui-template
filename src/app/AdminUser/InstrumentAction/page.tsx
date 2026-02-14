@@ -1,8 +1,11 @@
 import React from 'react'
+import AdminActionInstruments from './InstrumentsPage'
 
 function ManageInstrument() {
   return (
-    <div>Manage Instrument Details</div>
+    <div>
+      <AdminActionInstruments />
+    </div>
   )
 }
 

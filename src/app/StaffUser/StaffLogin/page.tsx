@@ -12,9 +12,35 @@ export default function staffLogin() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [serverDown, setServerDown] = useState(false);
     const { register, handleSubmit, formState: { errors, isValid } } = useForm({
         mode: 'onTouched'
     });
+
+    // Check if server is available on mount
+    useEffect(() => {
+        const checkServer = async () => {
+            try {
+                await myAppWebService.getAllInstruments();
+                setServerDown(false);
+            } catch (err: any) {
+                const errorMessage = err?.message || '';
+                // Check for network error message from axios interceptor
+                const isNetworkError = errorMessage.includes('Network error') || 
+                                      errorMessage.includes('Network Error') ||
+                                      errorMessage.includes('ECONNREFUSED') ||
+                                      errorMessage.includes('Failed to fetch') ||
+                                      errorMessage.includes('fetch failed') ||
+                                      err?.code === 'ECONNREFUSED' ||
+                                      err?.code === 'ERR_NETWORK';
+                
+                if (isNetworkError || err?.status >= 500) {
+                    setServerDown(true);
+                }
+            }
+        };
+        checkServer();
+    }, []);
 
     const onSubmit = async (data: any) => {
         const { Email, password } = data;
@@ -26,8 +52,9 @@ export default function staffLogin() {
             const response = await myAppWebService.loginInternalUser(id, key);
             myAppWebService.saveUser(response.token);
             await getEmployeeDetails(response.token);
-        } catch (error) {
-            loginFailed(' Server Error');
+        } catch (error: any) {
+            const errorMessage = error?.message || 'Server issue. Please try again later.';
+            loginFailed(errorMessage);
         }
     };
 
@@ -80,8 +107,9 @@ export default function staffLogin() {
                 loginFailed('Invalid Login Details ');
             }
         } catch (error: any) {
-            console.error("API Error Details:");
-            loginFailed('Invalid Login Details');
+            console.error("API Error Details:", error);
+            const errorMessage = error?.message || 'Server issue. Please try again later.';
+            loginFailed(errorMessage);
         }
     };
 
@@ -122,9 +150,14 @@ const UserCookies = JSON.stringify(userData);
         });
 
         if (result.isConfirmed) {
-
-            await myAppWebService.NewUserRecord(userData);
-            router.push('/StaffUser/MyUploads');
+            try {
+                await myAppWebService.NewUserRecord(userData);
+                router.push('/StaffUser/MyUploads');
+            } catch (error: any) {
+                console.error('Error creating user record:', error);
+                const errorMessage = error?.message || 'Server issue. Please try again later.';
+                Swal.fire('Error', errorMessage, 'error');
+            }
         } else {
             router.push('/StaffUser/StaffLogin');
         }
@@ -170,7 +203,12 @@ const UserCookies = JSON.stringify(userData);
 
                         <div className="col-md-6">
                             <div className="cifLogin p-md-4">
-                                <form onSubmit={handleSubmit(onSubmit)}>
+                                {serverDown ? (
+                                    <div className="alert alert-danger text-center py-3">
+                                        <strong>Server down. Please try after a while.</strong>
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className={styles.inputGroup}>
                                         <label className="form-label">User Id</label>
                                         <input
@@ -225,6 +263,7 @@ const UserCookies = JSON.stringify(userData);
                                     </div>
 
                                 </form>
+                                )}
                             </div>
 
                             <div className="mt-4 text-center">
