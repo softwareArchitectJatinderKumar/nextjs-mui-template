@@ -119,5 +119,5 @@ export default function NavigationSwitcher() {
     }
   };
 
-  return <>{renderNavigation()}</>;
+  return  <div className="bgDarkYellow p-1">{renderNavigation()}</div>;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Container, Box, Typography, CircularProgress } from '@mui/material';
+import { Container, Box, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 import SampleStatusTable from '@/components/CIF/SampleStatusTable';
 import { instrumentService } from '@/services/instrumentService';
@@ -12,7 +12,6 @@ export default function SampleStatusPage() {
 
     useEffect(() => {
         const loadSamples = async () => {
-            setLoading(true);
             try {
                 const cookieData = Cookies.get('InternalUserAuthData');
                 if (!cookieData) {
@@ -23,13 +22,10 @@ export default function SampleStatusPage() {
 
                 const userEmail = JSON.parse(cookieData).EmailId;
                 const response = await instrumentService.GetSampleStatusByUserId(userEmail);
-                // const response = await instrumentService.GetSampleStatusByUserId('prashant.16477@lpu.co.in');
 
                 // Handle both response structures (wrapped in item1 or direct array)
                 const dataArray = response?.item1 || response || [];
-                
-                // console.log("Data received in Page:", dataArray);
-                
+
                 if (Array.isArray(dataArray)) {
                     setSamplesData(dataArray);
                 } else {
@@ -40,7 +36,8 @@ export default function SampleStatusPage() {
                 console.error("Failed to fetch sample status:", error);
                 setSamplesData([]);
             } finally {
-                setLoading(false);
+                // Ensure loader shows for at least a brief moment for UX
+                setTimeout(() => setLoading(false), 500);
             }
         };
 
@@ -48,35 +45,93 @@ export default function SampleStatusPage() {
     }, []);
 
     return (
-        <div className="bg-light min-vh-100 py-5">
-            <Container maxWidth="xl">
-                {/* 1. Loading Indicator (Only show if no data yet) */}
-                {loading && samplesData.length === 0 && (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
-                        <CircularProgress size={50} sx={{ color: '#ff9219', mb: 2 }} />
-                        <Typography variant="h6" color="textSecondary">Fetching Records...</Typography>
-                    </Box>
-                )}
+        <>
+            {/* Full Screen Loader - shown during initial load */}
+            {loading && (
+                <div className="fullScreenLoader">
+                    <div className="customSpinnerOverlay">
+                        <img src="/assets/images/spinner.gif" alt="Loading..." />
+                    </div>
+                </div>
+            )}
 
-                {/* 2. Data Table */}
-                {!loading && samplesData.length > 0 && (
-                    <SampleStatusTable data={samplesData} loading={loading} />
-                )}
-
-                {/* 3. Empty State (Only show if truly empty and not loading) */}
-                {!loading && samplesData.length === 0 && (
-                    <Box sx={{ textAlign: 'center', py: 10 }}>
-                        <Typography variant="h3" color="error" sx={{ fontWeight: 'bold', mb: 2 }}>
-                            No Record !
+            <Box 
+                sx={{ 
+                    minHeight: '100vh', 
+                    py: 4,
+                    // backgroundColor: '#f8f9fa'
+                }}
+            >
+                <Container maxWidth="xl">
+                    {/* Header Section */}
+                    <Box sx={{ textAlign: 'center', mb: 4 }}>
+                        <Typography 
+                            variant="h4" 
+                            component="h1"
+                            sx={{ 
+                                fontWeight: 700, 
+                                color: '#333',
+                                mb: 1
+                            }}
+                        >
+                            Sample Status
                         </Typography>
-                        <Box sx={{ p: 4, bgcolor: 'white', borderRadius: 2, boxShadow: 1, display: 'inline-block' }}>
-                            <Typography variant="h6" color="error">
-                                No Samples Found for your account.
-                            </Typography>
-                        </Box>
+                        {/* <Typography 
+                            variant="body1" 
+                            color="text.secondary"
+                        >
+                            View the status of your submitted samples
+                        </Typography> */}
                     </Box>
-                )}
-            </Container>
-        </div>
+
+                    {/* Content Card */}
+                    <Box className='bgLightYellow'
+                        sx={{ 
+                            // backgroundColor: '#fff',
+                            borderRadius: 2,
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                            overflow: 'hidden',
+                            minHeight: '60vh'
+                        }}
+                    >
+                        {/* Data Table */}
+                        {!loading && samplesData.length > 0 && (
+                            <SampleStatusTable data={samplesData} loading={loading} />
+                        )}
+
+                        {/* Empty State */}
+                        {!loading && samplesData.length === 0 && (
+                            <Box 
+                                sx={{ 
+                                    display: 'flex', 
+                                    flexDirection: 'column',
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    py: 8,
+                                    px: 2
+                                }}
+                            >
+                                <Typography 
+                                    variant="h5" 
+                                    sx={{ 
+                                        fontWeight: 600, 
+                                        color: '#dc3545',
+                                        mb: 2
+                                    }}
+                                >
+                                    No Records Found
+                                </Typography>
+                                {/* <Typography 
+                                    variant="body1" 
+                                    color="text.secondary"
+                                >
+                                    No samples found for your account.
+                                </Typography> */}
+                            </Box>
+                        )}
+                    </Box>
+                </Container>
+            </Box>
+        </>
     );
 }

@@ -64,6 +64,7 @@ const BookingDashboard = () => {
             try {
                 // 2. Parse User Data
                 const parsedUser: UserDetails = JSON.parse(cookieData);
+                console.log(JSON.stringify(parsedUser)+'test case')
                 setUserData(parsedUser);
 
                 // 3. Set Base URLs for browser environment
@@ -72,7 +73,7 @@ const BookingDashboard = () => {
 
                 // 4. Fetch Data Concurrently
                 const [bookingsRes, statusRes] = await Promise.all([
-                    myAppWebService.GetUserAllBookingSlot(parsedUser.EmailId),
+                    myAppWebService.GetUserAllBookingSlot(parsedUser.UserId),
                     myAppWebService.GetAllSampleStatus()
                 ]);
 
@@ -174,7 +175,12 @@ const BookingDashboard = () => {
                     {/* Header Controls */}
                     <div className="row mb-4 align-items-center">
                         <div className="col-md-3">
-                            <button className="btn btn-dark w-100">Export to Excel</button>
+                            <button 
+                                className="btn btn-dark w-100" 
+                                disabled={allData.length === 0}
+                            >
+                                Export to Excel
+                            </button>
                         </div>
                         <div className="col-md-6 text-center">
                             <h3 className="fw-bold m-0">Payment and Booking Details</h3>
@@ -186,6 +192,7 @@ const BookingDashboard = () => {
                                 placeholder="Search by ID or Instrument..."
                                 value={searchQuery}
                                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                                disabled={allData.length === 0}
                             />
                         </div>
                     </div>

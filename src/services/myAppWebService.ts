@@ -546,16 +546,18 @@ async GetAllSampleStatus() {
   }
 
 
-    async ReplaceExcelSheetSample(dataSoft: any) {
+    async ReplaceExcelSheetSample(dataSoft: FormData) {
        try {
-      const response = await this.apiClient.post('api/LpuCIF/ReplaceExcelSheetSample', dataSoft, {
+      // Create a new axios instance for this request to avoid header conflicts
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_AUTH_API}api/LpuCIF/ReplaceExcelSheetSample`, dataSoft, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
         },
       });
       return response.data;
     } catch (error) {
-      console.error('Error adding booking slot:', error);
+      console.error('Error replacing excel sheet:', error);
       throw error;
     }
      
@@ -684,6 +686,7 @@ async GetAllSampleStatus() {
   async GetUserAllBookingSlot(Id: any) {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllUserBookingSlot', {
+        //  params: {UserId: 'email.jatinderkumar@gmail.com'},
          params: {UserId: Id},
       });
       return response.data;

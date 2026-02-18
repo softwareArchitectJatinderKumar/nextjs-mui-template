@@ -139,7 +139,7 @@ export default function LoginForm() {
                 </div>
             )}
 
-            <section className="section bgDarkYellow py-5">
+            <section className="section py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">

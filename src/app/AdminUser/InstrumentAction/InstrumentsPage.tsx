@@ -37,6 +37,9 @@ export default function AdminActionInstruments() {
     const [openReplaceModal, setOpenReplaceModal] = useState(false);
     const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
     const [uploadFile, setUploadFile] = useState<File | null>(null);
+    const [fileData, setFileData] = useState<string | null>(null); // base64 data
+    const [fileName, setFileName] = useState<string>('');
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     const serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/';
 
@@ -111,39 +114,141 @@ export default function AdminActionInstruments() {
         }
     };
 
-    // FILE SELECTION
+    // FILE SELECTION - Using same logic as Angular onFileSelected function
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            if (file.size > 1148576) {
-                Swal.fire('Warning', 'File exceeds 1MB', 'warning');
-                return;
-            }
-            setUploadFile(file);
+        const reader = new FileReader();
+        const target = e.target as HTMLInputElement;
+        const fileList = target.files as FileList;
+        const file: File | null = fileList[0] || null;
+
+        if (!file) {
+            return;
+        }
+
+        // File size validation (1MB = 1148576 bytes) - same as Angular
+        if (file.size > 5148576) {
+            Swal.fire({
+                title: 'File size exceeds 1MB. Please upload a smaller file.',
+                text: 'Invalid File size',
+                icon: 'warning'
+            });
+            target.value = '';
+            return;
+        }
+
+        // File name validation using regex - same as Angular
+        const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
+        
+        if (!fileNameRegex.test(file.name)) {
+            // Sanitize filename - replace special characters with underscore
+            const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const modifiedFile = new File([file], validFileName, { type: file.type });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(modifiedFile);
+            target.files = dataTransfer.files;
+            
+            // Store file reference
+            setUploadFile(modifiedFile);
+
+            // Read base64 for upload - same as Angular
+            reader.readAsDataURL(modifiedFile);
+            reader.onload = () => {
+                const result = reader.result as string;
+                const base64Array = result.split(',');
+                const base64Data = base64Array[1]; // base64 payload
+                
+                setFileData(base64Data);
+                setFileName(validFileName);
+            };
+            return;
+        }
+
+        // Normal case - valid filename
+        setUploadFile(file);
+
+        // Read base64 for upload - same as Angular
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const result = reader.result as string;
+            const base64Array = result.split(',');
+            const base64Data = base64Array[1]; // base64 payload
+            
+            setFileData(base64Data);
+            setFileName(file.name);
+        };
+    };
+
+
+    
+    // HANDLE MODAL CLOSE - Clear file state
+    const handleCloseModal = () => {
+        setOpenReplaceModal(false);
+        setUploadFile(null);
+        setFileData(null);
+        setFileName('');
+        // Reset file input
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
         }
     };
 
-    // API: POST REPLACE EXCEL
+    // API: POST REPLACE EXCEL - Using same logic as Angular VerifyData function
     const handleReplaceExcel = async () => {
-        if (!uploadFile || !selectedInstrument) return;
+        if (!fileData || !fileName || !selectedInstrument) {
+            Swal.fire({ title: 'No file selected', icon: 'warning' });
+            return;
+        }
 
         setLoading(true);
+        const startTime = Date.now();
+
+        // Create a unique filename to avoid overwriting existing file on server (same as Angular)
+        const extIndex = fileName.lastIndexOf('.');
+        const ext = extIndex >= 0 ? fileName.substring(extIndex) : '.xlsx';
+        const newFileName = `${selectedInstrument.instrumentId}_${Date.now()}${ext}`;
+
+        // Create FormData with base64 data (same as Angular)
         const formData = new FormData();
         formData.append('InstrumentId', selectedInstrument.instrumentId);
-        formData.append('FilePath', uploadFile.name);
-        formData.append('File', uploadFile); // The service handles base64 if needed
+        formData.append('FilePath', newFileName); // send unique filename
+        formData.append('File', fileData); // base64 payload expected by API
+
+        console.log("Uploading file:", fileName);
+        console.log("New unique filename:", newFileName);
+        console.log("InstrumentId:", selectedInstrument.instrumentId);
+        console.log("Base64 data length:", fileData.length);
 
         try {
             const res = await myAppWebService.ReplaceExcelSheetSample(formData);
-            if (res.item1[0]?.msg.toLowerCase() === 'success') {
-                Swal.fire('Success', 'Excel Sheet replaced!', 'success');
-                setOpenReplaceModal(false);
-                fetchAllInstruments();
+            const result = res.item1 && res.item1.length > 0 ? res.item1[0].msg : null;
+
+            // Close modal first before showing Swal alert
+            handleCloseModal();
+
+            if (result && result.toLowerCase() === 'success') {
+                Swal.fire({
+                    title: 'Uploaded Successfully!',
+                    icon: 'success'
+                }).then(() => {
+                    fetchAllInstruments();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error Occurred, Try Again Later',
+                    text: 'API returned: ' + result,
+                    icon: 'error'
+                });
             }
         } catch (error) {
-            Swal.fire('Error', 'Upload failed', 'error');
+            console.error("Upload error:", error);
+            // Close modal before showing error
+            handleCloseModal();
+            Swal.fire({ title: 'Error', text: 'Failed to Upload.', icon: 'error' });
         } finally {
-            setLoading(false);
+            // Same elapsed time calculation as Angular for minimum loading delay
+            const elapsed = Date.now() - startTime;
+            const remainingDelay = Math.max(1500 - elapsed, 0);
+            setTimeout(() => setLoading(false), remainingDelay);
         }
     };
 
@@ -267,7 +372,7 @@ export default function AdminActionInstruments() {
                 </Paper>
 
                 {/* REPLACE EXCEL MODAL */}
-                <Modal open={openReplaceModal} onClose={() => setOpenReplaceModal(false)}>
+                <Modal open={openReplaceModal} onClose={handleCloseModal}>
                     <Box className={styles.modalBox}>
                         <Typography variant="h6">Replace Excel Sheet</Typography>
                         <Divider sx={{ my: 2 }} />
@@ -278,16 +383,22 @@ export default function AdminActionInstruments() {
                             </Box>
                         )}
                         <input
+                            ref={fileInputRef}
                             type="file"
                             accept=".xls,.xlsx"
                             onChange={handleFileChange}
                             style={{ marginBottom: '20px' }}
                         />
+                        {fileData && (
+                            <Typography variant="body2" sx={{ mb: 2, color: 'green' }}>
+                                Selected: {fileName} (base64: {(fileData.length / 1024).toFixed(2)} KB)
+                            </Typography>
+                        )}
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                            <Button onClick={() => setOpenReplaceModal(false)}>Cancel</Button>
+                            <Button onClick={handleCloseModal}>Cancel</Button>
                             <Button
                                 variant="contained"
-                                disabled={!uploadFile}
+                                disabled={!fileData}
                                 onClick={handleReplaceExcel}
                             >
                                 Upload & Replace

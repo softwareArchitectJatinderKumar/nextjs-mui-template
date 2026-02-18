@@ -72,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="stretched ">
         <Script src="https://www.lpu.in/lpu-assets/js/jquery.js" strategy="beforeInteractive" />
 
-        <RemoteHeader />
+        {/* <RemoteHeader /> */}
 
         <ThemeRegistry>
           <NavigationSwitcher/>
@@ -80,10 +80,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main style={{ minHeight: '70vh' }}>
             {children}
           </main>
-          <Footer />
         </ThemeRegistry>
 
-        <RemoteFooter />
+        {/* <Footer /> */}
+        {/* <RemoteFooter /> */}
       </body>
     </html>
   );
