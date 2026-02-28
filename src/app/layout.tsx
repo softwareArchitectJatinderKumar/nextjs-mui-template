@@ -72,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="stretched ">
         <Script src="https://www.lpu.in/lpu-assets/js/jquery.js" strategy="beforeInteractive" />
 
-        {/* <RemoteHeader /> */}
+        <RemoteHeader />
 
         <ThemeRegistry>
           <NavigationSwitcher/>

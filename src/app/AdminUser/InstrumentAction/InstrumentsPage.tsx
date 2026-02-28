@@ -54,6 +54,7 @@ export default function AdminActionInstruments() {
         try {
             const response = await myAppWebService.GetAllInstruments();
             if (response.item1) {
+                console.log(JSON.stringify(response.item1))
                 setInstruments(response.item1);
                 setFilteredData(response.item1);
             }
@@ -323,7 +324,7 @@ export default function AdminActionInstruments() {
                                                         href={`${serverUrl}${row.sampleExcelSheetUrl}`}
                                                         target="_blank"
                                                     >
-                                                        <DownloadIcon />
+                                                        <DownloadIcon />{row.sampleExcelSheetUrl}
                                                         {/* <ArticleIcon /> */}
                                                     </IconButton>
                                                 </Tooltip>

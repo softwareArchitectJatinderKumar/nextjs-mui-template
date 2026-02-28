@@ -1,13 +1,13 @@
+
 // 'use client';
 
 // import React, { useEffect, useState } from 'react';
 // import Header from '@/components/common/Header';
 // import Navbar from '@/components/CIF/TopNavBar';
-
 // import StaffMenuBar from '@/app/StaffUser/StaffMenuBar/page';
+// import AdminNavBar from '@/app/AdminUser/AdminNavBar/page';
 // import { usePathname } from 'next/navigation';
 // import Cookies from 'js-cookie';
-// import AdminNavBar from '@/app/AdminUser/AdminNavBar/page';
 
 // export default function NavigationSwitcher() {
 //   const pathname = usePathname();
@@ -17,44 +17,55 @@
 //   useEffect(() => {
 //     setMounted(true);
 
-//     const AdminAuth = Cookies.get('AuthData');
+//     // 1. Consistency check: Match the exact cookie names used in your login pages
+//     const adminAuth = Cookies.get('authData'); // Changed from 'AuthData' to match your login code
 //     const internalAuth = Cookies.get('InternalUserAuthData');
 //     const staffAuth = Cookies.get('StaffUserAuthData');
 
-//     const publicPages = ['/login', '/StaffUser/StaffLogin', '/register', '/forgot-password', '/'];
+//     // 2. Determine Navigation Logic
+//     const publicPages = ['/login', '/StaffUser/StaffLogin', '/AdminUser/Login','/register', '/forgot-password', '/'];
 //     const isPublicPage = publicPages.includes(pathname);
 
 //     if (isPublicPage) {
 //       setNavType('PUBLIC');
 //     } 
-//     else if (staffAuth || pathname.startsWith('/StaffUser')) {
+//     else if (pathname.startsWith('/AdminUser') || adminAuth) {
+//       setNavType('ADMIN');
+//     } 
+//     else if (pathname.startsWith('/StaffUser') || staffAuth) {
 //       setNavType('STAFF');
 //     } 
-//     else if (internalAuth || pathname.startsWith('/InternalUserDashboard')) {
+//     else if (pathname.startsWith('/InternalUserDashboard') || internalAuth) {
 //       setNavType('INTERNAL');
-//     } 
-//     else if (AdminAuth || pathname.startsWith('/AdminUser')) {
-//       setNavType('ADMIN');
 //     } 
 //     else {
 //       setNavType('PUBLIC');
 //     }
 //   }, [pathname]);
 
-//   if (!mounted) return <Header />;
-
-//   switch (navType) {
-//     case 'STAFF':
-//       return <StaffMenuBar />;
-//     case 'INTERNAL':
-//       return <Navbar />;
-//     case 'ADMIN':
-//       return <AdminNavBar />;
-//     case 'PUBLIC':
-//     default:
-//       return <Header />;
+//   // Prevent flashing of wrong header during hydration
+//   if (!mounted) {
+//     return <div style={{ minHeight: '70px' }}><Header /></div>; 
 //   }
+
+//   // 3. Render Switcher
+//   const renderNavigation = () => {
+//     switch (navType) {
+//       case 'STAFF':
+//         return <StaffMenuBar />;
+//       case 'INTERNAL':
+//         return <Navbar />;
+//       case 'ADMIN':
+//         return <AdminNavBar />;
+//       case 'PUBLIC':
+//       default:
+//         return <Header />;
+//     }
+//   };
+
+//   return  <div className="bgDarkYellow p-1">{renderNavigation()}</div>;
 // }
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -73,12 +84,10 @@ export default function NavigationSwitcher() {
   useEffect(() => {
     setMounted(true);
 
-    // 1. Consistency check: Match the exact cookie names used in your login pages
-    const adminAuth = Cookies.get('authData'); // Changed from 'AuthData' to match your login code
+    const adminAuth = Cookies.get('authData'); 
     const internalAuth = Cookies.get('InternalUserAuthData');
     const staffAuth = Cookies.get('StaffUserAuthData');
 
-    // 2. Determine Navigation Logic
     const publicPages = ['/login', '/StaffUser/StaffLogin', '/AdminUser/Login','/register', '/forgot-password', '/'];
     const isPublicPage = publicPages.includes(pathname);
 
@@ -99,12 +108,13 @@ export default function NavigationSwitcher() {
     }
   }, [pathname]);
 
-  // Prevent flashing of wrong header during hydration
+  // FIX: Render a null or a simple empty div during hydration.
+  // Do NOT render <Header /> here, as it likely triggers MUI style injection
+  // which causes the mismatch with the server-rendered HTML.
   if (!mounted) {
-    return <div style={{ minHeight: '70px' }}><Header /></div>; 
+    return <div style={{ minHeight: '70px' }} />; 
   }
 
-  // 3. Render Switcher
   const renderNavigation = () => {
     switch (navType) {
       case 'STAFF':
@@ -119,5 +129,11 @@ export default function NavigationSwitcher() {
     }
   };
 
-  return  <div className="bgDarkYellow p-1">{renderNavigation()}</div>;
+  // Added suppressHydrationWarning to the wrapper just in case 
+  // background extensions try to modify this div.
+  return (
+    <div className="bgDarkYellow p-1" suppressHydrationWarning>
+      {renderNavigation()}
+    </div>
+  );
 }

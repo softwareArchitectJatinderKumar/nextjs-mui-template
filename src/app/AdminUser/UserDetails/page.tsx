@@ -169,7 +169,7 @@ const AssignStaff = async (emailId: string | undefined) => {
             {loading && <div className="fullScreenLoader"><div className="customSpinnerOverlay"><img src="/assets/images/spinner.gif" alt="Loading" /></div></div>}
             
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-                <Typography variant="h5" gutterBottom align="center" fontWeight="bold">Staff User Details</Typography>
+                <Typography variant="h5" gutterBottom align="center" fontWeight="bold">All CIF User Details</Typography>
                 <Divider sx={{ mb: 3 }} />
 
                 <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -254,7 +254,7 @@ const AssignStaff = async (emailId: string | undefined) => {
                     position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
                     width: 500, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 24, p: 4
                 }}>
-                    <Typography variant="h6">User Action: {editEvent?.candidateName}</Typography>
+                    <Typography variant="h6">Disabling User : {editEvent?.candidateName}</Typography>
                     <Divider sx={{ my: 2 }} />
                     <Box sx={{ mb: 3 }}>
                         <Typography variant="body2"><strong>Registration ID:</strong> {editEvent?.idProofNumber}</Typography>
