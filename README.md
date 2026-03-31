@@ -136,7 +136,7 @@ Installing devDependencies:
 cd nextjs-template
 
 Install Material UI & dependencies
-npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
+npm install @mui/material @emotion/react @emotion/styled @mui/icons-material @mui/x-data-grid @mui/material @mui/icons-material 
 
 npm install  @mui/x-data-grid @mui/material @mui/icons-material
 npm install @emotion/react @emotion/styled

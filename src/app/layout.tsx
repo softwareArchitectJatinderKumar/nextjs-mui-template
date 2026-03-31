@@ -82,8 +82,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
         </ThemeRegistry>
 
-        {/* <Footer /> */}
-        {/* <RemoteFooter /> */}
+        <Footer />
+        <RemoteFooter />
       </body>
     </html>
   );

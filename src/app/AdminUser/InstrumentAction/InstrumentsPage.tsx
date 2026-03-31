@@ -303,12 +303,12 @@ export default function AdminActionInstruments() {
                         <Table stickyHeader>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className={styles.headerCell}>ID</TableCell>
+                                    <TableCell className={styles.headerCell}>Instrument Code</TableCell>
                                     <TableCell className={styles.headerCell}>Instrument Name</TableCell>
                                     <TableCell className={styles.headerCell}>Excel Template</TableCell>
                                     <TableCell className={styles.headerCell}>Status</TableCell>
                                     <TableCell className={styles.headerCell} align="center">Disable </TableCell>
-                                    <TableCell className={styles.headerCell} align="center">Actions</TableCell>
+                                    <TableCell className={styles.headerCell} align="center">Replace Excel Sheet</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -324,7 +324,8 @@ export default function AdminActionInstruments() {
                                                         href={`${serverUrl}${row.sampleExcelSheetUrl}`}
                                                         target="_blank"
                                                     >
-                                                        <DownloadIcon />{row.sampleExcelSheetUrl}
+                                                        <DownloadIcon />
+                                                        {/* {row.sampleExcelSheetUrl} */}
                                                         {/* <ArticleIcon /> */}
                                                     </IconButton>
                                                 </Tooltip>

@@ -142,6 +142,7 @@ export default function AdminNavBar() {
               <Menu anchorEl={anchorElUsers} open={Boolean(anchorElUsers)} onClose={handleClose}>
                 <MenuItem onClick={() => handleNavigation('Payments')}>All Payments</MenuItem>
                 <MenuItem onClick={() => handleNavigation('UserDetails')}>All Users</MenuItem>
+                <MenuItem onClick={() => handleNavigation('AllPaymentProof')}>All Payment Proof</MenuItem>
               </Menu>
 
               <Button 
@@ -154,7 +155,21 @@ export default function AdminNavBar() {
               <Menu anchorEl={anchorElInstr} open={Boolean(anchorElInstr)} onClose={handleClose}>
                 <MenuItem onClick={() => handleNavigation('InstrumentAction')}>Change State</MenuItem>
                 <MenuItem onClick={() => handleNavigation('AdminInstruments')}>Upload Image</MenuItem>
-                <MenuItem onClick={() => handleNavigation('UpdateInstrumentPrices')}>Update Prices</MenuItem>
+                {/* <MenuItem onClick={() => handleNavigation('UpdateInstrumentPrices')}>Update Prices</MenuItem> */}
+              </Menu>
+
+
+
+              <Button 
+                endIcon={<KeyboardArrowDown />} 
+                onClick={(e) => setAnchorElUsers(e.currentTarget)}
+                sx={{ color: '#666', fontWeight: 600, textTransform: 'none', fontSize: '0.85rem' }}
+              >
+                Sample & Feedback
+              </Button>
+              <Menu anchorEl={anchorElUsers} open={Boolean(anchorElUsers)} onClose={handleClose}>
+                <MenuItem onClick={() => handleNavigation('SampleStatus')}>All Samples</MenuItem>
+                <MenuItem onClick={() => handleNavigation('UserDetails')}> Users Feedback</MenuItem>
               </Menu>
             </Box>
 

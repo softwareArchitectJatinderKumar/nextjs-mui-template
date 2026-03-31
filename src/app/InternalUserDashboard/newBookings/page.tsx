@@ -18,6 +18,7 @@ export default function NewBookings() {
   const [AnalysisData, setAnalysisData] = useState([]);
   const [InstrumentsDuration, setInstrumentsDuration] = useState([]);
   const [Datagrid, setDatagrid] = useState<any[]>([]);
+  const [inActiveInstrumentIds, setInActiveInstrumentIds] = useState("");
   
   const [formFields, setFormFields] = useState({
     InstrumentId: '',
@@ -46,55 +47,142 @@ export default function NewBookings() {
 
   // --- 1. Fetch Instruments (getInstrumentData) ---
   const getInstrumentData = async () => {
-    setLoadingIndicator(true);
-    const startTime = new Date().getTime();
-    try {
-      const response = await instrumentService.GetInstrumentsDetails();
-      const items = response.item1 || [];
-      setInstrumentData(items);
-      setInstrumentDataInactive(items.filter((inst: any) => inst.isActive === false));
-    } catch (err) {
-      console.error(err);
-    } finally {
-      const elapsed = new Date().getTime() - startTime;
-      const remainingDelay = Math.max(1000 - elapsed, 0);
-      setTimeout(() => setLoadingIndicator(false), remainingDelay);
-    }
-  };
+  setLoadingIndicator(true);
+  try {
+    const response = await instrumentService.GetInstrumentsDetails();
+    const items = response.item1 || [];
+    setInstrumentData(items);
+    
+    const inactive = items.filter((inst: any) => inst.isActive === false);
+    setInstrumentDataInactive(inactive);
+    
+    // Angular logic: this.InActiveInstrumentIds = this.InstrumentDataInactive.map(...).join(' | ');
+    setInActiveInstrumentIds(inactive.map((inst: any) => inst.instrumentId).join(' | '));
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoadingIndicator(false);
+  }
+};
 
-  // --- 2. Instrument Selection (getAllAnalysis) ---
-  const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === "Select") return;
+const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const selectedValue = e.target.value;
 
-    const [idStr, ...nameParts] = selectedValue.split(' ');
-    const id = parseInt(idStr);
-    const name = nameParts.join(' ');
+  // Requirement: Reset dependent values immediately (Angular: this.Duration = this.AnalysisId = this.PriceValue = '';)
+  setFormFields(prev => ({ 
+    ...prev, 
+    Duration: '', 
+    AnalysisId: '', 
+    PriceValue: '',
+    totalAmount: 0 
+  }));
 
-    if (InstrumentDataInactive.some((inst: any) => inst.instrumentId === id)) {
-      Swal.fire({ 
-        title: 'This instrument is under Maintenance. You cannot proceed with this selection.', 
-        icon: 'error' 
+  if (!selectedValue || selectedValue === "Select") return;
+
+  // 1. Split value to get ID and Name
+  const [selectedInstrumentIdStr, ...instrumentNameParts] = selectedValue.split(' ');
+  const selectedInstrumentId = parseInt(selectedInstrumentIdStr, 10);
+  const selectedInstrumentName = instrumentNameParts.join(' ');
+
+  // 2. Find instrument data objects (Matches Angular .find logic)
+  const selectedInstrument: any = InstrumentData?.find((inst: any) => inst.instrumentId === selectedInstrumentId);
+  const inactiveInstrument: any = InstrumentDataInactive?.find((inst: any) => inst.instrumentId === selectedInstrumentId);
+
+  if (selectedInstrumentId) {
+    // 3. Maintenance Logic (Matches Angular swal and reload logic)
+    if (inactiveInstrument && inActiveInstrumentIds?.includes(selectedInstrumentId.toString())) {
+      Swal.fire({
+        title: 'This instrument is under Maintenance. You cannot proceed with this selection.',
+        icon: 'error',
+      }).then(() => {
+        window.location.reload();
       });
       return;
     }
 
-    setFormFields(prev => ({ ...prev, InstrumentId: id.toString(), InstrumentName: name }));
-    
-    setLoadingIndicator(true);
-    try {
-      const response = await instrumentService.GetAnalysisDetails(id);
-      setAnalysisData(response.item1 || []);
+    // 4. Set selected values and proceed
+    setFormFields(prev => ({ 
+      ...prev, 
+      InstrumentId: selectedInstrumentId.toString(), 
+      InstrumentName: selectedInstrumentName 
+    }));
+
+    // 5. Trigger File Download (Equivalent to this.testClick(this.SampleExcelSheet.sampleExcelSheetUrl))
+    if (selectedInstrument?.sampleExcelSheetUrl) {
+      window.open('https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/'+selectedInstrument.sampleExcelSheetUrl, '_blank');
       
-      window.open(`https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/${id}.xlsx`, '_blank');
       Swal.fire({
-        title: "A Format File is being Downloaded. You need to fill and upload this Excel sheet!",
+        title: "A Format File is being Downloaded. You need to fill and upload this Excel sheet to send your requirements!",
         icon: 'warning',
       });
-    } finally {
-      setLoadingIndicator(false);
     }
-  };
+
+    // 6. Set internal logic markers
+    if (selectedInstrument) {
+      setFormFields(prev => ({ ...prev, Duration: "Other Cases" })); // Angular: this.Duration = "Other Cases"
+      
+      // 7. Fetch Analysis Details (Equivalent to this.GetInstrumentIDWiseAnalysisDetails)
+      setLoadingIndicator(true);
+      try {
+        const response = await instrumentService.GetAnalysisDetails(selectedInstrumentId);
+        setAnalysisData(response.item1 || []);
+      } finally {
+        setLoadingIndicator(false);
+      }
+    }
+  }
+};
+  // const getInstrumentData = async () => {
+  //   setLoadingIndicator(true);
+  //   const startTime = new Date().getTime();
+  //   try {
+  //     const response = await instrumentService.GetInstrumentsDetails();
+  //     const items = response.item1 || [];
+  //     setInstrumentData(items);
+  //     setInstrumentDataInactive(items.filter((inst: any) => inst.isActive === false));
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     const elapsed = new Date().getTime() - startTime;
+  //     const remainingDelay = Math.max(1000 - elapsed, 0);
+  //     setTimeout(() => setLoadingIndicator(false), remainingDelay);
+  //   }
+  // };
+
+  // --- 2. Instrument Selection (getAllAnalysis) ---
+  // const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedValue = e.target.value;
+  //   if (selectedValue === "Select") return;
+
+  //   const [idStr, ...nameParts] = selectedValue.split(' ');
+  //   const id = parseInt(idStr);
+  //   const name = nameParts.join(' ');
+
+  //   if (InstrumentDataInactive.some((inst: any) => inst.instrumentId === id)) {
+  //     Swal.fire({ 
+  //       title: 'This instrument is under Maintenance. You cannot proceed with this selection.', 
+  //       icon: 'error' 
+  //     });
+  //     return;
+  //   }
+
+  //   setFormFields(prev => ({ ...prev, InstrumentId: id.toString(), InstrumentName: name }));
+    
+  //   setLoadingIndicator(true);
+  //   try {
+  //     const response = await instrumentService.GetAnalysisDetails(id);
+  //     console.log(JSON.stringify(response))
+  //     setAnalysisData(response.item1 || []);
+      
+  //     window.open(`https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/${id}.xlsx`, '_blank');
+  //     Swal.fire({
+  //       title: "A Format File is being Downloaded. You need to fill and upload this Excel sheet!",
+  //       icon: 'warning',
+  //     });
+  //   } finally {
+  //     setLoadingIndicator(false);
+  //   }
+  // };
 
   // --- 3. Analysis Selection (Triggers getDurationData) ---
   const handleAnalysisChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {

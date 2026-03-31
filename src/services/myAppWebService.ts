@@ -98,6 +98,74 @@ class MyAppWebService {
   }
 
 
+
+   async NewSAmpleStatus(newSampleStatus: any) {
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/CIFUpdateSampleStatus', newSampleStatus, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
+
+    
+
+
+ async  GetBookingPaymentProofDetails(BookingId:any) {
+   const Token = storageService.getUser();
+    try {
+      const response = await this.apiClient.get('api/LpuCIF/CIFGetBookingPaymentProofDetails?UserId='+BookingId, {
+        headers: {
+          'Authorization': `Bearer ${Token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+      
+  }
+
+
+
+
+  async downloadFile(fileUrl: string): Promise<Blob> {
+    try {
+      const AUTH_API = process.env.NEXT_PUBLIC_AUTH_TOKEN; 
+      const payload = {
+        fileName: fileUrl,
+        folderPath: ""
+      };
+      const authToken = localStorage.getItem('auth_token');
+      const response = await fetch(`${AUTH_API}api/Mou/DownloadMOUFiles/MOUDownloadFiles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(errorData || 'Failed to download file');
+      }
+
+      return await response.blob();
+    } catch (error) {
+      console.error('Error fetching authorized user data:', error);
+      throw error;
+    }
+  }
+
+
   async loginInternalUser(userId: string, key: string) {
 
     try {
