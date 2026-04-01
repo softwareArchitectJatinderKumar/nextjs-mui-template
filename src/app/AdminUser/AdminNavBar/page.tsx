@@ -28,11 +28,13 @@ export default function AdminNavBar() {
   const [anchorElTests, setAnchorElTests] = useState<null | HTMLElement>(null);
   const [anchorElUsers, setAnchorElUsers] = useState<null | HTMLElement>(null);
   const [anchorElInstr, setAnchorElInstr] = useState<null | HTMLElement>(null);
+  const [anchorElSamples, setAnchorElSamples] = useState<null | HTMLElement>(null);
 
   const handleClose = () => {
     setAnchorElTests(null);
     setAnchorElUsers(null);
     setAnchorElInstr(null);
+    setAnchorElSamples(null);
   };
 
   const handleNavigation = (path: string) => {
@@ -160,14 +162,14 @@ export default function AdminNavBar() {
 
 
 
-              <Button 
-                endIcon={<KeyboardArrowDown />} 
-                onClick={(e) => setAnchorElUsers(e.currentTarget)}
+              <Button
+                endIcon={<KeyboardArrowDown />}
+                onClick={(e) => setAnchorElSamples(e.currentTarget)}
                 sx={{ color: '#666', fontWeight: 600, textTransform: 'none', fontSize: '0.85rem' }}
               >
                 Sample & Feedback
               </Button>
-              <Menu anchorEl={anchorElUsers} open={Boolean(anchorElUsers)} onClose={handleClose}>
+              <Menu anchorEl={anchorElSamples} open={Boolean(anchorElSamples)} onClose={handleClose}>
                 <MenuItem onClick={() => handleNavigation('SampleStatus')}>All Samples</MenuItem>
                 <MenuItem onClick={() => handleNavigation('UserDetails')}> Users Feedback</MenuItem>
               </Menu>

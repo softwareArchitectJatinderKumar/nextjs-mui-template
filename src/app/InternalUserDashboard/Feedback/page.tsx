@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import FeedbackForm from '@/components/CIF/FeedbackForm';
 import { instrumentService } from '@/services/instrumentService';
+
 import swal from 'sweetalert2';
 import Cookies from 'js-cookie';
+import myAppWebService from '@/services/myAppWebService';
 
 export default function FeedbackPage() {
     const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +25,7 @@ export default function FeedbackPage() {
         };
 
 
-        const response = await instrumentService.NewCifFeedback(payload);
+        const response = await myAppWebService.NewCifFeedback(payload);
         
         setIsLoading(false);
 

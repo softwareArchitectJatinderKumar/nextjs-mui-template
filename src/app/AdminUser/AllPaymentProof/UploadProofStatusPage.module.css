@@ -85,7 +85,8 @@
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10rem;
+  /* gap: 16px; */
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
@@ -122,10 +123,13 @@
   position: relative;
   flex-grow: 1;
   max-width: 340px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .searchInput {
-  width: 100%;
+  flex-grow: 1;
   padding: 9px 12px 9px 38px;
   border: 1.5px solid var(--border-light);
   border-radius: 8px;
@@ -134,6 +138,33 @@
   background-color: #fafafa;
   box-sizing: border-box;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btnSearch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 18px;
+  background-color: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btnSearch:hover:not(:disabled) {
+  background-color: #e06a00;
+  transform: translateY(-1px);
+}
+
+.btnSearch:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .searchInput:focus {
@@ -197,24 +228,23 @@
 .paginationBar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-left: auto;
+  /* margin-left: auto; */
 }
 
 .pageBtn {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
   border: 1.5px solid var(--border-light);
   background-color: #fff;
   color: var(--text-primary);
-  font-size: 22px;
-  line-height: 1;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: border-color 0.15s ease, background-color 0.15s ease;
+  white-space: nowrap;
 }
 
 .pageBtn:hover:not(:disabled) {

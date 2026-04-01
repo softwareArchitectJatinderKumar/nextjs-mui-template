@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, Typography, Grid, TextField, Button, Table, TableBody, 
+import {
+  Box, Typography, Grid, TextField, Button, Table, TableBody,
   TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress,
-  InputAdornment, IconButton
+  InputAdornment, IconButton, MenuItem, Select, FormControl, InputLabel,
+  Divider
 } from '@mui/material';
-import { Search, FileDownload, CloudUpload, Visibility } from '@mui/icons-material';
+import { Search, FileDownload, CloudUpload, Visibility, ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
 import styles from './AdminInstruments.module.css';
@@ -16,6 +17,10 @@ export default function AdminNewInstruments() {
   const [instruments, setInstruments] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   
   // File selection state with base64 data
   const [fileData, setFileData] = useState<{ [key: string]: { fileData: string; fileName: string } }>({});
@@ -40,18 +45,49 @@ export default function AdminNewInstruments() {
   };
 
   // Replicates: searchx() logic
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    if (!query) {
+  const handleSearch = () => {
+    setCurrentPage(1); // Reset to first page on search
+    if (!searchQuery) {
       setFilteredData(instruments);
       return;
     }
-    const filtered = instruments.filter(item => 
-      Object.values(item).some(val => 
-        String(val).toLowerCase().includes(query.toLowerCase())
+    const filtered = instruments.filter(item =>
+      Object.values(item).some(val =>
+        String(val).toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
     setFilteredData(filtered);
+  };
+
+  const handleSearchInputChange = (query: string) => {
+    setSearchQuery(query);
+    if (!query) {
+      setCurrentPage(1);
+      setFilteredData(instruments);
+    }
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedData = filteredData.slice(startIndex, endIndex);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleItemsPerPageChange = (event: any) => {
+    setItemsPerPage(Number(event.target.value));
+    setCurrentPage(1); // Reset to first page when items per page changes
   };
 
   // Replicates: exportToExcel()
@@ -143,16 +179,17 @@ export default function AdminNewInstruments() {
   };
 
   return (
-    <Box className={styles.container}>
+    
+    <Box className={styles.container + ' bgDarkYellow '}>
       {loading && <div className={styles.loaderOverlay}><CircularProgress color="warning" /></div>}
 
-      <Box className={styles.card}>
-        <Typography variant="h5" className={styles.headerTitle}>Update Instrument Images</Typography>
-        
+      <Box className={' '}>
+        <Typography variant="h4" className={' mb-3'} align='center' >Update Instrument Images</Typography>
+        <Divider sx={{ mb: 2 }} />
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
-          <Grid sx={{xs:12,md:4}}>
-            <Button 
-              variant="contained" 
+          <Grid size={{ xs: 12, md: 2 }}>
+            <Button
+              variant="contained"
               className={styles.exportBtn}
               startIcon={<FileDownload />}
               onClick={exportToExcel}
@@ -161,19 +198,81 @@ export default function AdminNewInstruments() {
               Export to Excel
             </Button>
           </Grid>
-          <Grid sx={{xs:12,md:8}}>
+          <Grid size={{ xs: 12, md: 2 }}>
             <TextField
               fullWidth
               placeholder="Type Search Text..."
               variant="outlined"
               size="small"
               value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => handleSearchInputChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
               InputProps={{
                 startAdornment: <InputAdornment position="start"><Search /></InputAdornment>,
               }}
               className={styles.searchField}
             />
+          </Grid>
+          <Grid size={{ xs: 12, md: 2 }}>
+            <Button
+              variant="contained"
+              className={styles.searchBtn}
+              startIcon={<Search />}
+              onClick={handleSearch}
+              fullWidth
+            >
+              Search
+            </Button>
+          </Grid>
+          <Grid size={{ xs: 12, md: 1 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Items per page</InputLabel>
+              <Select
+                value={itemsPerPage}
+                label="Items per page"
+                onChange={handleItemsPerPageChange}
+              >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={25}>25</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={100}>100</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid size={{xs:12, md:2}}>
+            
+          
+          <Box className={styles.paginationButtons}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<ArrowBackIos />}
+              onClick={handlePrevPage}
+              disabled={currentPage === 1 || filteredData.length === 0}
+              className={styles.paginationBtn}
+            >
+              Previous
+            </Button>
+            <Typography className={styles.pageInfo}>
+              Page {totalPages > 0 ? currentPage : 0} of {totalPages}
+            </Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              endIcon={<ArrowForwardIos />}
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages || filteredData.length === 0}
+              className={styles.paginationBtn}
+            >
+              Next
+            </Button>
+          </Box>
+          
           </Grid>
         </Grid>
 
@@ -188,7 +287,7 @@ export default function AdminNewInstruments() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredData.map((item) => (
+              {paginatedData.map((item) => (
                 <TableRow key={item.instrumentId} hover>
                   <TableCell>{item.instrumentName}</TableCell>
                   <TableCell>
@@ -221,8 +320,8 @@ export default function AdminNewInstruments() {
                     />
                   </TableCell>
                   <TableCell align="right">
-                    <Button 
-                      variant="contained" 
+                    <Button
+                      variant="contained"
                       className={styles.uploadBtn}
                       disabled={!fileData[item.instrumentId]}
                       onClick={() => handleUpload(item)}
@@ -235,6 +334,38 @@ export default function AdminNewInstruments() {
             </TableBody>
           </Table>
         </TableContainer>
+        
+        {/* Pagination Controls */}
+        <Box className={styles.paginationContainer}>
+          <Box className={styles.paginationInfo}>
+            Showing {filteredData.length > 0 ? startIndex + 1 : 0} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries
+          </Box>
+          <Box className={styles.paginationButtons}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<ArrowBackIos />}
+              onClick={handlePrevPage}
+              disabled={currentPage === 1 || filteredData.length === 0}
+              className={styles.paginationBtn}
+            >
+              Previous
+            </Button>
+            <Typography className={styles.pageInfo}>
+              Page {totalPages > 0 ? currentPage : 0} of {totalPages}
+            </Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              endIcon={<ArrowForwardIos />}
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages || filteredData.length === 0}
+              className={styles.paginationBtn}
+            >
+              Next
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

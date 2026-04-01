@@ -212,7 +212,7 @@ export default function LoginPage() {
                 </div>
             )}
         
-            <section className="section bgDarkYellow py-5">
+            <section className="section bgYellow py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
@@ -231,7 +231,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="col-md-6">
-                            <div className="cifLogin p-md-4">
+                            <div className="cifLogin shadow p-md-4">
                                 {serverDown ? (
                                     <div className="alert alert-danger text-center py-3">
                                         <strong>Server down. Please try after a while.</strong>

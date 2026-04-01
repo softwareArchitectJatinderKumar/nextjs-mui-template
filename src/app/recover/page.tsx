@@ -156,7 +156,7 @@ export default function AccountRecovery() {
                 </div>
             )}
 
-            <section className="bgDarkYellow py-5 vh-100">
+            <section className="bgYellow py-5 vh-100">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
@@ -175,8 +175,8 @@ export default function AccountRecovery() {
                         </div>
                         <div className="col-md-6">
                             <div
-                                className="p-4 shadow-lg border-0 d-flex flex-column"
-                                style={{ height: '31rem' }}
+                                className="p-4 shadow border-0 d-flex flex-column"
+                                style={{ height: '31rem', backgroundColor: '#0000000d' }}
                             >
                                 {/* Server Down Message */}
                                 {serverDown && (

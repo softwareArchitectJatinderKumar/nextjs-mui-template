@@ -124,7 +124,7 @@ function PaginationBar({ currentPage, totalPages, onPrev, onNext }: PaginationBa
         className={`${s.pageBtn} ${isFirst ? s.pageBtnDisabled : ''}`}
         aria-label="Previous page"
       >
-        ‹
+        Prev
       </button>
       <span className={s.pageLabel}>{currentPage} / {totalPages}</span>
       <button
@@ -133,7 +133,7 @@ function PaginationBar({ currentPage, totalPages, onPrev, onNext }: PaginationBa
         className={`${s.pageBtn} ${isLast ? s.pageBtnDisabled : ''}`}
         aria-label="Next page"
       >
-        ›
+        Next
       </button>
     </div>
   );
@@ -256,10 +256,26 @@ interface ToolbarProps {
   searchQuery: string;
   hasFilteredData: boolean;
   onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearchSubmit: () => void;
   onExport: () => void;
+  totalRecords: number;
+  itemsPerPage: number;
+  isAllSelected: boolean;
+  currentPage: number;
+  totalPages: number;
+  onItemsPerPageChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onPrev: () => void;
+  onNext: () => void;
 }
 
-function Toolbar({ searchQuery, hasFilteredData, onSearch, onExport }: ToolbarProps) {
+function Toolbar({
+  searchQuery, hasFilteredData, onSearch, onSearchSubmit, onExport,
+  totalRecords, itemsPerPage, isAllSelected, currentPage, totalPages,
+  onItemsPerPageChange, onPrev, onNext,
+}: ToolbarProps) {
+  const isFirst = currentPage === 1;
+  const isLast = currentPage === totalPages;
+
   return (
     <div className={s.toolbar}>
       <button
@@ -277,41 +293,27 @@ function Toolbar({ searchQuery, hasFilteredData, onSearch, onExport }: ToolbarPr
           type="text"
           value={searchQuery}
           onChange={onSearch}
+          onKeyDown={(e) => { if (e.key === 'Enter') onSearchSubmit(); }}
           placeholder="Search records…"
           disabled={!hasFilteredData}
           className={s.searchInput}
           aria-label="Search records"
         />
+        <button
+          onClick={onSearchSubmit}
+          disabled={!hasFilteredData}
+          className={`${s.btnSearch} ${!hasFilteredData ? s.btnDisabled : ''}`}
+          aria-label="Search"
+        >
+          Search
+        </button>
       </div>
-    </div>
-  );
-}
-
-// ─── Controls row ─────────────────────────────────────────────────────────────
-
-interface ControlsRowProps {
-  totalRecords: number;
-  itemsPerPage: number;
-  isAllSelected: boolean;
-  currentPage: number;
-  totalPages: number;
-  onItemsPerPageChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  onPrev: () => void;
-  onNext: () => void;
-}
-
-function ControlsRow({
-  totalRecords, itemsPerPage, isAllSelected,
-  currentPage, totalPages,
-  onItemsPerPageChange, onPrev, onNext,
-}: ControlsRowProps) {
-  return (
-    <div className={s.controlsRow}>
+      
       <span className={s.recordsBadge}>
         Records: <strong>{totalRecords}</strong>
       </span>
 
-      <div className={s.perPageRow}>
+      <div className={s.perPageRow + ' text-end '}>
         <label htmlFor="perPage" className={s.perPageLabel}>Items per page:</label>
         <select
           id="perPage"
@@ -327,15 +329,29 @@ function ControlsRow({
         </select>
       </div>
 
-      <PaginationBar
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPrev={onPrev}
-        onNext={onNext}
-      />
+      <div className={s.paginationBar}>
+        <button
+          onClick={onPrev}
+          disabled={isFirst}
+          className={`${s.pageBtn} ${isFirst ? s.pageBtnDisabled : ''}`}
+          aria-label="Previous page"
+        >
+          Prev
+        </button>
+        <span className={s.pageLabel}>{currentPage} / {totalPages}</span>
+        <button
+          onClick={onNext}
+          disabled={isLast}
+          className={`${s.pageBtn} ${isLast ? s.pageBtnDisabled : ''}`}
+          aria-label="Next page"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
+
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
@@ -353,6 +369,7 @@ export default function UploadProofStatusPage() {
     totalPages,
     totalRecords,
     handleSearch,
+    handleSearchSubmit,
     handleItemsPerPageChange,
     prevPage,
     nextPage,
@@ -389,21 +406,17 @@ export default function UploadProofStatusPage() {
             searchQuery={searchQuery}
             hasFilteredData={hasFilteredData}
             onSearch={handleSearch}
+            onSearchSubmit={handleSearchSubmit}
             onExport={exportToExcel}
+            totalRecords={totalRecords}
+            itemsPerPage={itemsPerPage}
+            isAllSelected={isAllSelected}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onItemsPerPageChange={handleItemsPerPageChange}
+            onPrev={prevPage}
+            onNext={nextPage}
           />
-
-          {hasFilteredData && (
-            <ControlsRow
-              totalRecords={totalRecords}
-              itemsPerPage={itemsPerPage}
-              isAllSelected={isAllSelected}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onItemsPerPageChange={handleItemsPerPageChange}
-              onPrev={prevPage}
-              onNext={nextPage}
-            />
-          )}
 
           {hasFilteredData ? (
             <DataTable

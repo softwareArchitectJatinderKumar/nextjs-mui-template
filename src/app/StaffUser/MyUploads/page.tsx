@@ -1,5 +1,14 @@
 'use client';
 
+import { 
+  Box, Container, Paper, TextField, MenuItem, Button, 
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
+  Typography, Pagination, Divider, Chip, IconButton, Dialog, DialogTitle, 
+  DialogContent, DialogActions, TextareaAutosize
+} from '@mui/material';
+
+import Grid from '@mui/material/Grid';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
@@ -25,7 +34,7 @@ export default function Myuploaded() {
   const [bookingData, setBookingData] = useState<BookingRecord[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   
   const serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
 
@@ -77,11 +86,15 @@ export default function Myuploaded() {
   const currentTableData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredData.slice(start, start + itemsPerPage);
-  }, [filteredData, currentPage]);
+  }, [filteredData, currentPage, itemsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage]);
 
   const exportToExcel = () => {
     const exportedData = bookingData.map(item => ({
@@ -140,6 +153,29 @@ export default function Myuploaded() {
                 </div>
                 <div className="col-md-3 text-center">
                   <h2 className="font-bold">Results Uploaded Details</h2>
+                </div>
+                <div className="col-md-2">
+
+                   <Grid size={{ xs: 12, sm: 2 }}>
+                <TextField
+                  select fullWidth label="Items Per Page"
+                  value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                >
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={25}>25</MenuItem>
+                </TextField>
+              </Grid>
+                  {/* <label className="form-label">Items per page</label>
+                  <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="form-select" >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={15}>15</option>
+                    <option value={20}>20</option>
+                    <option value={25}>25</option>
+                  </select> */}
                 </div>
                 <div className="col-md-3">
                   <input

@@ -254,7 +254,7 @@ export default function AdminActionInstruments() {
     };
 
     return (
-        <div className='section bgDarkYellow'>
+        <div className='bgDarkYellow'>
             {loading && (
                 <div className="fullScreenLoader">
                     <div className="customSpinnerOverlay">
@@ -262,10 +262,10 @@ export default function AdminActionInstruments() {
                     </div>
                 </div>
             )}
-            <Box sx={{ p: 4 }}>
+            <Box sx={{ p: 2 }}>
                 <Paper sx={{ p: 3, borderRadius: 2 }}>
-                    <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Instruments Management
+                    <Typography variant="h5" fontWeight="bold" gutterBottom  align='center' >
+                        Manage Instrument 
                     </Typography>
                     <Divider sx={{ mb: 3 }} />
 

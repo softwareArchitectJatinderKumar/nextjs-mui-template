@@ -96,9 +96,21 @@ class MyAppWebService {
 
     return {};
   }
-
-
-
+ 
+ 
+   async NewCifFeedback(newFeedbackData: any) {
+    try {
+      const response = await this.apiClient.post('api/LpuCIF/NewFeedback', newFeedbackData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
    async NewSAmpleStatus(newSampleStatus: any) {
     try {
       const response = await this.apiClient.post('api/LpuCIF/CIFUpdateSampleStatus', newSampleStatus, {
@@ -708,6 +720,39 @@ async GetAllSampleStatus() {
       throw error;
     }
   }
+//
+
+
+   async UploadPaymentReceipt(PaymentReceipt: any){
+     try {
+      const response = await this.apiClient.post('api/LpuCIF/CIFUploadPaymentReceipt', PaymentReceipt,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+   
+  }
+
+  async  GetDecodePaymentStatusDetails(Data: any) {
+      try {
+      const response = await this.apiClient.post('api/LpuCIF/DecodePaymentStatusDetails', Data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding booking slot:', error);
+      throw error;
+    }
+  }
 
 
   async ReAssignTestToStaff(dataSoft: any) {
@@ -748,13 +793,11 @@ async GetAllSampleStatus() {
 
 
 
-
   // get request 
 
   async GetUserAllBookingSlot(Id: any) {
     try {
       const response = await this.apiClient.get('api/LpuCIF/GetAllUserBookingSlot', {
-        //  params: {UserId: 'email.jatinderkumar@gmail.com'},
          params: {UserId: Id},
       });
       return response.data;
@@ -819,6 +862,8 @@ async GetAllSampleStatus() {
       throw error;
     }
   }
+
+
 
 
 

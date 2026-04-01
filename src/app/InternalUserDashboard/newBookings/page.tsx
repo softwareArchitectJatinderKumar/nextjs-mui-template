@@ -12,7 +12,7 @@ export default function NewBookings() {
 
   // --- State Management (Matching Angular Component Variables) ---
   const [currentStep, setCurrentStep] = useState(1);
-  const [loadingIndicator, setLoadingIndicator] = useState(false);
+  const [loadingIndicator, setLoadingIndicator] = useState(true);
   const [InstrumentData, setInstrumentData] = useState([]);
   const [InstrumentDataInactive, setInstrumentDataInactive] = useState([]);
   const [AnalysisData, setAnalysisData] = useState([]);
@@ -42,6 +42,7 @@ export default function NewBookings() {
       const parsed = JSON.parse(authData);
       setUserData(parsed);
       getInstrumentData();
+      setLoadingIndicator(false);
     }
   }, []);
 
@@ -132,59 +133,7 @@ const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     }
   }
 };
-  // const getInstrumentData = async () => {
-  //   setLoadingIndicator(true);
-  //   const startTime = new Date().getTime();
-  //   try {
-  //     const response = await instrumentService.GetInstrumentsDetails();
-  //     const items = response.item1 || [];
-  //     setInstrumentData(items);
-  //     setInstrumentDataInactive(items.filter((inst: any) => inst.isActive === false));
-  //   } catch (err) {
-  //     console.error(err);
-  //   } finally {
-  //     const elapsed = new Date().getTime() - startTime;
-  //     const remainingDelay = Math.max(1000 - elapsed, 0);
-  //     setTimeout(() => setLoadingIndicator(false), remainingDelay);
-  //   }
-  // };
-
-  // --- 2. Instrument Selection (getAllAnalysis) ---
-  // const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const selectedValue = e.target.value;
-  //   if (selectedValue === "Select") return;
-
-  //   const [idStr, ...nameParts] = selectedValue.split(' ');
-  //   const id = parseInt(idStr);
-  //   const name = nameParts.join(' ');
-
-  //   if (InstrumentDataInactive.some((inst: any) => inst.instrumentId === id)) {
-  //     Swal.fire({ 
-  //       title: 'This instrument is under Maintenance. You cannot proceed with this selection.', 
-  //       icon: 'error' 
-  //     });
-  //     return;
-  //   }
-
-  //   setFormFields(prev => ({ ...prev, InstrumentId: id.toString(), InstrumentName: name }));
-    
-  //   setLoadingIndicator(true);
-  //   try {
-  //     const response = await instrumentService.GetAnalysisDetails(id);
-  //     console.log(JSON.stringify(response))
-  //     setAnalysisData(response.item1 || []);
-      
-  //     window.open(`https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/${id}.xlsx`, '_blank');
-  //     Swal.fire({
-  //       title: "A Format File is being Downloaded. You need to fill and upload this Excel sheet!",
-  //       icon: 'warning',
-  //     });
-  //   } finally {
-  //     setLoadingIndicator(false);
-  //   }
-  // };
-
-  // --- 3. Analysis Selection (Triggers getDurationData) ---
+  
   const handleAnalysisChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const analysisId = e.target.value;
     if (analysisId === "Select") return;
@@ -194,7 +143,7 @@ const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLoadingIndicator(true);
     const startTime = new Date().getTime();
     try {
-      // This is the getDurationData logic from your Angular file
+ 
       const response = await instrumentService.GetAnalysisData(analysisId, userData.UserRole);
       setInstrumentsDuration(response.item1 || []);
     } finally {
@@ -310,6 +259,15 @@ const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     }
   };
   return (
+    <>
+      {loadingIndicator && (
+                <div className="fullScreenLoader">
+                    <div className="customSpinnerOverlay">
+                        <img src="/assets/images/spinner.gif" alt="Loading..." />
+                    </div>
+                </div>
+            )}
+
     <div className="container-fluid p-4 bg-light min-vh-100">
       {loadingIndicator && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white opacity-75" style={{ zIndex: 9999 }}>
@@ -432,6 +390,8 @@ const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         </div>
       )}
     </div>
+    </>
+
   );
 }
 

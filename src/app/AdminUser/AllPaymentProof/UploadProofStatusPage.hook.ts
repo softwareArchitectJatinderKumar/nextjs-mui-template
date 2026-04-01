@@ -106,21 +106,23 @@ export function useUploadProofStatus() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value;
       setSearchQuery(query);
-
-      const trimmed = query.toLowerCase().trim();
-      setFilteredData(
-        trimmed
-          ? allData.filter((item) =>
-              Object.values(item).some((val) =>
-                String(val).toLowerCase().includes(trimmed)
-              )
-            )
-          : [...allData]
-      );
-      setCurrentPage(1);
     },
-    [allData]
+    []
   );
+
+  const handleSearchSubmit = useCallback(() => {
+    const trimmed = searchQuery.toLowerCase().trim();
+    setFilteredData(
+      trimmed
+        ? allData.filter((item) =>
+            Object.values(item).some((val) =>
+              String(val).toLowerCase().includes(trimmed)
+            )
+          )
+        : [...allData]
+    );
+    setCurrentPage(1);
+  }, [allData, searchQuery]);
 
 
   const totalPages = isAllSelected
@@ -226,6 +228,7 @@ export function useUploadProofStatus() {
 
     // Actions
     handleSearch,
+    handleSearchSubmit,
     handleItemsPerPageChange,
     prevPage,
     nextPage,

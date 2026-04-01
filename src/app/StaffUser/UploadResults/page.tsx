@@ -193,8 +193,8 @@ export default function StaffActionBookings() {
 
             <Grid container spacing={2} alignItems="center">
               <Grid size={{ xs: 12, sm: 2 }}>
-                <Button 
-                  fullWidth variant="contained" color="info" 
+                <Button
+                  fullWidth variant="contained" color="info"
                   startIcon={<FileDownloadIcon />} onClick={exportToExcel}
                   disabled={filteredData.length === 0}
                 >
@@ -222,7 +222,19 @@ export default function StaffActionBookings() {
                   <MenuItem value="Pending">Pending Results</MenuItem>
                 </TextField>
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid size={{ xs: 12, sm: 2 }}>
+                <TextField
+                  select fullWidth label="Items Per Page"
+                  value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                >
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={25}>25</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 2 }}>
                 <TextField
                   fullWidth placeholder="Search All Columns..."
                   value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}

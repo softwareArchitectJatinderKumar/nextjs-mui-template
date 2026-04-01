@@ -255,8 +255,8 @@ useEffect(() => {
                                         <TableRow key={index} hover>
                                             <TableCell>{row.bookingId}</TableCell>
                                             <TableCell>{row.candidateName}</TableCell>
-                                            <TableCell>{row.amount}</TableCell>
                                             <TableCell>{row.userEmailId}</TableCell>
+                                            <TableCell>{row.organisationName}</TableCell>
                                             <TableCell>{row.mobileNo}</TableCell>
                                             {/* <TableCell>{row.requestDate}</TableCell> */}
                                             <TableCell sx={{ whiteSpace: 'nowrap' }}>

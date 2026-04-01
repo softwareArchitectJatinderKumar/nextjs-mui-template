@@ -183,7 +183,7 @@ const UserCookies = JSON.stringify(userData);
                 </div>
             )}
 
-            <section className="section bgDarkYellow py-5">
+            <section className="section bgYellow py-5">
                 <div className="container">
                     <div className="headingWraper mb-5">
                         <div className="mainHead">
