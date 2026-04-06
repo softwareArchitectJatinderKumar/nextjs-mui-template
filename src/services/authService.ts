@@ -4,7 +4,8 @@ import axios from 'axios';
  * IMPORTANT: This base URL points to the proxy defined in next.config.ts
  * This bypasses CORS by routing requests through your local dev server.
  */
-const AUTH_API = 'https://projectsapi.lpu.in/';
+// const AUTH_API = 'https://projectsapi.lpu.in/';
+const AUTH_API = 'https://localhost:7125/';
 
 class AuthService {
     private apiClient;

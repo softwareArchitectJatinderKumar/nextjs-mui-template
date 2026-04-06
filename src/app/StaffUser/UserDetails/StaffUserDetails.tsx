@@ -73,9 +73,10 @@ export default function StaffUserDetails() {
         try {
             const response = await myAppWebService.GetAllUserData();
             const data = response?.item1 || [];
+            // console.log(JSON.stringify(data)+'dadad')
             const sorted = [...data].sort((a, b) => Number(b.idProofNumber) - Number(a.idProofNumber));
-            setOriginalData(sorted);
-            setFilteredData(sorted);
+            setOriginalData(data);
+            setFilteredData(data);
         } catch (error) {
             console.error("Error fetching user data", error);
         } finally {
@@ -85,13 +86,14 @@ export default function StaffUserDetails() {
     };
 
     useEffect(() => {
+        setLoading(true);
         let result = [...originalData];
 
         if (selectedStatus) {
-            setLoading(true);
-            const timer = setTimeout(() => setLoading(false), 1500);
-            result = result.filter(item => item.userRole === selectedStatus);
-            return () => clearTimeout(timer);
+            const roleCode = selectedStatus === "Internal" ? "400000" : selectedStatus === "External" ? "400001" : selectedStatus === "Others" ? "400002" : "";
+            if (roleCode) {
+                result = result.filter(item => item.userRole === roleCode);
+            }
         }
 
         if (searchQuery) {
@@ -103,6 +105,7 @@ export default function StaffUserDetails() {
 
         setFilteredData(result);
         setCurrentPage(1);
+        setTimeout(() => setLoading(false), 300);
     }, [searchQuery, selectedStatus, originalData]);
 
     const exportToExcel = () => {
@@ -188,9 +191,9 @@ export default function StaffUserDetails() {
                                 onChange={(e) => setSelectedStatus(e.target.value)}
                             >
                                 <MenuItem value="">All Users</MenuItem>
-                                <MenuItem value="400000">Internal User</MenuItem>
-                                <MenuItem value="400001">External User</MenuItem>
-                                <MenuItem value="400002">Industry User</MenuItem>
+                                <MenuItem value="Internal">Internal User</MenuItem>
+                                <MenuItem value="External">External User</MenuItem>
+                                <MenuItem value="Others">Industry User</MenuItem>
                             </TextField>
                         </Grid>
 

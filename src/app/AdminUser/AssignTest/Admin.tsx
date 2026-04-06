@@ -21,8 +21,9 @@ export default function AdminAssignTest() {
     // Pagination & Search States
     const [searchQuery, setSearchQuery] = useState('');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState<number | 'all'>(10);
     const recordSizeOptions = [10, 25, 50, 100];
+    const [paymentStatusFilter, setPaymentStatusFilter] = useState('All');
 
     // Modal States
     const [openModal, setOpenModal] = useState(false);
@@ -45,6 +46,21 @@ export default function AdminAssignTest() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        let filtered = AllBookingTestsData;
+        if (searchQuery) {
+            filtered = filtered.filter(item =>
+                Object.values(item).some(v => String(v).toLowerCase().includes(searchQuery.toLowerCase()))
+            );
+        }
+        if (paymentStatusFilter !== 'All') {
+            const status = paymentStatusFilter === 'Paid' ? 'success' : paymentStatusFilter === 'Failed' ? 'failure' : 'pending';
+            filtered = filtered.filter(item => item.paymentStatus === status);
+        }
+        setTmpsAllBookingTestsData(filtered);
+        setPage(0);
+    }, [AllBookingTestsData, searchQuery, paymentStatusFilter]);
+
     const fetchData = async () => {
         setLoadingIndicator(true);
         try {
@@ -58,15 +74,6 @@ export default function AdminAssignTest() {
 
     const handleSearch = (val: string) => {
         setSearchQuery(val);
-        if (!val) {
-            setTmpsAllBookingTestsData(AllBookingTestsData);
-            return;
-        }
-        const filtered = AllBookingTestsData.filter(item =>
-            Object.values(item).some(v => String(v).toLowerCase().includes(val.toLowerCase()))
-        );
-        setTmpsAllBookingTestsData(filtered);
-        setPage(0);
     };
 
     // Helper for INR Formatting (Matches Angular | currency:'INR')
@@ -74,6 +81,26 @@ export default function AdminAssignTest() {
         if (!amount || amount === 'null') return 'NA';
         return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
     };
+
+    const handleRowsPerPageChange = (e: any) => {
+        const val = e.target.value;
+        if (val === 'All') {
+            setRowsPerPage(tmpsAllBookingTestsData.length);
+        } else {
+            setRowsPerPage(parseInt(val, 10));
+        }
+        setPage(0);
+    };
+
+    const handlePaymentStatusChange = (e: any) => {
+        setPaymentStatusFilter(e.target.value);
+    };
+
+    const currentRowsPerPage = rowsPerPage === 'all' ? tmpsAllBookingTestsData.length : rowsPerPage;
+
+    const handlePrev = () => setPage(Math.max(0, page - 1));
+
+    const handleNext = () => setPage(Math.min(Math.ceil(tmpsAllBookingTestsData.length / currentRowsPerPage) - 1, page + 1));
 
     return (
         <Box className={styles.pageContainer}>
@@ -85,8 +112,8 @@ export default function AdminAssignTest() {
 
             <Card className={styles.mainCard}>
                 <CardContent>
-                    <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
-                        <Grid sx={{xs:12,sm:4}}>
+                    <Box display="flex" flexWrap="wrap" gap={2} alignItems="center" sx={{ mb: 4 }}>
+                        <Box sx={{ flex: '1 1 300px' }}>
                             <Button variant="contained" className={styles.btnDark} startIcon={<FileDownload />}
                                 onClick={() => {
                                     const ws = XLSX.utils.json_to_sheet(tmpsAllBookingTestsData);
@@ -96,15 +123,39 @@ export default function AdminAssignTest() {
                                 }}>
                                 Export to Excel
                             </Button>
-                        </Grid>
-                        <Grid sx={{xs:12,sm:6}}>
+                        </Box>
+                        <Box sx={{ flex: '1 1 400px' }}>
                             <TextField
                                 fullWidth size="small" placeholder="Search..."
                                 value={searchQuery} onChange={(e) => handleSearch(e.target.value)}
                                 InputProps={{ endAdornment: <InputAdornment position="end"><Search /></InputAdornment> }}
                             />
-                        </Grid>
-                    </Grid>
+                        </Box>
+                    </Box>
+
+                    <Box display="flex" gap={2} alignItems="center" sx={{ mb: 2 }}>
+                        <FormControl size="small" sx={{ minWidth: 120 }}>
+                            <InputLabel>Rows per page</InputLabel>
+                            <Select value={rowsPerPage === 'all' ? 'All' : rowsPerPage} onChange={handleRowsPerPageChange}>
+                                <MenuItem value={5}>5</MenuItem>
+                                <MenuItem value={10}>10</MenuItem>
+                                <MenuItem value={15}>15</MenuItem>
+                                <MenuItem value={20}>20</MenuItem>
+                                <MenuItem value="All">All</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl size="small" sx={{ minWidth: 120 }}>
+                            <InputLabel>Payment Status</InputLabel>
+                            <Select value={paymentStatusFilter} onChange={handlePaymentStatusChange}>
+                                <MenuItem value="All">All</MenuItem>
+                                <MenuItem value="Paid">Paid</MenuItem>
+                                <MenuItem value="Failed">Failed</MenuItem>
+                                <MenuItem value="Pending">Pending</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button variant="outlined" onClick={handlePrev} disabled={page === 0}>Prev</Button>
+                        <Button variant="outlined" onClick={handleNext} disabled={page >= Math.ceil(tmpsAllBookingTestsData.length / currentRowsPerPage) - 1}>Next</Button>
+                    </Box>
 
                     <TableContainer component={Paper} variant="outlined" className={styles.tableResponsive}>
                         <Table size="small" className={styles.stripedTable}>
@@ -126,7 +177,7 @@ export default function AdminAssignTest() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {tmpsAllBookingTestsData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => (
+                                {tmpsAllBookingTestsData.slice(page * currentRowsPerPage, page * currentRowsPerPage + currentRowsPerPage).map((row, i) => (
                                     <TableRow key={i} hover>
                                         <TableCell sx={{ fontWeight: 'bold' }}>{row.newBookingId}</TableCell>
                                         <TableCell sx={{ fontWeight: 'bold' }}>{row.instrumentName}</TableCell>
@@ -188,16 +239,6 @@ export default function AdminAssignTest() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-
-                    <TablePagination
-                        component="div"
-                        count={tmpsAllBookingTestsData.length}
-                        page={page}
-                        onPageChange={(_, p) => setPage(p)}
-                        rowsPerPage={rowsPerPage}
-                        rowsPerPageOptions={recordSizeOptions}
-                        onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
-                    />
                 </CardContent>
             </Card>
 

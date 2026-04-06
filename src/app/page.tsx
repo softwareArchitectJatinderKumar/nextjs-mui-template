@@ -28,11 +28,16 @@ export default function Home() {
     const fetchInstruments = async () => {
       try {
         const response = await myAppWebService.getAllInstruments();
-        const data = response.item1 || response.data || response;
-        setInstruments(Array.isArray(data) ? data : []);
-      } catch (err) {
+        const data = response?.item1 || response?.data || response;
+        // Only set instruments if we have valid array data, otherwise keep empty to trigger fallback
+        if (Array.isArray(data) && data.length > 0) {
+          setInstruments(data);
+        }
+        setError(''); // Clear any previous errors
+      } catch (err: any) {
         console.error('Error fetching instruments:', err);
-        setError('Failed to load instruments');
+        // Don't set error message - just let the static data show as fallback
+        // This ensures user always sees instrument data
       } finally {
         setIsLoading(false);
       }
@@ -41,13 +46,6 @@ export default function Home() {
     fetchInstruments();
   }, []);
 
-  if (error) {
-    return (
-      <div className="container mt-5">
-        <div className="alert alert-danger">{error}</div>
-      </div>
-    );
-  }
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 1500);
@@ -63,8 +61,13 @@ export default function Home() {
           </div>
         </div>
       )}
+      
       <HeroSection />
-      <FacilitiesSection instruments={instruments} />
+      <FacilitiesSection 
+        instruments={instruments} 
+        isLoading={isLoading}
+        error={error}
+      />
 
       <EventsSection />
       {/* <EventsSection styles={Eventsstyles} /> */}

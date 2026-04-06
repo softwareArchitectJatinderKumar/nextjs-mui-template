@@ -6,10 +6,10 @@ export const RemoteHeader = () => {
   const [headerHtml, setHeaderHtml] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isMounted, setIsMounted] = useState(false); // New state to track mounting
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true); // Set to true once the component hits the browser
+    setIsMounted(true);
     const fetchHeader = async () => {
       try {
         const response = await fetch('/api/remote-header');
@@ -25,9 +25,6 @@ export const RemoteHeader = () => {
     fetchHeader();
   }, []);
 
-  // IMPORTANT: If not mounted, return null or a simple div placeholder.
-  // This prevents the Server from rendering the CircularProgress and 
-  // causing a mismatch with the Client.
   if (!isMounted) return <div style={{ minHeight: '80px' }} />; 
 
   if (loading) return <CircularProgress size={20} sx={{ m: 2 }} />;

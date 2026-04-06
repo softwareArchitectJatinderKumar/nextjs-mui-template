@@ -152,7 +152,7 @@ function ResponsiveAppBar() {
     //     </Toolbar>
     //   </Container>
     // </AppBar>
-    <Box sx={{ py: 2 ,marginTop: 5 }}>
+    <Box sx={{ py: 2 ,marginTop: 2 }}>
       <Container maxWidth="md">
         <Box
           sx={{

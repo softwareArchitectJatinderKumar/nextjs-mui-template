@@ -96,14 +96,14 @@ const TopNavBar = () => {
       >
         <Toolbar variant="dense" sx={{ justifyContent: 'space-between', px: { xs: 1, md: 0 } }}>
           
-          <Typography
+          {/* <Typography
             variant="subtitle1"
             component={Link}
             href="/InternalUserDashboard/Profile"
             sx={{ fontWeight: 800, textDecoration: 'none', color: '#333', minWidth: 'max-content' }}
           >
+          </Typography> */}
           <Box component="span" sx={{ marginRight:'3rem'}}> CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box></Box>
-          </Typography>
 
           <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
             <Tabs 

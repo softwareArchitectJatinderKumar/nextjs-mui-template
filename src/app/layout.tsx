@@ -80,9 +80,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main style={{ minHeight: '70vh' }}>
             {children}
           </main>
-          <Footer />
         </ThemeRegistry>
 
+        <Footer />
         <RemoteFooter />
       </body>
     </html>

@@ -28,7 +28,7 @@ const InstrumentDetails: React.FC<Props> = ({ instrument, specs, onViewCharges }
               className="lpu-btn"
               // style={{ backgroundColor: '#ef7d00', border: 'none', color: 'white' }}
             >
-              Login/ Register
+              Login
             </button>
           </div>
            

@@ -45,7 +45,7 @@ export default function AdminActionBookings() {
 
   // Pagination
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [rowsPerPage, setRowsPerPage] = useState('15');
 
   // Modal State
   const [openModal, setOpenModal] = useState(false);
@@ -195,7 +195,7 @@ export default function AdminActionBookings() {
           {/* Toolbar */}
           <Grid container spacing={2} alignItems="center" sx={{ width: '100%', mb: 3 }} >
             <Grid size={{ xs: 12, sm: 6, md: 1.5, lg: 1.4 }} sx={{ textAlign: 'center' }} >
-              <Button variant="contained" color="inherit" startIcon={<FileDownload />} onClick={exportToExcel}>
+              <Button variant="contained" className={styles.btnAction} startIcon={<FileDownload />} onClick={exportToExcel}>
                 Export to Excel
               </Button>
             </Grid>
@@ -227,14 +227,61 @@ export default function AdminActionBookings() {
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 1.5 }} textAlign="center">
-              <Button
-                variant="outlined"
-                color="primary"
+              <Button className={styles.btnAction}
+                variant="contained"
+                // color="primary"
                 startIcon={showAdvancedSearch ? <FilterListOff /> : <FilterList />}
                 onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
               >
                 {showAdvancedSearch ? 'Hide Advanced' : 'Advanced Search'}
               </Button>
+            </Grid>
+            <Grid size={{xs:12, sm:6, md:2}}>
+
+              {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}> */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body2" sx={{ mr: 1 }}>Rows per page:</Typography>
+              <Select
+                value={rowsPerPage}
+                onChange={(e) => {
+                  setRowsPerPage(e.target.value as string);
+                  setPage(0);
+                }}
+                size="small"
+                sx={{ minWidth: 80 }}
+              >
+                <MenuItem value="5">5</MenuItem>
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="15">15</MenuItem>
+                <MenuItem value="20">20</MenuItem>
+                <MenuItem value="-1">All</MenuItem>
+              </Select>
+            </Box>
+             </Grid>
+            <Grid size={{xs:12, sm:6, md:2}}>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+             
+              <IconButton
+                size="small"
+                disabled={page === 0 || rowsPerPage === '-1'}
+                onClick={() => setPage(prev => Math.max(0, prev - 1))}
+              >
+                <ChevronLeft />
+                 </IconButton>
+                 <Typography variant="body2">
+                {tmpsBookingData.length === 0 ? 0 : page * parseInt(rowsPerPage, 10) + 1} of {tmpsBookingData.length}
+              </Typography>
+             
+              <IconButton
+                size="small"
+                disabled={rowsPerPage === '-1' ? true : (page + 1) * parseInt(rowsPerPage, 10) >= tmpsBookingData.length}
+                onClick={() => setPage(prev => prev + 1)}
+              >
+                <ChevronRight />
+              </IconButton>
+            </Box>
+          {/* </Box> */}
             </Grid>
           </Grid>
 
@@ -273,19 +320,60 @@ export default function AdminActionBookings() {
             </Box>
           )}
            
+          {/* Custom Pagination Controls at Top 
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body2" sx={{ mr: 1 }}>Rows per page:</Typography>
+              <Select
+                value={rowsPerPage}
+                onChange={(e) => {
+                  setRowsPerPage(e.target.value as string);
+                  setPage(0);
+                }}
+                size="small"
+                sx={{ minWidth: 80 }}
+              >
+                <MenuItem value="5">5</MenuItem>
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="15">15</MenuItem>
+                <MenuItem value="20">20</MenuItem>
+                <MenuItem value="-1">All</MenuItem>
+              </Select>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body2">
+                {tmpsBookingData.length === 0 ? 0 : page * parseInt(rowsPerPage, 10) + 1}-{rowsPerPage === '-1' ? tmpsBookingData.length : Math.min((page + 1) * parseInt(rowsPerPage, 10), tmpsBookingData.length)} of {tmpsBookingData.length}
+              </Typography>
+              <IconButton
+                size="small"
+                disabled={page === 0 || rowsPerPage === '-1'}
+                onClick={() => setPage(prev => Math.max(0, prev - 1))}
+              >
+                <ChevronLeft />
+              </IconButton>
+              <IconButton
+                size="small"
+                disabled={rowsPerPage === '-1' ? true : (page + 1) * parseInt(rowsPerPage, 10) >= tmpsBookingData.length}
+                onClick={() => setPage(prev => prev + 1)}
+              >
+                <ChevronRight />
+              </IconButton>
+            </Box>
+          </Box>
+
           {/* Data Table */}
           <TableContainer component={Paper} className={styles.tableContainer}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   {["Booking ID", "Instrument", "Samples", "Charges", "Sheet", "Candidate", "Role", "Status", "Action"].map(head => (
-                    <TableCell key={head} sx={{ fontWeight: 'bold', bgcolor: '#f0f0f0' }}>{head}</TableCell>
+                    <TableCell key={head} sx={{ fontWeight: 'bold', bgcolor: '#f0f0f0' }} className={styles.headerCell}>{head}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
 
               <TableBody>
-                {tmpsBookingData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                {(rowsPerPage === '-1' ? tmpsBookingData : tmpsBookingData.slice(page * parseInt(rowsPerPage, 10), page * parseInt(rowsPerPage, 10) + parseInt(rowsPerPage, 10))).map((row, index) => (
                   <TableRow key={`${row.bookingId}-${index}`} hover>
                     <TableCell>{row.bookingId}</TableCell>
                     <TableCell>{row.instrumentName}</TableCell>
@@ -325,12 +413,12 @@ export default function AdminActionBookings() {
             count={tmpsBookingData.length}
             page={page}
             onPageChange={(_, newPage) => setPage(newPage)}
-            rowsPerPage={rowsPerPage}
+            rowsPerPage={rowsPerPage === '-1' ? tmpsBookingData.length : parseInt(rowsPerPage, 10)}
             onRowsPerPageChange={(e) => {
-              setRowsPerPage(parseInt(e.target.value, 10));
+              setRowsPerPage(e.target.value);
               setPage(0);
             }}
-            rowsPerPageOptions={[5, 10, 15, 25, 50]}
+            rowsPerPageOptions={[5, 10, 15, 20, -1]}
             slotProps={{
               select: {
                 variant: 'standard',  

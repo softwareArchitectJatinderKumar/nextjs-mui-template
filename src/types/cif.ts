@@ -1,8 +1,9 @@
 export interface Instrument {
   id: string | number;
   instrumentName: string;
-  categoryId: string | number;
+  categoryId?: string | number | undefined | null;
   imageUrl?: string;
+  sampleExcelSheetUrl?: string;
 }
 
 export interface Offer {

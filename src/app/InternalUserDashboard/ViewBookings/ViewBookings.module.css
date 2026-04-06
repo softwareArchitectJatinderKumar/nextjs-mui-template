@@ -1,0 +1,345 @@
+/* ============================================================
+   ViewBookings.module.css
+   Scoped CSS Module — converted from SCSS, zero global leaks
+   ============================================================ */
+
+/* ---------- Loader ---------- */
+.fullscreenLoader {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.spinnerContent {
+  padding: 20px;
+  text-align: center;
+}
+.spinner {
+  width: 56px;
+  height: 56px;
+  border: 5px solid #dee2e6;
+  border-top-color: #0d6efd;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Layout ---------- */
+.bottomSpace { padding-bottom: 2rem; }
+
+.cardBody {
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+  padding: 1.5rem;
+}
+
+/* ---------- Page header ---------- */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* ---------- Search ---------- */
+.searchBox {
+  max-width: 250px;
+  width: 100%;
+}
+
+/* ---------- Table ---------- */
+.tableWrapper {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+.bookingsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.bookingsTable thead {
+  background: #f8f9fa;
+}
+.bookingsTable thead th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  white-space: nowrap;
+}
+.bookingsTable tbody tr {
+  border-bottom: 1px solid #dee2e6;
+  transition: background-color 0.2s;
+}
+.bookingsTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+.bookingsTable tbody td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-block;
+  padding: 0.4em 0.7em;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  color: #fff;
+  line-height: 1;
+}
+.badgeDark    { background-color: #343a40; }
+.badgeDanger  { background-color: #dc3545; margin-bottom: 6px; }
+.badgeSuccess { background-color: #198754; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.btnSm { padding: 0.35rem 0.7rem; font-size: 0.8125rem; }
+
+.btnDark    { background-color: #343a40; color: #fff; }
+.btnDark:hover { background-color: #23272b; }
+
+.btnPrimary { background-color: #0d6efd; color: #fff; }
+.btnPrimary:hover { background-color: #0b5ed7; }
+
+.btnWarning { background-color: #ffc107; color: #212529; }
+.btnWarning:hover { background-color: #ffcd39; }
+
+/* ---------- Pagination ---------- */
+.paginationBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+}
+.paginationNav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pageLink {
+  background: none;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: #0d6efd;
+  transition: background-color 0.15s;
+}
+.pageLink:hover { background-color: #e9ecef; }
+.pageLinkDisabled {
+  color: #6c757d;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.pageInfo {
+  font-weight: 500;
+  color: #495057;
+  padding: 0 0.5rem;
+}
+.perPageSelect {
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* ---------- Empty / no-data ---------- */
+.noDataCard {
+  text-align: center;
+  padding: 3rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  margin: 2rem 0;
+}
+.noDataTitle {
+  font-size: 1.5rem;
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+.noDataText {
+  font-size: 1.125rem;
+  color: #dc3545;
+}
+
+/* ---------- Modal ---------- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+.modalDialog {
+  background: #fff;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
+}
+.modalDialogSm { max-width: 440px; }
+.modalDialogLg { max-width: 820px; }
+
+.modalHeader {
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modalTitle {
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  font-size: 1.1rem;
+}
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #6c757d;
+  line-height: 1;
+  padding: 0;
+}
+.modalClose:hover { color: #333; }
+
+.modalBody { padding: 1.5rem; }
+
+/* ---------- Form controls ---------- */
+.formControl {
+  display: block;
+  width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+.formControl:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+}
+.formLabel {
+  display: block;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.4rem;
+}
+.formText {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  display: block;
+}
+.formPlaintext {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  color: #212529;
+  margin: 0;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.formError {
+  font-size: 0.8rem;
+  color: #dc3545;
+  margin-top: 0.25rem;
+}
+
+/* ---------- Inline table (modals) ---------- */
+.inlineTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.inlineTable th {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #495057;
+  white-space: nowrap;
+}
+.inlineTable td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+/* ---------- Fade-in ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fadeIn { animation: fadeIn 0.25s ease-in-out; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .pageHeader       { flex-direction: column; align-items: flex-start; }
+  .searchBox        { max-width: 100%; }
+  .cardBody         { padding: 1rem; }
+  .btn              { padding: 0.4rem 0.75rem; font-size: 0.8125rem; }
+  .bookingsTable thead th,
+  .bookingsTable tbody td { padding: 8px; font-size: 0.875rem; }
+  .formGrid         { grid-template-columns: 1fr; }
+}
+@media (max-width: 576px) {
+  .pageTitle        { font-size: 1.25rem; }
+  .cardBody         { padding: 0.75rem; }
+  .badge            { font-size: 0.75rem; }
+  .modalDialog      { margin: 0.5rem; }
+}
+@media print {
+  .fullscreenLoader,
+  .paginationBar,
+  .btn { display: none !important; }
+}

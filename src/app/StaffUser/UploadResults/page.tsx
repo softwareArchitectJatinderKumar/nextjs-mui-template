@@ -50,7 +50,7 @@ export default function StaffActionBookings() {
     const startTime = Date.now();
     try {
       const resBookings = await myAppWebService.GetAllBooking();
-      
+       
       if (resBookings?.item1 && resBookings.item1.length > 0) {
         const bookings = resBookings.item1;
         setOriginalData(bookings);
@@ -62,9 +62,10 @@ export default function StaffActionBookings() {
 
       const resResults = await myAppWebService.GetUploadedResultDetails(userId);
       setBookingResultsData(resResults?.item1 || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Data fetch error", error);
-      setNoResultsMessage('No Details');
+      const errorMessage = error?.message || 'Server issue. Please try again later.';
+      setNoResultsMessage(errorMessage);
     } finally {
       const elapsed = Date.now() - startTime;
       setTimeout(() => setLoading(false), Math.max(1500 - elapsed, 0));
@@ -142,8 +143,9 @@ export default function StaffActionBookings() {
       } else {
         Swal.fire('Error', 'Already Uploaded Results for this Test', 'error');
       }
-    } catch (error) {
-      Swal.fire('Error', 'Failed to Upload.', 'error');
+    } catch (error: any) {
+      const errorMessage = error?.message || 'Server issue. Please try again later.';
+      Swal.fire('Error', errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -191,8 +193,8 @@ export default function StaffActionBookings() {
 
             <Grid container spacing={2} alignItems="center">
               <Grid size={{ xs: 12, sm: 2 }}>
-                <Button 
-                  fullWidth variant="contained" color="info" 
+                <Button
+                  fullWidth variant="contained" color="info"
                   startIcon={<FileDownloadIcon />} onClick={exportToExcel}
                   disabled={filteredData.length === 0}
                 >
@@ -220,7 +222,19 @@ export default function StaffActionBookings() {
                   <MenuItem value="Pending">Pending Results</MenuItem>
                 </TextField>
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid size={{ xs: 12, sm: 2 }}>
+                <TextField
+                  select fullWidth label="Items Per Page"
+                  value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                >
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={25}>25</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 2 }}>
                 <TextField
                   fullWidth placeholder="Search All Columns..."
                   value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}

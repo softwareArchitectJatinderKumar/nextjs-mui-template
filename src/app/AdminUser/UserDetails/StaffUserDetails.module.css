@@ -34,11 +34,10 @@
 }
 
 .headerCell {
-  background-color: #1976d2 !important;
+  background-color:  #ef7d00 !important;
   color: white !important;
   font-weight: bold !important;
 }
-
 .roleInternal { color: #d32f2f; font-weight: bold; }
 .roleExternal { color: #1976d2; font-weight: bold; }
 .roleIndustry { color: #2e7d32; font-weight: bold; }

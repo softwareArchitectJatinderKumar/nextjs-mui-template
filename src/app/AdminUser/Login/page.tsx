@@ -13,6 +13,7 @@ export default function StaffLogin() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [serverDown, setServerDown] = useState(false);
 
     const { 
         register, 
@@ -21,6 +22,31 @@ export default function StaffLogin() {
     } = useForm({
         mode: 'onTouched'
     });
+
+    // Check if server is available on mount
+    useEffect(() => {
+        const checkServer = async () => {
+            try {
+                await myAppWebService.getAllInstruments();
+                setServerDown(false);
+            } catch (err: any) {
+                const errorMessage = err?.message || '';
+                // Check for network error message from axios interceptor
+                const isNetworkError = errorMessage.includes('Network error') || 
+                                      errorMessage.includes('Network Error') ||
+                                      errorMessage.includes('ECONNREFUSED') ||
+                                      errorMessage.includes('Failed to fetch') ||
+                                      errorMessage.includes('fetch failed') ||
+                                      err?.code === 'ECONNREFUSED' ||
+                                      err?.code === 'ERR_NETWORK';
+                
+                if (isNetworkError || err?.status >= 500) {
+                    setServerDown(true);
+                }
+            }
+        };
+        checkServer();
+    }, []);
 
     // 1. Initial Page Loader
     useEffect(() => {
@@ -129,7 +155,6 @@ export default function StaffLogin() {
 
         if (result.isConfirmed) {
             try {
-                // Record user entry in database
                 await myAppWebService.NewUserRecord(userData);
             } catch (e) {
                 console.warn("User record logging failed, but proceeding to dashboard.");
@@ -147,15 +172,6 @@ export default function StaffLogin() {
                     </div>
                 </div>
             )}
-            {/* {loading && (
-                <div className={styles.fullScreenLoader} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255,255,255,0.8)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <div className="text-center">
-                        <img src="/assets/images/spinner.gif" alt="Loading..." width="80" />
-                        <p className="mt-2" style={{ color: '#ef7d00', fontWeight: 'bold' }}>Authenticating...</p>
-                    </div>
-                </div>
-            )} */}
-
             <section className="section bgDarkYellow py-5" style={{ minHeight: '100vh' }}>
                 <div className="container">
                     <div className="headingWraper mb-5 text-center">
@@ -176,7 +192,12 @@ export default function StaffLogin() {
 
                         <div className="col-md-5">
                             <div className="card shadow-lg p-4 bg-white rounded">
-                                <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                                {serverDown ? (
+                                    <div className="alert alert-danger text-center py-3">
+                                        <strong>Server down. Please try after a while.</strong>
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                                     {/* User ID Field */}
                                     <div className="mb-3">
                                         <label className="form-label fw-bold">User ID</label>
@@ -226,6 +247,7 @@ export default function StaffLogin() {
                                         {loading ? 'Logging in...' : 'Login'}
                                     </button>
                                 </form>
+                                )}
 
                                 <div className="mt-4 text-center">
                                     <span className="text-muted small">Don't have an account? </span>

@@ -27,6 +27,11 @@
     margin-top: 1rem;
 }
 
+.headerCell {
+  background-color:  #ef7d00 !important;
+  color: white !important;
+  font-weight: bold !important;
+}
 .modalContent {
     position: absolute;
     top: 50%;
@@ -51,4 +56,14 @@
         width: 95%;
         padding: 1rem;
     }
+}
+
+.btnAction {
+     background-color: #0c0c0c !important;
+
+}
+
+.btnAction:hover {
+color: #f4f6f8 !important;
+   background-color: #ef7d00 !important;
 }

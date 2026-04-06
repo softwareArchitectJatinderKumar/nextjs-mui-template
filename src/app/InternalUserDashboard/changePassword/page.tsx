@@ -146,121 +146,121 @@ export default function ChangePassword() {
 
     return (
         <>
-         {loading && (
-        <div className="fullScreenLoader">
-          <div className="customSpinnerOverlay">
-            <img src="/assets/images/spinner.gif" alt="Loading..." />
-          </div>
-        </div>
-      )}
-        
-        <section className="min-vh-100 mt-3">
-            <div className="container">
-                <div className="text-center mt-2 mb-4">
-                    <h2 className="fw-bold">Account Settings</h2>
+            {loading && (
+                <div className="fullScreenLoader">
+                    <div className="customSpinnerOverlay">
+                        <img src="/assets/images/spinner.gif" alt="Loading..." />
+                    </div>
                 </div>
+            )}
 
-                <div className="section row justify-content-center g-0 shadow-lg rounded-4 overflow-hidden bgLightYellow">
-                    {/* LEFT SIDE: Visual */}
-                    <div className="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center p-5">
-                        <img
-                            src="https://www.lpu.in/lpu-assets/images/cif/login-left.png"
-                            alt="Security"
-                            className="img-fluid floating-img"
-                            style={{ maxHeight: '350px', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.3))' }}
-                        />
+            <section className="min-vh-100 mt-3">
+                <div className="container">
+                    <div className="text-center mt-2 mb-4">
+                        <h2 className="fw-bold">Account Settings</h2>
                     </div>
 
-                    {/* RIGHT SIDE: Wizard Form */}
-                    <div className="col-md-5 p-4 p-lg-5 shadow-lg rounded-2">
-                        <div className="d-flex justify-content-between mb-4">
-                            <span className={`badge ${currentStep >= 2 ? 'bg-success' : 'bg-secondary'} rounded-pill`}>1. Identity</span>
-                            <span className={`badge ${currentStep >= 3 ? 'bg-success' : 'bg-secondary'} rounded-pill`}>2. Security</span>
+                    <div className="section row justify-content-center g-0 shadow-lg rounded-4 overflow-hidden bgLightYellow">
+                        {/* LEFT SIDE: Visual */}
+                        <div className="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center p-5">
+                            <img
+                                src="https://www.lpu.in/lpu-assets/images/cif/login-left.png"
+                                alt="Security"
+                                className="img-fluid floating-img"
+                                style={{ maxHeight: '350px', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.3))' }}
+                            />
                         </div>
 
-                        {/* STEP 2: Identity Verification */}
-                        {currentStep === 2 && (
-                            <div className="fade-in">
-                                <h2 className="fw-bold text-dark">Identity Verification</h2>
-                                <p className="text-muted small mb-4">Confirm your <strong>{userDetails?.idProofType || 'Identity Proof'}</strong> to proceed.</p>
-                                <div className="mb-4">
-                                    <input
-                                        type="text"
-                                        className={`form-control form-control-lg border-2 ${errors.idProofNumber ? 'is-invalid' : ''}`}
-                                        placeholder="Enter ID Proof Number"
-                                        {...register("idProofNumber", { required: "ID Proof is required" })}
-                                    />
-                                </div>
-                                <button className="btn btn-primary btn-lg w-100 fw-bold shadow-sm" onClick={verifyIdProof} style={{ backgroundColor: '#ef7d00', border: 'none' }}>
-                                    Continue
-                                </button>
+                        {/* RIGHT SIDE: Wizard Form */}
+                        <div className="col-md-5 p-4 p-lg-5 shadow-lg rounded-2">
+                            <div className="d-flex justify-content-between mb-4">
+                                <span className={`badge ${currentStep >= 2 ? 'bg-success' : 'bg-secondary'} rounded-pill`}>1. Identity</span>
+                                <span className={`badge ${currentStep >= 3 ? 'bg-success' : 'bg-secondary'} rounded-pill`}>2. Security</span>
                             </div>
-                        )}
 
-                        {/* STEP 3: Password Reset */}
-                        {currentStep === 3 && (
-                            <form onSubmit={handleSubmit(onResetPassword)} className="fade-in">
-                                <h4 className="fw-bold text-dark mb-4">Choose New Password</h4>
-
-                                <div className="mb-3">
-                                    <label className="small fw-bold text-secondary">NEW PASSWORD</label>
-                                    <div className="input-group">
+                            {/* STEP 2: Identity Verification */}
+                            {currentStep === 2 && (
+                                <div className="fade-in">
+                                    <h2 className="fw-bold text-dark">Identity Verification</h2>
+                                    <p className="text-muted small mb-4">Confirm your <strong>{userDetails?.idProofType || 'Identity Proof'}</strong> to proceed.</p>
+                                    <div className="mb-4">
                                         <input
-                                            type={showPassword ? "text" : "password"}
-                                            className="form-control border-2 border-end-0"
-                                            {...register("password", { required: "Required", minLength: { value: 8, message: "Min 8 characters" } })}
+                                            type="text"
+                                            className={`form-control form-control-lg border-2 ${errors.idProofNumber ? 'is-invalid' : ''}`}
+                                            placeholder="Enter ID Proof Number"
+                                            {...register("idProofNumber", { required: "ID Proof is required" })}
                                         />
-                                        <button className="btn btn-outline-secondary border-2 border-start-0" type="button" onClick={() => setShowPassword(!showPassword)}>
-                                            <i className={`bi bi-eye${showPassword ? '-slash' : ''}`}></i>
-                                        </button>
                                     </div>
-                                    {password && (
-                                        <div className="mt-2">
-                                            <div className="progress" style={{ height: '4px' }}>
-                                                <div className={`progress-bar ${strength.color}`} style={{ width: `${strength.score}%` }}></div>
-                                            </div>
-                                            <div className="d-flex justify-content-between mt-1">
-                                                <small className="text-muted">Security:</small>
-                                                <small className={`fw-bold ${strength.color.replace('bg-', 'text-')}`}>{strength.label}</small>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="small fw-bold text-secondary">CONFIRM PASSWORD</label>
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        className={`form-control border-2 ${errors.confirmPassword ? 'is-invalid' : ''}`}
-                                        {...register("confirmPassword", {
-                                            required: "Passwords must match",
-                                            validate: (val) => val === password || "The passwords you entered do not match."
-                                        })}
-                                    />
-                                    {errors.confirmPassword && <small className="text-danger fw-bold">{errors.confirmPassword.message as string}</small>}
-                                </div>
-
-                                <div className="d-flex gap-2">
-                                    <button type="button" className="btn btn-outline-secondary w-25" onClick={() => setCurrentStep(2)}>Back</button>
-                                    <button type="submit" className="btn btn-success w-75 fw-bold shadow-sm" disabled={!isValid || actionLoading}>
-                                        {actionLoading ? <CircularProgress size={20} color="inherit" /> : "Update Password"}
+                                    <button className="btn btn-primary btn-lg w-100 fw-bold shadow-sm" onClick={verifyIdProof} style={{ backgroundColor: '#ef7d00', border: 'none' }}>
+                                        Continue
                                     </button>
                                 </div>
-                            </form>
-                        )}
+                            )}
 
-                        {errorMessage && <div className="alert alert-danger mt-4 border-0 shadow-sm">{errorMessage}</div>}
+                            {/* STEP 3: Password Reset */}
+                            {currentStep === 3 && (
+                                <form onSubmit={handleSubmit(onResetPassword)} className="fade-in">
+                                    <h4 className="fw-bold text-dark mb-4">Choose New Password</h4>
+
+                                    <div className="mb-3">
+                                        <label className="small fw-bold text-secondary">NEW PASSWORD</label>
+                                        <div className="input-group">
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                className="form-control border-2 border-end-0"
+                                                {...register("password", { required: "Required", minLength: { value: 8, message: "Min 8 characters" } })}
+                                            />
+                                            <button className="btn btn-outline-secondary border-2 border-start-0" type="button" onClick={() => setShowPassword(!showPassword)}>
+                                                <i className={`bi bi-eye${showPassword ? '-slash' : ''}`}></i>
+                                            </button>
+                                        </div>
+                                        {password && (
+                                            <div className="mt-2">
+                                                <div className="progress" style={{ height: '4px' }}>
+                                                    <div className={`progress-bar ${strength.color}`} style={{ width: `${strength.score}%` }}></div>
+                                                </div>
+                                                <div className="d-flex justify-content-between mt-1">
+                                                    <small className="text-muted">Security:</small>
+                                                    <small className={`fw-bold ${strength.color.replace('bg-', 'text-')}`}>{strength.label}</small>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label className="small fw-bold text-secondary">CONFIRM PASSWORD</label>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            className={`form-control border-2 ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                                            {...register("confirmPassword", {
+                                                required: "Passwords must match",
+                                                validate: (val) => val === password || "The passwords you entered do not match."
+                                            })}
+                                        />
+                                        {errors.confirmPassword && <small className="text-danger fw-bold">{errors.confirmPassword.message as string}</small>}
+                                    </div>
+
+                                    <div className="d-flex gap-2">
+                                        <button type="button" className="btn btn-outline-secondary w-25" onClick={() => setCurrentStep(2)}>Back</button>
+                                        <button type="submit" className="btn btn-success w-75 fw-bold shadow-sm" disabled={!isValid || actionLoading}>
+                                            {actionLoading ? <CircularProgress size={20} color="inherit" /> : "Update Password"}
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
+
+                            {errorMessage && <div className="alert alert-danger mt-4 border-0 shadow-sm">{errorMessage}</div>}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <style jsx>{`
+                <style jsx>{`
                 .fade-in { animation: fadeIn 0.5s ease-in; }
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
                 .floating-img { animation: float 3s ease-in-out infinite; }
                 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
             `}</style>
-        </section>
+            </section>
         </>
     );
 }

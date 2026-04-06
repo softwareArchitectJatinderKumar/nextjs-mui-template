@@ -93,18 +93,13 @@ export default function PaymentDetails() {
 useEffect(() => {
     let result = [...originalData];
 
-    // Filter by Payment Status
     if (selectedPaymentStatus && selectedPaymentStatus !== 'All') {
         result = result.filter(item => {
-            // Normalize the API value: if null, treat as "pending"
             const statusFromApi = item.paymentStatus ? item.paymentStatus.toLowerCase() : 'pending';
-            
-            // Compare with the dropdown value
             return statusFromApi === selectedPaymentStatus.toLowerCase();
         });
     }
 
-    // Filter by Search Query
     if (searchQuery) {
         const query = searchQuery.toLowerCase();
         result = result.filter(item =>
@@ -260,8 +255,8 @@ useEffect(() => {
                                         <TableRow key={index} hover>
                                             <TableCell>{row.bookingId}</TableCell>
                                             <TableCell>{row.candidateName}</TableCell>
-                                            <TableCell>{row.amount}</TableCell>
                                             <TableCell>{row.userEmailId}</TableCell>
+                                            <TableCell>{row.organisationName}</TableCell>
                                             <TableCell>{row.mobileNo}</TableCell>
                                             {/* <TableCell>{row.requestDate}</TableCell> */}
                                             <TableCell sx={{ whiteSpace: 'nowrap' }}>
