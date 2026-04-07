@@ -1,0 +1,192 @@
+/* =============================================================
+   events-crud/EventsCrud.module.css
+   Migrated from Angular events-crud.component.css
+   ============================================================= */
+
+/* ── Loader ─────────────────────────────────────────────────── */
+
+.fullscreenLoader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.spinnerOverlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinnerContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Carousel Section ───────────────────────────────────────── */
+
+.carouselSection {
+  padding: 60px 0;
+  background-color: #f8c51c;
+}
+
+.carouselHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.carouselTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.carouselNavBtns {
+  display: flex;
+  gap: 8px;
+}
+
+.carouselNavBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  transition: opacity 0.2s;
+}
+
+.carouselNavBtn:hover {
+  opacity: 0.7;
+}
+
+/* ── Slide layout ───────────────────────────────────────────── */
+
+.slideRow {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.slideCard {
+  text-align: center;
+  min-width: 200px;
+}
+
+.slideImage {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.slideCaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+/* ── Dot Indicators ─────────────────────────────────────────── */
+
+.indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: #aaa;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.25s;
+}
+
+.dotActive {
+  background-color: #333;
+}
+
+/* ── Form Labels ─────────────────────────────────────────────── */
+
+/* Mirror: .event-form label */
+:global(.col-form-label) {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Required field asterisk */
+:global(.required)::after {
+  content: ' *';
+  color: red;
+}
+
+/* ── Table ───────────────────────────────────────────────────── */
+
+/* Mirrors: .event-table th, .event-table td */
+:global(.table) th,
+:global(.table) td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+:global(.table) th {
+  background-color: #e9ecef;
+  font-weight: bold;
+}
+
+/* ── Delete button ───────────────────────────────────────────── */
+/* Mirrors: .delete-btn */
+:global(.btn-danger) {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+/* ── Thumbnail (kept from original) ─────────────────────────── */
+
+.eventThumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* ── Img container ───────────────────────────────────────────── */
+
+.imgContainer {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Responsive helpers ──────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .carouselTitle {
+    font-size: 1.4rem;
+  }
+
+  .slideCard {
+    flex: 0 0 100% !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .slideCard {
+    flex: 0 0 calc(50% - 16px) !important;
+  }
+}

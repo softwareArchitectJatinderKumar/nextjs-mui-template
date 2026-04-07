@@ -1,6 +1,6 @@
  
 'use client';
-
+import { Suspense } from 'react'
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Swal from 'sweetalert2';
@@ -61,11 +61,10 @@ type ActiveModal =
   | null;
 
  
-export default function ViewBookingsPage() {
-  const searchParams = useSearchParams();
+function ViewBookingsContent() {
 
-  // ── Session ──────────────────────────────────────────────
-  const [session, setSession] = useState<UserSession | null>(null);
+   const [session, setSession] = useState<UserSession | null>(null);
+   const searchParams = useSearchParams();
 
   useEffect(() => {
     setSession(readUserSession());
@@ -94,7 +93,7 @@ export default function ViewBookingsPage() {
         Swal.fire({ title: 'Payment Failed', icon: 'error' });
       }
     });
-  }, []); // run once on mount only
+  }, []);  
 
   const {
     bookings, loading: bookingsLoading,
@@ -261,5 +260,13 @@ export default function ViewBookingsPage() {
         />
       )}
     </>
+  );
+}
+
+export default function ViewBookingsPage() {
+  return (
+    <Suspense fallback={<div>Loading Dashboard...</div>}>
+      <ViewBookingsContent />
+    </Suspense>
   );
 }

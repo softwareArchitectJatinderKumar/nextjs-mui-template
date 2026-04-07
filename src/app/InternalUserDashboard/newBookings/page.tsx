@@ -278,15 +278,15 @@ const getAllAnalysis = async (e: React.ChangeEvent<HTMLSelectElement>) => {
       {/* Maintenance Alerts */}
       <div className="card mb-4 border-0 shadow-sm">
         <div className="card-body bg-white">
-          <h6 className="text-danger fw-bold mb-2">Maintenance Status:</h6>
+          <h6 className="text-danger fw-bolder mb-2 fs-3">Maintenance Status:</h6>
           <div className="d-flex flex-wrap gap-2">
             {InstrumentDataInactive.length > 0 ? (
               InstrumentDataInactive.map((inst: any) => (
-                <span key={inst.instrumentId} className="badge bg-danger-subtle text-danger border border-danger">
+                <span key={inst.instrumentId} className="fs-4 badge bg-danger-subtle text-danger border border-danger">
                   {inst.instrumentName} - Offline
                 </span>
               ))
-            ) : <span className="text-muted small">All systems operational</span>}
+            ) : <span className="text-muted fs-5 ">All systems operational</span>}
           </div>
         </div>
       </div>

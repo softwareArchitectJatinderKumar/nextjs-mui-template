@@ -29,12 +29,14 @@ export default function AdminNavBar() {
   const [anchorElUsers, setAnchorElUsers] = useState<null | HTMLElement>(null);
   const [anchorElInstr, setAnchorElInstr] = useState<null | HTMLElement>(null);
   const [anchorElSamples, setAnchorElSamples] = useState<null | HTMLElement>(null);
+  const [anchorElEvents, setAnchorElEvents] = useState<null | HTMLElement>(null);
 
   const handleClose = () => {
     setAnchorElTests(null);
     setAnchorElUsers(null);
     setAnchorElInstr(null);
     setAnchorElSamples(null);
+    setAnchorElEvents(null);
   };
 
   const handleNavigation = (path: string) => {
@@ -160,8 +162,6 @@ export default function AdminNavBar() {
                 {/* <MenuItem onClick={() => handleNavigation('UpdateInstrumentPrices')}>Update Prices</MenuItem> */}
               </Menu>
 
-
-
               <Button
                 endIcon={<KeyboardArrowDown />}
                 onClick={(e) => setAnchorElSamples(e.currentTarget)}
@@ -171,7 +171,19 @@ export default function AdminNavBar() {
               </Button>
               <Menu anchorEl={anchorElSamples} open={Boolean(anchorElSamples)} onClose={handleClose}>
                 <MenuItem onClick={() => handleNavigation('SampleStatus')}>All Samples</MenuItem>
-                <MenuItem onClick={() => handleNavigation('UserDetails')}> Users Feedback</MenuItem>
+                <MenuItem onClick={() => handleNavigation('UserFeedbacks')}> Users Feedback</MenuItem>
+              </Menu>
+
+              <Button
+                endIcon={<KeyboardArrowDown />}
+                onClick={(e) => setAnchorElEvents(e.currentTarget)}
+                sx={{ color: '#666', fontWeight: 600, textTransform: 'none', fontSize: '0.85rem' }}
+              >
+                CIF Events
+              </Button>
+              <Menu anchorEl={anchorElEvents} open={Boolean(anchorElEvents)} onClose={handleClose}>
+                <MenuItem onClick={() => handleNavigation('AllEvents')}>All Events</MenuItem>
+                <MenuItem onClick={() => handleNavigation('ManageEvents')}> Manage </MenuItem>
               </Menu>
             </Box>
 

@@ -117,7 +117,7 @@ const StaffMenuBar = () => {
               href="/StaffUser/MyUploads"
               sx={{ fontWeight: 800, textDecoration: 'none', color: '#333', minWidth: 'max-content' }}
             >
-              <Box component="span" sx={{ marginRight: '3rem' }}> CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box></Box>
+              <Box component="span" sx={{ marginRight: '3rem', fontWeight: 800, textDecoration: 'none', color: '#333' }}> CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box></Box>
             </Typography>
 
             <Box sx={{ display: { xs: 'none', lg: 'block' } }}>

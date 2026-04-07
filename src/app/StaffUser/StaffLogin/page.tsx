@@ -253,7 +253,7 @@ const UserCookies = JSON.stringify(userData);
                                         {errors.password && <span className="text-danger small">{errors.password.message as string}</span>}
                                     </div>
 
-                                    <button type="submit" className={styles.loginBtn + " w-20 mt-3"}>
+                                    <button type="submit" className={styles.loginBtn + " w-20 "}>
                                         Login
                                     </button>
 
