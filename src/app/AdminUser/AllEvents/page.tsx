@@ -13,10 +13,7 @@ export default function EventsCrudPage() {
 
   return (
     <>
-      
       <EventCarousel events={eventsState.events} />
-
-     
       <EventsCrudView {...eventsState} />
     </>
   );
