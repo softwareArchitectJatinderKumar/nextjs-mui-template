@@ -70,7 +70,7 @@ export function useEventsCrud(): UseEventsReturn {
   const [userEmail, setUserEmail] = useState('');
   const handleLogout = () => {
     Cookies.remove('authData');
-    router.push('/');
+    router.push('/about');
   };
 
   

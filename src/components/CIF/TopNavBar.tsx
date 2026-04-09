@@ -79,8 +79,62 @@ const TopNavBar = () => {
     });
   };
 
+    const downloadTestCharge = () => {
+      Swal.fire({
+        title: 'Send Samples at Following Address :',
+        html: `
+             <address>
+              <div class="contact-text">
+             Central Instrumentation Facility (CIF) <br/>
+            Lovely Professional University <br/>
+            Block-38, Room No.106 <br/>
+            Jalandhar - Delhi G.T. Road, <br/>
+            Phagwara, Punjab (India) - 144411 <br/>
+            Phone : <a href="tel:+911824444021">+91 1824-444021</a><br>
+            Email : cif@lpu.co.in<br>
+            </div>
+             </address>`,
+        icon: 'info'
+      });
+  
+    };
+
   return (
+
     <Box sx={{ width: '100%', pt: { xs: 1, md: 2 }, pb: 1, px: { xs: 2, md: 0 }, display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{  width: '50%', display: 'flex', justifyContent: 'start' }}>
+        <Paper
+          elevation={3}
+          sx={{
+            width: { xs: '100%', md: 'auto' },
+            maxWidth: '1200px',
+            borderRadius: { xs: '10px', md: '50px' },
+            px: { xs: 1, md: 3 },
+            bgcolor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(0,0,0,0.05)',
+            overflowX: 'auto'
+          }}
+        >
+          <Toolbar variant="dense" sx={{ justifyContent: 'space-between', px: { xs: 1, md: 0 } }}>
+              
+            <Typography
+              onClick={(e) => {
+                e.preventDefault();
+                downloadTestCharge();
+              }}
+              variant="subtitle1"
+              component={Link}
+              href="#"
+              sx={{ fontWeight: 800, textDecoration: 'none', color: '#333', minWidth: 'max-content' }}
+            >
+              <Box component="span" sx={{ fontWeight: 800, textDecoration: 'none', color: '#333' }}> Address for <Box component="span" sx={{ color: '#ff6a00' }}>Sending </Box> Samples</Box>
+            </Typography>
+          </Toolbar>
+          </Paper>
+      </Box>
+
+    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
       <Paper 
         elevation={3} 
         sx={{ 
@@ -95,14 +149,7 @@ const TopNavBar = () => {
         }}
       >
         <Toolbar variant="dense" sx={{ justifyContent: 'space-between', px: { xs: 1, md: 0 } }}>
-          
-          {/* <Typography
-            variant="subtitle1"
-            component={Link}
-            href="/InternalUserDashboard/Profile"
-            sx={{ fontWeight: 800, textDecoration: 'none', color: '#333', minWidth: 'max-content' }}
-          >
-          </Typography> */}
+         
           <Box component="span" sx={{ marginRight:'3rem', fontWeight: 800, textDecoration: 'none', color: '#333'}}> CIF <Box component="span" sx={{ color: '#ff6a00' }}>LPU</Box></Box>
 
           <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
@@ -200,6 +247,7 @@ const TopNavBar = () => {
           </ListItem>
         </List>
       </Drawer>
+    </Box>
     </Box>
   );
 };

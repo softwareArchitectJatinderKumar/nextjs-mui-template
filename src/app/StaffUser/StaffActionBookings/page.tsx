@@ -39,11 +39,15 @@ export default function StaffActionBookings() {
   const [fileData, setFileData] = useState<any>(null);
   const [fileName, setFileName] = useState('');
   const [remarks, setRemarks] = useState('');
+  const [userUid, setuserUid] = useState('');
 
   const serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
 
   // 1. Initial Data Fetch
   useEffect(() => {
+    const staffData = Cookies.get('StaffUserAuthData');
+    const userUid = staffData ? JSON.parse(staffData).UserId : '';
+    setuserUid(userUid);
     fetchInitialData();
   }, []);
 
@@ -54,9 +58,10 @@ export default function StaffActionBookings() {
        const [bookings, results] = await Promise.all([
         myAppWebService.GetAllBooking(),
         // myAppWebService.GetUploadedResultDetails('33476');
-        myAppWebService.GetUploadedResultDetails('33476')
+        myAppWebService.GetUploadedResultDetails(userUid)
       ]);
-       const response =await myAppWebService.GetUploadedResultDetails('33476');
+       const response =await myAppWebService.GetUploadedResultDetails(userUid);
+      //  const response =await myAppWebService.GetUploadedResultDetails('33476');
 
       let data: BookingData[] = [];
       if (Array.isArray(response)) {

@@ -68,7 +68,7 @@ export default function StaffActionBookings() {
       setNoResultsMessage(errorMessage);
     } finally {
       const elapsed = Date.now() - startTime;
-      setTimeout(() => setLoading(false), Math.max(1500 - elapsed, 0));
+      setTimeout(() => setLoading(false), Math.max(500 - elapsed, 0));
     }
   };
 

@@ -108,9 +108,6 @@ export default function NavigationSwitcher() {
     }
   }, [pathname]);
 
-  // FIX: Render a null or a simple empty div during hydration.
-  // Do NOT render <Header /> here, as it likely triggers MUI style injection
-  // which causes the mismatch with the server-rendered HTML.
   if (!mounted) {
     return <div style={{ minHeight: '70px' }} />; 
   }
@@ -129,8 +126,6 @@ export default function NavigationSwitcher() {
     }
   };
 
-  // Added suppressHydrationWarning to the wrapper just in case 
-  // background extensions try to modify this div.
   return (
     <div className="bgDarkYellow p-1" suppressHydrationWarning>
       {renderNavigation()}

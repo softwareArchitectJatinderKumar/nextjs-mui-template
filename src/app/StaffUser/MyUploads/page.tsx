@@ -68,7 +68,7 @@ export default function Myuploaded() {
       console.error("Fetch Error:", error);
     } finally {
       const elapsed = Date.now() - startTime;
-      const delay = Math.max(2500 - elapsed, 0);
+      const delay = Math.max(1000 - elapsed, 0);
       setTimeout(() => setLoading(false), delay);
     }
   };

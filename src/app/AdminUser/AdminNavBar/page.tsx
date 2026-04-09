@@ -50,12 +50,10 @@ export default function AdminNavBar() {
   };
 
   useEffect(() => {
-    // Initial Check & Data Load
     const checkAuth = () => {
       const authData = Cookies.get('authData');
       
       if (!authData) {
-        // If cookie is gone (expired or manually deleted), force logout
         handleLogout();
         return;
       }
