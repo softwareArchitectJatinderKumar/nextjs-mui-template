@@ -30,6 +30,7 @@ const TopNavBar = () => {
     { label: 'View Bookings', path: '/InternalUserDashboard/ViewBookings' },
     { label: 'Feedback', path: '/InternalUserDashboard/Feedback' },
     { label: 'Sample Status', path: '/InternalUserDashboard/SampleStatus' },
+    { label: 'Upload MOU', path: '/InternalUserDashboard/CIFMouUploads' },
     { label: 'Change Password', path: '/InternalUserDashboard/changePassword' },
   ]);
 
