@@ -15,8 +15,8 @@ export default function ChangePassword() {
      const [loading, setLoading] = useState(true);
     const [currentStep, setCurrentStep] = useState(1);
     const [pageLoading, setPageLoading] = useState(true); // Fixed: Start as true for initial load
-    const [actionLoading, setActionLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [actionLoading, setActionLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [userDetails, setUserDetails] = useState<any>(null);
 
@@ -55,8 +55,7 @@ export default function ChangePassword() {
       }, []);
     useEffect(() => {
         const initializeAccountSettings = async () => {
-            const cookieData = Cookies.get('InternalUserAuthData');
-            
+            const cookieData = Cookies.get('InternalUserAuthData');            
             if (!cookieData) {
                 router.push('/login');
                 return;

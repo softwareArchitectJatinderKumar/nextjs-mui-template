@@ -90,11 +90,6 @@ export default function EventsCrudView(props: UseEventsReturn) {
       )}
 
       <div className="container-fluid">
-
-        {/* ═══════════════════════════════════════════════════════
-            ADD / EDIT FORM
-            Mirrors Angular's [formGroup]="eventForm" section
-            ═══════════════════════════════════════════════════════ */}
         <div className="row">
           <div className="col-lg-12">
             <div className="card shadow mb-4">

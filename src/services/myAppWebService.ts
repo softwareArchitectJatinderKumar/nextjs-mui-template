@@ -6,7 +6,7 @@ export interface EventModel {
   eventId: number;
   eventName: string;
   eventDate: string;
-  eventCategory: 'Upcoming' | 'Happenings'; 
+  eventCategory: 'Upcoming' | 'Happenings';
   eventDetails: string;
   imageUrl: string;
   Action?: 'Insert' | 'Update' | 'Delete' | 'View';
@@ -15,6 +15,14 @@ export interface EventModel {
   LoginName?: string;
 }
 
+import {
+  MouInsertPayload,
+  MouUpdatePayload,
+  MouDeletePayload,
+  MouApprovePayload,
+  MouApiResponse,
+  MouViewResponse,
+} from '@/types/mou.types';
 
 class MyAppWebService {
   apiClient: any;
@@ -26,7 +34,8 @@ class MyAppWebService {
 
   constructor() {
     this.apiClient = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_AUTH_API,
+      baseURL: process.env.NEXT_PUBLIC_AUTH_API_LOCAL,
+      // baseURL: process.env.NEXT_PUBLIC_AUTH_API,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
@@ -104,7 +113,173 @@ class MyAppWebService {
 
     return {};
   }
+//  CRUD Operation CIF MOU 
 
+private prepareMouFormData(
+  fields: Record<string, string | undefined | null>,
+): FormData {
+  const fd = new FormData();
+  for (const [key, value] of Object.entries(fields)) {
+    if (value !== undefined && value !== null && value !== '') {
+      fd.append(key, value);
+    }
+  }
+  return fd;
+}
+
+// ── View MOUs for a specific user ────────────────────────────────────────────
+async viewMyMous(userId: string): Promise<MouViewResponse> {
+  const fd = this.prepareMouFormData({ Action: 'View', UserId: userId });
+  try {
+    const response = await this.apiClient.post(
+      'api/LpuCIF/CIFMOUCrudOperation',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('viewMyMous failed:', error);
+    throw error;
+  }
+}
+
+// ── View all MOUs (admin) ────────────────────────────────────────────────────
+async viewAllMous(): Promise<MouViewResponse> {
+  const fd = this.prepareMouFormData({ Action: 'ViewAll' });
+  try {
+    const response = await this.apiClient.post(
+      'api/LpuCIF/CIFMOUCrudOperation',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('viewAllMous failed:', error);
+    throw error;
+  }
+}
+
+// ── Insert new MOU ────────────────────────────────────────────────────────────
+async insertMou(payload: MouInsertPayload): Promise<MouApiResponse> {
+  const fd = this.prepareMouFormData({
+    Action:          'Insert',
+    MOUTitle:        payload.mouTitle,
+    MOUDocumentUrl:  payload.mouDocumentUrl,
+    MOUDocumentData: payload.mouDocumentData,
+    MouStartDate:    payload.mouStartDate,
+    MouEndDate:      payload.mouEndDate,
+    MOURemarks:      payload.mouRemarks,
+    UserId:          payload.userId,
+  });
+  try {
+    const response = await this.apiClient.post(
+      'api/LpuCIF/CIFMOUCrudOperation',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('insertMou failed:', error);
+    throw error;
+  }
+}
+
+// ── Update existing MOU ───────────────────────────────────────────────────────
+async updateMou(payload: MouUpdatePayload): Promise<MouApiResponse> {
+  const fd = this.prepareMouFormData({
+    Action:          'Update',
+    MouId:           payload.mouId,
+    MOUTitle:        payload.mouTitle,
+    MOUDocumentData: payload.mouDocumentData,
+    MOUDocumentUrl:  payload.mouDocumentUrl,
+    MouStartDate:    payload.mouStartDate,
+    MouEndDate:      payload.mouEndDate,
+    MOURemarks:      payload.mouRemarks,
+    LoginName:       payload.loginName,
+    UserId:          payload.userId,
+  });
+  try {
+    const response = await this.apiClient.post(
+      'api/LpuCIF/CIFMOUCrudOperation',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('updateMou failed:', error);
+    throw error;
+  }
+}
+
+// ── Delete / deactivate MOU ───────────────────────────────────────────────────
+async deleteMou(payload: MouDeletePayload): Promise<MouApiResponse> {
+  const fd = this.prepareMouFormData({
+    Action:    'Delete',
+    MouId:     payload.mouId,
+    MOUTitle:  payload.mouTitle,
+    UserId:    payload.userId,
+    LoginName: payload.loginName,
+  });
+  try {
+    const response = await this.apiClient.post(
+      'api/LpuCIF/CIFMOUCrudOperation',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('deleteMou failed:', error);
+    throw error;
+  }
+}
+
+// ── Approve MOU (admin) ───────────────────────────────────────────────────────
+async approveMou(payload: MouApprovePayload): Promise<MouApiResponse> {
+  const fd = this.prepareMouFormData({
+    Action:          'Approve',
+    MouId:           payload.mouId,
+    UserId:          payload.userId,
+    ApprovalRemarks: payload.approvalRemarks,
+    LoginName:       payload.loginName,
+  });
+  try {
+    const response = await this.apiClient.post(
+      'api/LpuCIF/CIFMOUCrudOperation',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('approveMou failed:', error);
+    throw error;
+  }
+}
+
+// ── Disapprove MOU (admin) ────────────────────────────────────────────────────
+async disapproveMou(payload: MouApprovePayload): Promise<MouApiResponse> {
+  const fd = this.prepareMouFormData({
+    Action:          'DisApprove',
+    MouId:           payload.mouId,
+    UserId:          payload.userId,
+    ApprovalRemarks: payload.approvalRemarks,
+    LoginName:       payload.loginName,
+  });
+  try {
+    const response = await this.apiClient.post(
+      'api/LpuCIF/CIFMOUCrudOperation',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('disapproveMou failed:', error);
+    throw error;
+  }
+}
+
+
+
+// END 
   // --- CRUD Operations ---
 
   /**
@@ -160,20 +335,7 @@ class MyAppWebService {
   }
 
 
-  //   async GetAllFeedbackdetails() {
-  //   const Token = storageService.getUser();
-  //   try {
-  //     const response = await this.apiClient.get('api/LpuCIF/GetAllUserFeedbacks', {
-  //       headers: {
-  //         'Authorization': `Bearer ${Token}`,
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error fetching authorized user data:', error);
-  //     throw error;
-  //   }
-  // }
+
   async getEvents() {
     var authToken = storageService.getUser();
     const viewEventModel: EventModel = {
